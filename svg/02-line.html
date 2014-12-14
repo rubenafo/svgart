@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType('svg',{
+    RED.nodes.registerType('line',{
         category: 'svg',
         color: '#a6bbcf',
         defaults: {
@@ -9,18 +9,18 @@
         outputs:1,
         icon: "file.png",
         label: function() {
-            return this.name||"svg";
+            return this.name||"line";
         }
     });
 </script>
 
-<script type="text/x-red" data-template-name="svg">
+<script type="text/x-red" data-template-name="line">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="svg">
-    <p>A simple SVG empty file generator</p>
+<script type="text/x-red" data-help-name="line">
+    <p>SVG line element</p>
 </script>
