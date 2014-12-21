@@ -3,7 +3,9 @@
         category: 'svg',
         color: '#a6bbcf',
         defaults: {
-            name: {value:""}
+            name: {value:""},
+            width: {value:"800"},
+            height: {value:"600"}
         },
         inputs:1,
         outputs:1,
@@ -18,6 +20,14 @@
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+      <label for="node-input-width"><i class="icon-tag"></i> Width</label>
+      <input type="text" id="node-input-width" placeholder="width" value="800">
+    </div>
+    <div class="form-row">
+      <label for="node-input-height"><i class="icon-tag"></i> Height</label>
+      <input type="text" id="node-input-height" placeholder="height" value="600">
     </div>
 </script>
 
