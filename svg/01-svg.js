@@ -7,42 +7,35 @@ module.exports = function(RED) {
         context.count = context.count || 0;
         context.data = context.data || [];
         this.on('input', function(msg) {
-          var svgHeaderBegin = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?> " +
-				    "<svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" " +
-   					"xmlns:cc=\"http://creativecommons.org/ns#\" " +
-   					"xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" " +
-   					"xmlns:svg=\"http://www.w3.org/2000/svg\" " +
-   					"xmlns=\"http://www.w3.org/2000/svg\" " +
-   					"xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
-            "width=\"" + config.width + "\" " +
-   					"height=\"" + config.height + "\" " +
-            "id=\"svg2\" version=\"1.1\">";
-   			var svgHeaderEnd = "</svg>";
-   			//if (msg.payload)
-   			//{
-   			//	msg.payload = svgHeaderBegin + msg.payload + svgHeaderEnd;
-   			//}
-   			//else
-   			//{
-   			//	msg.payload = svgHeaderBegin + svgHeaderEnd;
-   			//}
-        if (context.count < 2) {
-          node.send (null);
-          context.data.push (msg.payload);
-          context.count = context.count + 1;
-        }
-        if (context.count == 2)
-        {
-          msg.payload = svgHeaderBegin;
-          context.data.forEach (function (elem) {
-            msg.payload += elem;
-          });
-          msg.payload += svgHeaderEnd;
-          node.send(msg);
-          context.count = 0;
-          context.data = [];
-        }
-		});
+          if (msg.nrSvg) {
+            var svgHeaderBegin = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?> " +
+  				    "<svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" " +
+     					"xmlns:cc=\"http://creativecommons.org/ns#\" " +
+     					"xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" " +
+     					"xmlns:svg=\"http://www.w3.org/2000/svg\" " +
+     					"xmlns=\"http://www.w3.org/2000/svg\" " +
+     					"xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
+              "width=\"" + config.width + "\" " +
+     					"height=\"" + config.height + "\" " +
+              "id=\"svg2\" version=\"1.1\">";
+     			  var svgHeaderEnd = "</svg>";
+            if (context.count < 2) {
+              node.send (null);
+              context.data.push (msg.nrSvg);
+              context.count = context.count + 1;
+            }
+            if (context.count == 2) {
+              msg.payload = svgHeaderBegin;
+              context.data.forEach (function (elem) {
+                msg.payload += elem;
+              });
+              msg.payload += svgHeaderEnd;
+              node.send(msg);
+              context.count = 0;
+              context.data = [];
+            }
+          }
+       });
     };
     RED.nodes.registerType("svg",LowerCaseNode);
 }

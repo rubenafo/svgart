@@ -9,7 +9,7 @@ module.exports = function(RED) {
               var circle = "<circle cx=\"" + elem.x + "\" cy=\"" + elem.y + "\" r=\"40\" stroke=\"black\" stroke-width=\"3\" fill=\"red\" />";
               elems[elems.length] = circle;
             });
-            msg.payload = elems;
+            msg.nrSvg = elems;
             node.send (msg);
           }
         });
