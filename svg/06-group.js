@@ -18,11 +18,11 @@ module.exports = function(RED) {
               context.count = context.count + 1;
             }
             if (context.count == elemsToGroup) {
-              msg.payload = svgHeaderBegin;
+              msg.nrSvg = svgHeaderBegin;
               context.data.forEach (function (elem) {
-                msg.payload += elem;
+                msg.nrSvg += elem;
               });
-              msg.payload += svgHeaderEnd;
+              msg.nrSvg += svgHeaderEnd;
               node.send(msg);
               context.count = 0;
               context.data = [];

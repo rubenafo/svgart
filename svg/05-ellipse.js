@@ -13,6 +13,13 @@ module.exports = function(RED) {
             msg.nrSvg = elems;
             node.send (msg);
           }
+	  else {
+	    var ellipse = "<ellipse cx=\"" + 10 + "\" cy=\""+ 20 + "\" rx=\"10\" ry=\"20\"" +
+                      " style=\"fill:yellow;stroke:purple;stroke-width:2\" />";
+            msg.nrSvg = ellipse;
+            node.send (msg);
+          }
+
         });
     };
     RED.nodes.registerType("ellipse", circleNode);
