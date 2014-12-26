@@ -12,6 +12,11 @@ module.exports = function(RED) {
             msg.nrSvg = elems;
             node.send (msg);
           }
+          else {
+	    var circle = "<circle cx=\"" + 10 + "\" cy=\"" + 10 + "\" r=\"40\" stroke=\"black\" stroke-width=\"3\" fill=\"red\" />";
+            msg.nrSvg = circle;
+            node.send (msg);
+          }
         });
     };
     RED.nodes.registerType("circle", circleNode);

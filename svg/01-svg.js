@@ -2,10 +2,6 @@ module.exports = function(RED) {
     var vm = require ("vm");
     function LowerCaseNode(config) {
         RED.nodes.createNode(this, config);
-        var node = this;
-        var context = vm.createContext ();
-        context.count = context.count || 0;
-        context.data = context.data || [];
         this.on('input', function(msg) {
           if (msg.nrSvg) {
             var svgHeaderBegin = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?> " +
@@ -19,23 +15,10 @@ module.exports = function(RED) {
      					"height=\"" + config.height + "\" " +
               "id=\"svg2\" version=\"1.1\">";
      			  var svgHeaderEnd = "</svg>";
-            if (context.count < 2) {
-              node.send (null);
-              context.data.push (msg.nrSvg);
-              context.count = context.count + 1;
+              msg.payload = svgHeaderBegin + msg.nrSvg + svgHeaderEnd;
+              this.send(msg);
             }
-            if (context.count == 2) {
-              msg.payload = svgHeaderBegin;
-              context.data.forEach (function (elem) {
-                msg.payload += elem;
-              });
-              msg.payload += svgHeaderEnd;
-              node.send(msg);
-              context.count = 0;
-              context.data = [];
-            }
-          }
-       });
-    };
+          });
+       };
     RED.nodes.registerType("svg",LowerCaseNode);
 }
