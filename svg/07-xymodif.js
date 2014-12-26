@@ -71,10 +71,27 @@ module.exports = function(RED) {
                            var svgElems = window.$("body").children();
                            var svgInputElem = svgElems.get(0);
                            results.forEach (function (pos) {
-                              if (svgInputElem.tagName.toLowerCase() == "circle") {
+                              if (svgInputElem.tagName.toLowerCase() == "circle" ||
+                                  svgInputElem.tagName.toLowerCase() == "ellipse") {
                                 svgInputElem.setAttribute ("cx", pos.x);
                                 svgInputElem.setAttribute ("cy", pos.y);
                                 outputElems.push (svgInputElem.outerHTML);
+                              }
+                              else {
+                                var elemName = svgInputElem.tagName.toLowerCase();
+                                console.log ("elem name = " + elemName);
+                                if (elemName == "rect") {
+                                  svgInputElem.setAttribute ("x", pos.x);
+                                  svgInputElem.setAttribute ("y", pos.y);
+                                  outputElems.push (svgInputElem.outerHTML);
+                                }
+                                else {
+                                  if (elemName == "g") {
+                                      var translate = "translate ("+ pos.x +","+pos.y+")";
+                                      svgInputElem.setAttribute ("transform", translate);
+                                      outputElems.push (svgInputElem.outerHTML);
+                                  }
+                                }
                               }
                            });
 		           node.send({nrSvg: outputElems});

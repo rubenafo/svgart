@@ -3,7 +3,7 @@ module.exports = function(RED) {
         RED.nodes.createNode(this,config);
         var node = this;
         this.on('input', function(msg) {
-        msg.payload = "\<rect width=\"300\" height=\"100\" " +
+        msg.nrSvg = "\<rect width=\"300\" height=\"100\" " +
                       "style=\"fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)\" /> ";
         node.send(msg);
         });
