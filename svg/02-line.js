@@ -8,7 +8,7 @@ module.exports = function(RED) {
               for (var i = 0; i < msg.nrSvg.coords.length-1; i++) {
                 var line = "<line x1=\"" + msg.nrSvg.coords[i].x + "\" y1=\"" + msg.nrSvg.coords[i].y +
                            "\" x2=\"" + msg.nrSvg.coords[i+1].x + "\" y2=\"" + msg.nrSvg.coords[i+1].y +
-                           "\" " + "style=\"stroke:rgb(255,0,0);stroke-width:3\" />";
+                           "\" " + "style=\"stroke:rgb(255,0,0);stroke-width:3\"></line>";
                 elems[elems.length] = line;
               };
             msg.nrSvg = elems;
