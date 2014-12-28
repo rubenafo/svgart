@@ -4,7 +4,8 @@
         color: '#a6bbcf',
         defaults: {
             name: {value:""},
-            elems: {value:"1"}
+            elems: {value:"1"},
+            zindex: {value:"0"}
         },
         inputs:1,
         outputs:1,
@@ -24,6 +25,11 @@
       <label for="node-input-elems"><i class="icon-tag"></i> Elems</label>
       <input type="text" id="node-input-elems" placeholder="elems" value="1">
     </div>
+    <div class="form-row">
+      <label for="node-input-zindex"><i class="icon-tag"></i> Z-Index</label>
+      <input type="number" id="node-input-zindex" placeholder="z-index" value="0">
+    </div>
+
 </script>
 
 <script type="text/x-red" data-help-name="group">
