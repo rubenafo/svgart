@@ -2,6 +2,7 @@ module.exports = function(RED) {
     var vm = require ("vm");
     function LowerCaseNode(config) {
         RED.nodes.createNode(this, config);
+        var customStyle = config.func;
         this.on('input', function(msg) {
           if (msg.nrSvg) {
             var svgHeaderBegin = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?> " +
@@ -13,9 +14,17 @@ module.exports = function(RED) {
      					"xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
               "width=\"" + config.width + "\" " +
      					"height=\"" + config.height + "\" " +
-              "id=\"svg2\" version=\"1.1\">";
-     			  var svgHeaderEnd = "</svg>";
-              msg.payload = svgHeaderBegin + msg.nrSvg + svgHeaderEnd;
+              "id=\"svg\" " +
+              "version=\"1.1\"> ";
+              if (customStyle && customStyle.trim()) {
+                 var backgroundRect = "<rect x=\"0\" y=\"0\" width=\"" + config.width +
+                                      "\" height=\"" + config.height + "\" " +
+                                      "style=\"" + customStyle + "\"></rect>";
+                 svgHeaderBegin += backgroundRect;
+              }
+     			    var svgHeaderEnd = "</svg>";
+              svgHeaderBegin = svgHeaderBegin + msg.nrSvg + svgHeaderEnd;
+              msg.payload = svgHeaderBegin;
               this.send(msg);
             }
           });

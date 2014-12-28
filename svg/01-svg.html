@@ -5,13 +5,59 @@
         defaults: {
             name: {value:""},
             width: {value:"800"},
-            height: {value:"600"}
+            height: {value:"600"},
+            func: {value: "//svg style"}
         },
         inputs:1,
         outputs:1,
         icon: "file.png",
         label: function() {
             return this.name||"svg";
+        },
+	oneditprepare: function() {
+            function functionDialogResize() {
+                var rows = $("#dialog-form>div:not(.node-text-editor-row)");
+                var height = $("#dialog-form").height();
+                for (var i=0;i<rows.size();i++) {
+                    height -= $(rows[i]).outerHeight(true);
+                }
+                var editorRow = $("#dialog-form>div.node-text-editor-row");
+                height -= (parseInt(editorRow.css("marginTop"))+parseInt(editorRow.css("marginBottom")));
+                $(".node-text-editor").css("height",height+"px");
+            };
+
+            $( "#dialog" ).on("dialogresize", functionDialogResize);
+            $( "#dialog" ).one("dialogopen", function(ev) {
+                var size = $( "#dialog" ).dialog('option','sizeCache-function');
+                if (size) {
+                    $("#dialog").dialog('option','width',size.width);
+                    $("#dialog").dialog('option','height',size.height);
+                    functionDialogResize();
+                }
+            });
+            $( "#dialog" ).one("dialogclose", function(ev,ui) {
+                var height = $( "#dialog" ).dialog('option','height');
+                $( "#dialog" ).off("dialogresize",functionDialogResize);
+            });
+            var that = this;
+            require(["orion/editor/edit"], function(edit) {
+                that.editor = edit({
+                    parent:document.getElementById('node-input-func-editor'),
+                    lang:"css",
+                    contents: $("#node-input-func").val()
+                });
+                RED.library.create({
+                    url:"functions", // where to get the data from
+                    type:"function", // the type of object the library is for
+                    editor:that.editor, // the field name the main text body goes to
+                    //fields:['name','outputs']
+                });
+                $("#node-input-name").focus();
+            });
+        },
+        oneditsave: function() {
+            $("#node-input-func").val(this.editor.getText())
+            delete this.editor;
         }
     });
 </script>
@@ -28,6 +74,13 @@
     <div class="form-row">
       <label for="node-input-height"><i class="icon-tag"></i> Height</label>
       <input type="text" id="node-input-height" placeholder="height" value="600">
+    </div>
+    <div class="form-row" style="margin-bottom: 0px;">
+            <label for="node-input-func"><i class="fa fa-wrench"></i> Style</label>
+            <input type="hidden" id="node-input-func" autofocus="autofocus">
+    </div>
+    <div class="form-row node-text-editor-row">
+        <div style="height: 250px;" class="node-text-editor" id="node-input-func-editor" ></div>
     </div>
 </script>
 
