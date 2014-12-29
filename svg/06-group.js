@@ -13,11 +13,10 @@ module.exports = function(RED) {
             var svgHeaderEnd = "</g>";
             if (context.count < elemsToGroup) {
               node.send (null);
-	      console.log ("waiting for " + elemsToGroup);
               context.data.push (msg.nrSvg);
-              context.count = context.count + 1;
+              context.count++;
             }
-            if (context.count == elemsToGroup) {
+            if (context.count == elemsToGroup) { // waiting is over, send!
               msg.nrSvg = svgHeaderBegin;
               context.data.forEach (function (elem) {
                 msg.nrSvg += elem;

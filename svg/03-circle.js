@@ -1,4 +1,5 @@
 module.exports = function(RED) {
+    var svg = require ("./svg.js");
     function circleNode(config) {
         RED.nodes.createNode(this,config);
         var node = this;
@@ -13,7 +14,7 @@ module.exports = function(RED) {
             node.send (msg);
           }
           else {
-	    var circle = "<circle r=\"40\" stroke=\"black\" stroke-width=\"3\" fill=\"red\"></circle>";
+	          var circle = "<circle r=\"40\" stroke=\"black\" stroke-width=\"3\" fill=\"red\"></circle>";
             msg.nrSvg = circle;
             node.send (msg);
           }
