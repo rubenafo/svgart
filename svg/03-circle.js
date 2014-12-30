@@ -7,15 +7,15 @@ module.exports = function(RED) {
           if (msg.nrSvg && msg.nrSvg.coords) {
             var elems = new Array();
             msg.nrSvg.coords.forEach (function (elem) {
-              var circle = "<circle cx=\"" + elem.x + "\" cy=\"" + elem.y + "\" r=\"40\" stroke=\"black\" stroke-width=\"3\" fill=\"red\"></circle>";
+              var circle = new svg.Circle (elem.x, elem.y, 40, "stroke:black;stroke-width:3;fill:red");
               elems[elems.length] = circle;
             });
             msg.nrSvg = elems;
             node.send (msg);
           }
           else {
-	          var circle = "<circle r=\"40\" stroke=\"black\" stroke-width=\"3\" fill=\"red\"></circle>";
-            msg.nrSvg = circle;
+	          var circle = new svg.Circle (0, 0, 40, "stroke:black;stroke-width:3;fill:red");
+            msg.nrSvg = [circle];
             node.send (msg);
           }
         });

@@ -64,40 +64,39 @@ module.exports = function(RED) {
                     var outputElems = [];
                     var node = this;
                     if (msg.nrSvg && results) {
-                      jsdom.env ({
-                        html: msg.nrSvg,
-                        scripts: ["http://code.jquery.com/jquery-1.6.min.js"],
-                        done: function (err, window) {
-                           var svgElems = window.$("body").children();
-                           var svgInputElem = svgElems.get(0);
-                           results.forEach (function (pos) {
-                              if (svgInputElem.tagName.toLowerCase() == "circle" ||
-                                  svgInputElem.tagName.toLowerCase() == "ellipse") {
-                                svgInputElem.setAttribute ("cx", pos.x);
-                                svgInputElem.setAttribute ("cy", pos.y);
-                                outputElems.push (svgInputElem.outerHTML);
-                              }
-                              else {
-                                var elemName = svgInputElem.tagName.toLowerCase();
-                                console.log ("elem name = " + elemName);
-                                if (elemName == "rect") {
-                                  svgInputElem.setAttribute ("x", pos.x);
-                                  svgInputElem.setAttribute ("y", pos.y);
-                                  outputElems.push (svgInputElem.outerHTML);
-                                }
-                                else {
-                                  if (elemName == "g") {
-                                      var translate = "translate ("+ pos.x +","+pos.y+")";
-                                      svgInputElem.setAttribute ("transform", translate);
-                                      outputElems.push (svgInputElem.outerHTML);
-                                  }
-                                }
-                              }
-                           });
-		           node.send({nrSvg: outputElems});
-                         }
+                      var cp = undefined;
+                      if (msg.nrSvg.length != undefined) {
+                        cp = msg.nrSvg[0];
+                      }
+                      else
+                        cp = msg.nrSvg;
+                      results.forEach (function (pos) {
+                        console.log(cp);
+                        var elem = cp.clone();
+                        console.log(elem);
+                        if (elem.data.type == "circle" ||
+                            elem.data.type == "ellipse") {
+                            elem.setAttribute ("cx", pos.x);
+                            elem.setAttribute ("cy", pos.y);
+                            outputElems.push (elem);
+                        }
+                        else {
+                          if (elem.data.type == "rect") {
+                            elem.setAttribute ("x", pos.x);
+                            elem.setAttribute ("y", pos.y);
+                            outputElems.push (elem);
+                          }
+                          else {
+                            if (elem.data.type == "group") {
+                              var translate = "translate ("+ pos.x +","+pos.y+")";
+                              elem.setAttribute ("transform", translate);
+                              outputElems.push (elem);
+                            }
+                          }
+                        }
                       });
-		    }
+                      node.send({nrSvg: outputElems});
+		                }
                     var duration = process.hrtime(start);
                     if (process.env.NODE_RED_FUNCTION_TIME) {
                         this.status({fill:"yellow",shape:"dot",text:""+Math.floor((duration[0]* 1e9 +  duration[1])/10000)/100});
@@ -108,9 +107,8 @@ module.exports = function(RED) {
             });
         } catch(err) {
             this.error(err);
-        }
+          }
     }
-
     RED.nodes.registerType("XYModif",FunctionNode);
-   // RED.library.register("functions");
+    // RED.library.register("functions");
 }
