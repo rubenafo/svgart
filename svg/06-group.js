@@ -1,29 +1,25 @@
 module.exports = function(RED) {
     var vm = require ("vm");
+    var svg = require ("./svg.js");
     function GroupFunction (config) {
         RED.nodes.createNode(this, config);
         var node = this;
         var context = vm.createContext ();
-        context.count = context.count || 0;
         context.data = context.data || [];
         var elemsToGroup = config.elems;
         this.on('input', function(msg) {
           if (msg.nrSvg) {
-            var svgHeaderBegin = "<g>";
-            var svgHeaderEnd = "</g>";
-            if (context.count < elemsToGroup) {
+            if (context.data.length < elemsToGroup) {
               node.send (null);
               context.data.push (msg.nrSvg);
-              context.count++;
             }
-            if (context.count == elemsToGroup) { // waiting is over, send!
-              msg.nrSvg = svgHeaderBegin;
+            if (context.data.length == elemsToGroup) { // waiting is over, send!
+              var group = new svg.Group ();
               context.data.forEach (function (elem) {
-                msg.nrSvg += elem;
+                group.addChild (elem);
               });
-              msg.nrSvg += svgHeaderEnd;
+              msg.nrSvg = group;
               node.send(msg);
-              context.count = 0;
               context.data = [];
             }
           }

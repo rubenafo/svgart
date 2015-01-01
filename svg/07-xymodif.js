@@ -19,6 +19,7 @@ module.exports = function(RED) {
     var util = require("util");
     var vm = require("vm");
     var jsdom = require ("jsdom");
+    var svg = require ("./svg.js");
 
     function FunctionNode(n) {
         RED.nodes.createNode(this,n);
@@ -71,30 +72,27 @@ module.exports = function(RED) {
                       else
                         cp = msg.nrSvg;
                       results.forEach (function (pos) {
-                        console.log(cp);
                         var elem = cp.clone();
-                        console.log(elem);
-                        if (elem.data.type == "circle" ||
-                            elem.data.type == "ellipse") {
-                            elem.setAttribute ("cx", pos.x);
-                            elem.setAttribute ("cy", pos.y);
-                            outputElems.push (elem);
+                        elem = svg.SVGadapter (elem);
+                        if (elem.content.type == "circle" ||
+                            elem.content.type == "ellipse") {
+                            elem.setPos (pos.x, pos.y);
+                            outputElems.push (circle);
                         }
                         else {
-                          if (elem.data.type == "rect") {
-                            elem.setAttribute ("x", pos.x);
-                            elem.setAttribute ("y", pos.y);
+                          if (elem.content.type == "rect") {
+                            elem.setPos (pos.x, pos.y);
                             outputElems.push (elem);
                           }
                           else {
-                            if (elem.data.type == "group") {
-                              var translate = "translate ("+ pos.x +","+pos.y+")";
-                              elem.setAttribute ("transform", translate);
+                            if (elem.content.type == "g") {
+                              elem.setPos (pos.x, pos.y);
                               outputElems.push (elem);
                             }
                           }
                         }
                       });
+                      console.log ("node sent");
                       node.send({nrSvg: outputElems});
 		                }
                     var duration = process.hrtime(start);

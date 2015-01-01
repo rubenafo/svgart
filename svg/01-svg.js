@@ -5,11 +5,21 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);
         var customStyle = config.func;
         this.on('input', function(msg) {
-          if (msg.nrSvg) {
-            var svgDoc = new svg.SVG (config.width, config.height, customStyle);
-            msg.payload = svgDoc.toString (msg.nrSvg);
-            this.send(msg);
-          }
+            if (msg.nrSvg) {
+                var svgDoc = new svg.SVG (config.width, config.height, customStyle);
+                if (msg.nrSvg.constructor === Array) {
+                    var svgString = new String ();
+                    msg.nrSvg.forEach (function (item) {
+                        svgString += item.toSVG();
+                    });
+                    msg.payload = svgDoc.toSVG (svgString);
+                }
+                else {
+                    console.log("one");
+                    msg.payload = svgDoc.toSVG (msg.nrSvg);
+                }
+                this.send(msg);
+            }
         });
     };
     RED.nodes.registerType("svg",LowerCaseNode);

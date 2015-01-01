@@ -15,7 +15,7 @@ module.exports = function(RED) {
           }
           else {
 	          var circle = new svg.Circle (0, 0, 40, "stroke:black;stroke-width:3;fill:red");
-            msg.nrSvg = [circle];
+            msg.nrSvg = circle;
             node.send (msg);
           }
         });
