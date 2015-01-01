@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
- 
+
 module.exports = function(RED) {
     var vm = require ("vm");
     var svg = require ("./svg.js");
@@ -31,8 +31,9 @@ module.exports = function(RED) {
                     msg.payload = svgDoc.toSVG (svgString);
                 }
                 else {
-                    console.log("one");
-                    msg.payload = svgDoc.toSVG (msg.nrSvg);
+                    console.log(msg.nrSvg);
+                    var svgString = msg.nrSvg.toSVG();
+                    msg.payload = svgDoc.toSVG (svgString);
                 }
                 this.send(msg);
             }

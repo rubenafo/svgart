@@ -77,22 +77,30 @@ module.exports = function(RED) {
                         if (elem.content.type == "circle" ||
                             elem.content.type == "ellipse") {
                             elem.setPos (pos.x, pos.y);
-                            outputElems.push (circle);
+                            //outputElems.push (elem);
                         }
-                        else {
+                        else 
                           if (elem.content.type == "rect") {
                             elem.setPos (pos.x, pos.y);
-                            outputElems.push (elem);
+                            //outputElems.push (elem);
                           }
-                          else {
+                          else 
                             if (elem.content.type == "g") {
                               elem.setPos (pos.x, pos.y);
-                              outputElems.push (elem);
+                              //outputElems.push (elem);
                             }
-                          }
-                        }
+                            else 
+                              if (elem.content.type == "line") {
+                                var current = results.indexOf (pos);
+                                if (current > 0)
+                                  elem.setCoords (results[current-1].x, results[current-1].y, 
+                                                  pos.x, pos.y);
+                                //else
+                                  //elem.setCoords (0,0, pos.x,pos.y);
+                                  //continue;
+                              }
+                        outputElems.push (elem);
                       });
-                      console.log ("node sent");
                       node.send({nrSvg: outputElems});
 		                }
                     var duration = process.hrtime(start);

@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
- 
+
 module.exports = function(RED) {
+    var svg = require ("./svg.js");
     function circleNode(config) {
         RED.nodes.createNode(this,config);
         var node = this;
@@ -22,12 +23,17 @@ module.exports = function(RED) {
           if (msg.nrSvg && msg.nrSvg.coords) {
             var elems = new Array();
               for (var i = 0; i < msg.nrSvg.coords.length-1; i++) {
-                var line = "<line x1=\"" + msg.nrSvg.coords[i].x + "\" y1=\"" + msg.nrSvg.coords[i].y +
-                           "\" x2=\"" + msg.nrSvg.coords[i+1].x + "\" y2=\"" + msg.nrSvg.coords[i+1].y +
-                           "\" " + "style=\"stroke:rgb(255,0,0);stroke-width:3\"></line>";
+                var line = new svg.Line (msg.nrSvg.coords[i].x, msg.nrSvg.coords[i].y, 
+                                     msg.nrSvg.coords[i+1].x, msg.nrSvg.coords[i+1].y,
+                                     "stroke:rgb(255,0,0);stroke-width:3");
                 elems[elems.length] = line;
               };
-            msg.nrSvg = elems;
+              msg.nrSvg = elems;
+              node.send (msg);
+          }
+          else {
+            var line = new svg.Line (0, 0, 0, 0, "stroke:rgb(255,0,0);stroke-width:3");
+            msg.nrSvg = line;
             node.send (msg);
           }
         });

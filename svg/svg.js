@@ -228,11 +228,15 @@ Line.prototype.parent = SVGBase.prototype;
 Line.prototype.constructor = Line;
 function Line (x0, y0, x1, y1, style) {
   SVGBase.call (this, Line.type);
-  this.parent.setAttribute.call (this, "x0", x0);
-  this.parent.setAttribute.call (this, "y0", y0);
-  this.parent.setAttribute.call (this, "x1", x1);
-  this.parent.setAttribute.call (this, "y1", y1);
+  this.setCoords (x0, y0, x1, y1);
   this.parent.setAttribute.call (this, "style", style);
+};
+
+Line.prototype.setCoords = function (x0, y0, x1, y1) {
+  this.parent.setAttribute.call (this, "x1", x0);
+  this.parent.setAttribute.call (this, "y1", y0);
+  this.parent.setAttribute.call (this, "x2", x1);
+  this.parent.setAttribute.call (this, "y2", y1);
 };
 
 Line.adapt = function (elem) {
@@ -250,6 +254,7 @@ SVGadapter = function (elem) {
       case Ellipse.type: return Ellipse.adapt (elem);
       case Group.type: return Group.adapt (elem);
       case Rect.type: return Rect.adapt (elem);
+      case Line.type: return Line.adapt (elem);
     }
   }
   console.log ("Undefined type casting " + elem);
@@ -264,3 +269,4 @@ exports.Ellipse = Ellipse;
 exports.Group = Group;
 exports.SVGadapter = SVGadapter;
 exports.Rect = Rect;
+exports.Line = Line;
