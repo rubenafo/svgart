@@ -1,3 +1,18 @@
+/**
+ * Copyright 2014 Ruben Afonso, ruben@figurebelow.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ **/
 
 function SVGBase (t) {
 	this.content = {};
@@ -98,7 +113,7 @@ Circle.prototype.parent = SVGBase.prototype;
 
 Circle.prototype.constructor = Circle;
 function Circle (x, y, rd, style) {
-	SVGBase.call (this, "circle");
+	SVGBase.call (this, Circle.type);
   this.setPos (x,y);
   this.parent.setAttribute.call (this, "r", rd);
   this.parent.setAttribute.call (this, "style", style);
@@ -121,7 +136,7 @@ Ellipse.prototype.parent = SVGBase.prototype;
 
 Ellipse.prototype.constructor = Ellipse;
 function Ellipse (cx, cy, rx, ry, style) {
-  SVGBase.call (this, "ellipse");
+  SVGBase.call (this, Ellipse.type);
   this.setPos (cx, cy);
   this.parent.setAttribute.call (this, "rx", rx);
   this.parent.setAttribute.call (this, "ry", ry);
@@ -145,7 +160,7 @@ Group.prototype.parent = SVGBase.prototype;
 
 Group.prototype.constructor = Group;
 function Group () {
-  SVGBase.call (this, "g");
+  SVGBase.call (this, Group.type);
   this.content.children = [];
 };
 
@@ -205,6 +220,26 @@ Rect.adapt = function (elem) {
 }
 
 // Line element ////////////////////////
+
+Line.type = "line";
+Line.prototype = new SVGBase ();
+Line.prototype.parent = SVGBase.prototype;
+
+Line.prototype.constructor = Line;
+function Line (x0, y0, x1, y1, style) {
+  SVGBase.call (this, Line.type);
+  this.parent.setAttribute.call (this, "x0", x0);
+  this.parent.setAttribute.call (this, "y0", y0);
+  this.parent.setAttribute.call (this, "x1", x1);
+  this.parent.setAttribute.call (this, "y1", y1);
+  this.parent.setAttribute.call (this, "style", style);
+};
+
+Line.adapt = function (elem) {
+  return SVGBase.prototype.adapt.call (elem, Line.prototype);
+}
+
+// SVG Adapter /////////////////////////
 
 SVGadapter = function (elem) {
   if (elem.content && elem.content.type) {
