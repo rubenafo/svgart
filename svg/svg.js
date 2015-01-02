@@ -165,7 +165,10 @@ function Group () {
 };
 
 Group.prototype.addChild = function (child) {
-  this.content.children.push (child);
+  if (child instanceof Array)
+    this.content.children = this.content.children.concat (child.slice());
+  else
+    this.content.children.push (child);
 };
 
 Group.prototype.setPos = function (x, y) {

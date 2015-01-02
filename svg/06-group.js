@@ -32,7 +32,11 @@ module.exports = function(RED) {
             if (context.data.length == elemsToGroup) { // waiting is over, send!
               var group = new svg.Group ();
               context.data.forEach (function (elem) {
-                group.addChild (elem);
+                if (elem instanceof Array) {
+                  group.addChild (elem.slice());
+                }
+                else
+                  group.addChild (elem);
               });
               msg.nrSvg = group;
               node.send(msg);

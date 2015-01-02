@@ -62,7 +62,7 @@ module.exports = function(RED) {
                             }
                         }
                     }
-                    var outputElems = [];
+                    var outputElems = new Array();
                     var node = this;
                     if (msg.nrSvg && results) {
                       var cp = undefined;
@@ -77,17 +77,14 @@ module.exports = function(RED) {
                         if (elem.content.type == "circle" ||
                             elem.content.type == "ellipse") {
                             elem.setPos (pos.x, pos.y);
-                            //outputElems.push (elem);
                         }
                         else 
                           if (elem.content.type == "rect") {
                             elem.setPos (pos.x, pos.y);
-                            //outputElems.push (elem);
                           }
                           else 
                             if (elem.content.type == "g") {
                               elem.setPos (pos.x, pos.y);
-                              //outputElems.push (elem);
                             }
                             else 
                               if (elem.content.type == "line") {

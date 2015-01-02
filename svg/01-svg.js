@@ -15,7 +15,6 @@
  **/
 
 module.exports = function(RED) {
-    var vm = require ("vm");
     var svg = require ("./svg.js");
     function LowerCaseNode(config) {
         RED.nodes.createNode(this, config);
@@ -31,8 +30,8 @@ module.exports = function(RED) {
                     msg.payload = svgDoc.toSVG (svgString);
                 }
                 else {
-                    console.log(msg.nrSvg);
-                    var svgString = msg.nrSvg.toSVG();
+                    var svgElem = svg.SVGadapter (msg.nrSvg);
+                    var svgString = svgElem.toSVG();
                     msg.payload = svgDoc.toSVG (svgString);
                 }
                 this.send(msg);
