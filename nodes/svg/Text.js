@@ -37,6 +37,12 @@ Text.prototype.setPos = function (x,y) {
   this.parent.setAttribute.call (this, "y", y);
 };
 
+Text.prototype.clone = function () {
+  var copy = this.parent.clone.call (this);
+  copy.content.string = this.content.string;
+  return copy;
+}
+
 Text.prototype.toSVG = function () {
   return this.parent.toSVG.call (this, this.content.string);
 };

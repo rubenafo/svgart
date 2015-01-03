@@ -53,7 +53,7 @@ module.exports = function(RED) {
             msg.nrSvg = new Line (config.x1pos, config.y1pos, config.x2pos, config.y2pos, 
                                      config.func, config.zindex);
           case "text":
-            msg.nrSvg = new Text (config.xpos, config.ypos, "string", config.func, config.zindex);
+            msg.nrSvg = new Text (config.xpos, config.ypos, config.textString, config.func, config.zindex);
         }
         node.send (msg);
       }
