@@ -15,27 +15,30 @@
  **/
 
 module.exports = function(RED) {
-    var svg = require ("./svg.js");
+    var Line = require ("./svg/Line").Line;
     function circleNode(config) {
-        RED.nodes.createNode(this, config);
+        RED.nodes.createNode(this,config);
         var node = this;
         this.on('input', function(msg) {
           if (msg.nrSvg && msg.nrSvg.coords) {
             var elems = new Array();
-            msg.nrSvg.coords.forEach (function (elem) {
-              var circle = new svg.Circle (elem.x, elem.y, 40, config.func, config.zindex);
-              elems[elems.length] = circle;
-            });
-            msg.nrSvg = elems;
-            node.send (msg);
+              for (var i = 0; i < msg.nrSvg.coords.length-1; i++) {
+                var line = new Line (msg.nrSvg.coords[i].x, msg.nrSvg.coords[i].y, 
+                                     msg.nrSvg.coords[i+1].x, msg.nrSvg.coords[i+1].y,
+                                     "stroke:rgb(255,0,0);stroke-width:3");
+                elems[elems.length] = line;
+              };
+              msg.nrSvg = elems;
+              node.send (msg);
           }
           else {
-	          var circle = new svg.Circle (config.xpos, config.ypos, config.radio, 
-                                         config.func, config.zindex);
-            msg.nrSvg = circle;
+            var line = new Line (config.x1, config.y1, config.x2, config.y2, 
+                                     "stroke:rgb(255,0,0);stroke-width:3", 
+                                     config.zindex);
+            msg.nrSvg = line;
             node.send (msg);
           }
         });
     };
-    RED.nodes.registerType("circle", circleNode);
+    RED.nodes.registerType("line", circleNode);
 }

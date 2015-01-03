@@ -15,13 +15,13 @@
  **/
 
 module.exports = function(RED) {
-    var svg = require ("./svg.js");
+    var SVG = require ("./svg/Svg").SVG;
     function LowerCaseNode(config) {
         RED.nodes.createNode(this, config);
         var customStyle = config.func;
         this.on('input', function(msg) {
             if (msg.nrSvg) {
-                var svgDoc = new svg.SVG (config.width, config.height, customStyle);
+                var svgDoc = new SVG (config.width, config.height, customStyle);
                 if (msg.nrSvg.constructor === Array) {
                     var svgString = new String ();
                     msg.nrSvg.forEach (function (item) {

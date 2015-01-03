@@ -18,8 +18,7 @@ module.exports = function(RED) {
     "use strict";
     var util = require("util");
     var vm = require("vm");
-    var jsdom = require ("jsdom");
-    var svg = require ("./svg.js");
+    var SVGadapter = require ("./svg/Utils.js").SVGadapter;
 
     function FunctionNode(n) {
         RED.nodes.createNode(this,n);
@@ -73,7 +72,7 @@ module.exports = function(RED) {
                         cp = msg.nrSvg;
                       results.forEach (function (pos) {
                         var elem = cp.clone();
-                        elem = svg.SVGadapter (elem);
+                        elem = SVGadapter (elem);
                         if (elem.content.type == "circle" ||
                             elem.content.type == "ellipse") {
                             elem.setPos (pos.x, pos.y);

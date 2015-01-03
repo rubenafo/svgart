@@ -13,18 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
- 
+
 module.exports = function(RED) {
-    var svg = require ("./svg.js");
+    var Circle = require ("./svg/Circle.js").Circle;
     function circleNode(config) {
-        RED.nodes.createNode(this,config);
+        RED.nodes.createNode(this, config);
         var node = this;
         this.on('input', function(msg) {
-            var rect = new svg.Rect (config.xpos, config.ypos, config.width, config.height, 
-                                     config.func, config.zindex);
-            msg.nrSvg = rect;
-            node.send(msg);
+          if (msg.nrSvg && msg.nrSvg.coords) {
+            var elems = new Array();
+            msg.nrSvg.coords.forEach (function (elem) {
+              var circle = new Circle (elem.x, elem.y, 40, config.func, config.zindex);
+              elems[elems.length] = circle;
+            });
+            msg.nrSvg = elems;
+            node.send (msg);
+          }
+          else {
+	          var circle = new Circle (config.xpos, config.ypos, config.radio, 
+                                         config.func, config.zindex);
+            msg.nrSvg = circle;
+            node.send (msg);
+          }
         });
     };
-    RED.nodes.registerType("rect", circleNode);
+    RED.nodes.registerType("circle", circleNode);
 }

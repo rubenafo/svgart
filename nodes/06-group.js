@@ -16,7 +16,7 @@
 
 module.exports = function(RED) {
     var vm = require ("vm");
-    var svg = require ("./svg.js");
+    var Group = require ("./svg/Group").Group;
     function GroupFunction (config) {
         RED.nodes.createNode(this, config);
         var node = this;
@@ -30,7 +30,7 @@ module.exports = function(RED) {
               context.data.push (msg.nrSvg);
             }
             if (context.data.length == elemsToGroup) { // waiting is over, send!
-              var group = new svg.Group ();
+              var group = new Group ();
               context.data.forEach (function (elem) {
                 if (elem instanceof Array) {
                   group.addChild (elem.slice());

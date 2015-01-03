@@ -15,7 +15,7 @@
  **/
 
 module.exports = function(RED) {
-  var svg = require ("./svg.js");
+  var Ellipse = require ("./svg/Ellipse").Ellipse;
   function circleNode(config) {
     RED.nodes.createNode(this,config);
     var node = this;
@@ -23,7 +23,7 @@ module.exports = function(RED) {
       if (msg.nrSvg && msg.nrSvg.coords) {
         var elems = new Array();
         msg.nrSvg.coords.forEach (function (elem) {
-          var ellipse = new svg.Ellipse (elem.x, elem.y, config.rx, config.ry, 
+          var ellipse = new Ellipse (elem.x, elem.y, config.rx, config.ry, 
                                          config.func, config.zindex);
           elems[elems.length] = ellipse;
         });
@@ -31,7 +31,7 @@ module.exports = function(RED) {
         node.send (msg);
       }
       else {
-        var ellipse = new svg.Ellipse (config.xpos, config.ypos, config.rx, config.ry, 
+        var ellipse = new Ellipse (config.xpos, config.ypos, config.rx, config.ry, 
                                        config.func, config.zindex);
         msg.nrSvg = ellipse;
         node.send (msg);
