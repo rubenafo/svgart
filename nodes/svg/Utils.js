@@ -20,6 +20,7 @@ var Ellipse = require ("./Ellipse").Ellipse;
 var Group = require ("./Group").Group;
 var Rect = require ("./Rect").Rect;
 var Line = require ("./Line").Line;
+var Text = require ("./Text").Text;
 
 SVGadapter = function (elem) {
   if (elem.content && elem.content.type) {
@@ -31,6 +32,7 @@ SVGadapter = function (elem) {
       case Group.type: return Group.adapt (elem);
       case Rect.type: return Rect.adapt (elem);
       case Line.type: return Line.adapt (elem);
+      case Text.type: return Text.adapt (elem);
     }
   }
   console.log ("Undefined type casting " + elem);

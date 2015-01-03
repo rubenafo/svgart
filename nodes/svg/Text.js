@@ -42,7 +42,7 @@ Text.prototype.toSVG = function () {
 };
 
 Text.adapt = function (elem) {
-  return SVGBase.prototype.adapt.call (elem, Ellipse.prototype);
+  return SVGBase.prototype.adapt.call (elem, Text.prototype);
 }
 
 exports.Text = Text;

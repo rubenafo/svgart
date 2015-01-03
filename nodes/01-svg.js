@@ -30,7 +30,7 @@ module.exports = function(RED) {
                     msg.payload = svgDoc.toSVG (svgString);
                 }
                 else {
-                    var svgElem = svg.SVGadapter (msg.nrSvg);
+                    var svgElem = SVGadapter (msg.nrSvg);
                     var svgString = svgElem.toSVG();
                     msg.payload = svgDoc.toSVG (svgString);
                 }

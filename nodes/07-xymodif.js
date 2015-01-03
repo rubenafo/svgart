@@ -64,41 +64,29 @@ module.exports = function(RED) {
                     var outputElems = new Array();
                     var node = this;
                     if (msg.nrSvg && results) {
-                      var cp = undefined;
-                      if (msg.nrSvg.length != undefined) {
+                        var cp = undefined;
+                        if (msg.nrSvg.length != undefined) {
                         cp = msg.nrSvg[0];
-                      }
-                      else
+                    }
+                    else
                         cp = msg.nrSvg;
-                      results.forEach (function (pos) {
-                        var elem = cp.clone();
-                        elem = SVGadapter (elem);
-                        if (elem.content.type == "circle" ||
-                            elem.content.type == "ellipse") {
-                            elem.setPos (pos.x, pos.y);
-                        }
-                        else 
-                          if (elem.content.type == "rect") {
-                            elem.setPos (pos.x, pos.y);
-                          }
-                          else 
-                            if (elem.content.type == "g") {
-                              elem.setPos (pos.x, pos.y);
-                            }
-                            else 
-                              if (elem.content.type == "line") {
+                        results.forEach (function (pos) {
+                            var elem = cp.clone();
+                            elem = SVGadapter (elem);
+                            if (elem.content.type == "line")
+                            {
                                 var current = results.indexOf (pos);
                                 if (current > 0)
-                                  elem.setCoords (results[current-1].x, results[current-1].y, 
-                                                  pos.x, pos.y);
-                                //else
-                                  //elem.setCoords (0,0, pos.x,pos.y);
-                                  //continue;
-                              }
-                        outputElems.push (elem);
-                      });
-                      node.send({nrSvg: outputElems});
-		                }
+                                    elem.setCoords (results[current-1].x, results[current-1].y, 
+                                        pos.x, pos.y);
+                            }
+                            else {
+                                elem.setPos (pos.x, pos.y);
+                            }
+                            outputElems.push (elem);
+                        });
+                        node.send({nrSvg: outputElems});
+                    }
                     var duration = process.hrtime(start);
                     if (process.env.NODE_RED_FUNCTION_TIME) {
                         this.status({fill:"yellow",shape:"dot",text:""+Math.floor((duration[0]* 1e9 +  duration[1])/10000)/100});

@@ -1,0 +1,233 @@
+<!--
+   Copyright 2014 Ruben Afonso, ruben@figurebelow.com
+  
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+  
+   http://www.apache.org/licenses/LICENSE-2.0
+  
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+
+<script type="text/javascript">
+
+    hideAllRows = function () {
+      $("#xypos-option").hide();
+      $("#rxry-option").hide();
+      $("#radio-option").hide();
+      $("#sourcepos-option").hide();
+      $("#targetpos-option").hide();
+      $("#zindex-option").hide();
+      $("#size-option").hide();
+      $("#textString-option").hide();
+      $("#stylelabel-option").hide();
+      $("#stylecontent-option").hide();
+    };
+
+    RED.nodes.registerType('shape',{
+        category: 'svg',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""},
+            shapeType: {value: "circle"},
+            xpos: {value: "0"},
+            ypos: {value: "0"},
+            elemwidth: {value :"0"},
+            elemheight: {value :"0"},
+            radio: {value: "0"},
+            x1pos: {value: "0"},
+            y1pos: {value: "0"},
+            x2pos: {value: "0"},
+            y2pos: {value: "0"},
+            rx: {value: "0"},
+            ry: {value: "0"},
+            textString: {value: ""},
+            zindex: {value:"0"},
+            func: {value: "//svg style"}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            return this.name || this.shapeType;
+        },
+        oneditprepare: function() {
+            $("#node-input-shapeType").change(function() {
+              var shape = $("#node-input-shapeType option:selected").val();
+              hideAllRows ();
+              switch (shape) {
+                case "circle":
+                  $("#xypos-option").show();
+                  $("#radio-option").show();
+                  $("#zindex-option").show();
+                  $("#stylelabel-option").show();
+                  $("#stylecontent-option").show();
+                  break;
+                case "ellipse":
+                  $("#xypos-option").show();
+                  $("#rxry-option").show();
+                  $("#zindex-option").show();
+                  $("#stylelabel-option").show();
+                  $("#stylecontent-option").show();
+                  break;
+                case "rect":
+                  $("#xypos-option").show();
+                  $("#size-option").show();
+                  $("#zindex-option").show();
+                  $("#stylelabel-option").show();
+                  $("#stylecontent-option").show();
+                  break;
+                case "line":
+                  $("#sourcepos-option").show();
+                  $("#targetpos-option").show();
+                  $("#zindex-option").show();
+                  $("#stylelabel-option").show();
+                  $("#stylecontent-option").show();
+                  break;
+                case "text":
+                  $("#sourcepos-option").show();
+                  $("#textString-option").show();
+                  break;
+                default: // empty;
+                };
+            });
+
+            function functionDialogResize() {
+                var rows = $("#dialog-form>div:not(.node-text-editor-row)");
+                var height = $("#dialog-form").height();
+                for (var i=0;i<rows.size();i++) {
+                    height -= $(rows[i]).outerHeight(true);
+                }
+                var editorRow = $("#dialog-form>div.node-text-editor-row");
+                height -= (parseInt(editorRow.css("marginTop"))+parseInt(editorRow.css("marginBottom")));
+                $(".node-text-editor").css("height",height+"px");
+            };
+
+            $( "#dialog" ).on("dialogresize", functionDialogResize);
+            $( "#dialog" ).one("dialogopen", function(ev) {
+                var size = $( "#dialog" ).dialog('option','sizeCache-function');
+                if (size) {
+                    $("#dialog").dialog('option','width',size.width);
+                    $("#dialog").dialog('option','height',size.height);
+                    functionDialogResize();
+                }
+            });
+            $( "#dialog" ).one("dialogclose", function(ev,ui) {
+                var height = $( "#dialog" ).dialog('option','height');
+                $( "#dialog" ).off("dialogresize",functionDialogResize);
+            });
+            var that = this;
+            require(["orion/editor/edit"], function(edit) {
+                that.editor = edit({
+                    parent:document.getElementById('node-input-func-editor'),
+                    lang:"css",
+                    contents: $("#node-input-func").val()
+                });
+            });
+            /*if (this.shapeType == null) {
+                this.shapeType = "circle";
+                $("#node-input-shapeType").val(this.shapeType);
+                $("#node-input-shapeType").change();
+            }*/
+            //else {
+            $("#node-input-shapeType").val(this.shapeType);
+            $("#node-input-shapeType").change();
+            //};
+        },
+        oneditsave: function() {
+            //$("#node-input-shapeType").val(this.shapeType);
+            $("#node-input-func").val(this.editor.getText());
+            delete this.editor;
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="shape">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    
+    <div class="form-row">
+      <label for="node-input-shapeType"><i class="fa fa-envelope"></i> Shape</label>
+        <select id="node-input-shapeType" style="width:125px !important">
+          <option value="circle">Circle</option>
+          <option value="ellipse">Ellipse</option>
+          <option value="rect">Rect</option>
+          <option value="line">Line</option>
+          <option value="text">Text</option>
+        </select>
+    </div>
+
+    <!-- X,Y -->
+    <div class="form-row hidden" id="xypos-option">
+      <label for="node-input-xpos"><i class="icon-tag"></i> X,Y coords</label>
+      <input type="number" id="node-input-xpos" placeholder="X position" style="width:25%">
+      <input type="number" id="node-input-ypos" placeholder="Y position" style="width:25%">
+    </div>
+
+    <!-- Radio -->
+    <div class="form-row hidden"  id="radio-option">
+      <label for="node-input-radio"><i class="icon-tag"></i> Radio</label>
+      <input type="number" id="node-input-radio" placeholder="Radio">
+    </div>
+    
+    <!-- X1,Y1 -->
+    <div class="form-row hidden" id="sourcepos-option">
+      <label for="node-input-sourcepos"><i class="icon-tag"></i> X1, Y1</label>
+      <input type="number" id="node-input-x1pos" placeholder="X1 pos" style="width:25%">
+      <input type="number" id="node-input-y1pos" placeholder="Y1 pos" style="width:25%">
+    </div>
+    
+     <!-- X2,Y2 -->
+    <div class="form-row hidden" id="targetpos-option">
+      <label for="node-input-x2pos"><i class="icon-tag"></i> X2,Y2</label>
+      <input type="number" id="node-input-x2pos" placeholder="X2 pos" style="width:25%">
+       <input type="number" id="node-input-y2pos" placeholder="Y2 pos" style="width:25%">
+    </div>
+
+     <!-- RX,RY -->
+    <div class="form-row hidden" id="rxry-option">
+      <label for="node-input-rx"><i class="icon-tag"></i> RX,RY</label>
+      <input type="number" id="node-input-rx" placeholder="X radio" style="width:25%">
+      <input type="number" id="node-input-ry" placeholder="Y radio" style="width:25%">
+    </div>
+
+    <!-- Width,Height -->
+    <div class="form-row hidden" id="size-option">
+      <label for="node-input-rx"><i class="icon-tag"></i> Width,Height</label>
+      <input type="number" id="node-input-elemwidth" placeholder="Width" style="width:25%">
+      <input type="number" id="node-input-elemheight" placeholder="Height" style="width:25%">
+    </div>
+
+    <!-- Text -->
+    <div class="form-row hidden" id="textString-option">
+      <label for="node-input-textString"><i class="icon-tag"></i> Text</label>
+      <input type="text" id="node-input-textString" placeholder="string">
+    </div>
+    
+    <!-- Z-Index -->
+    <div class="form-row hidden" id="zindex-option">
+      <label for="node-input-zindex"><i class="icon-tag"></i> Z-Index</label>
+      <input type="number" id="node-input-zindex" placeholder="z-index" value="0">
+    </div>
+
+    <!-- Style -->
+    <div class="form-row hidden" style="margin-bottom: 0px;" id="stylelabel-option">
+      <label for="node-input-func"><i class="fa fa-wrench"></i> Style</label>
+      <input type="hidden" id="node-input-func" autofocus="autofocus">
+    </div>
+    
+    <div class="form-row node-text-editor-row hidden" id="stylecontent-option">
+      <div style="height: 150px;" class="node-text-editor" id="node-input-func-editor" ></div>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="shape">
+    <p>SVG graphics elements</p>
+</script>
