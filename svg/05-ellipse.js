@@ -23,14 +23,16 @@ module.exports = function(RED) {
       if (msg.nrSvg && msg.nrSvg.coords) {
         var elems = new Array();
         msg.nrSvg.coords.forEach (function (elem) {
-          var ellipse = new svg.Ellipse (elem.x, elem.y, 10, 20, "fill:yellow;stroke:purple;stroke-width:2");
+          var ellipse = new svg.Ellipse (elem.x, elem.y, config.rx, config.ry, 
+                                         config.func, config.zindex);
           elems[elems.length] = ellipse;
         });
         msg.nrSvg = elems;
         node.send (msg);
       }
       else {
-        var ellipse = new svg.Ellipse (10, 20, 10, 20, "fill:yellow;stroke:purple;stroke-width:2");
+        var ellipse = new svg.Ellipse (config.xpos, config.ypos, config.rx, config.ry, 
+                                       config.func, config.zindex);
         msg.nrSvg = ellipse;
         node.send (msg);
       }

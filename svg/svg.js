@@ -14,10 +14,11 @@
  * limitations under the License.
  **/
 
-function SVGBase (t) {
+function SVGBase (type, zindex) {
 	this.content = {};
 	this.content.properties = [];
-	this.content.type = t;
+	this.content.type = type;
+  this.content.zindex = zindex || 0;
 };
 
 SVGBase.prototype.setAttribute = function (key, value) {
@@ -27,6 +28,10 @@ SVGBase.prototype.setAttribute = function (key, value) {
     this.content.properties.push (lowerStr);
   }
   this.content[lowerStr] = value;
+};
+
+SVGBase.prototype.getZindex = function () {
+  return this.content["zindex"] || 0;
 };
 
 SVGBase.prototype.toSVG = function (content) {
@@ -58,6 +63,10 @@ SVGBase.prototype.clone = function () {
 
 SVGBase.prototype.getType = function () {
   return this.content.type;
+};
+
+SVGBase.prototype.getZIndex = function () {
+  return this.content.zindex;
 };
 
 SVGBase.prototype.adapt = function (prototype) {
@@ -112,8 +121,8 @@ Circle.prototype = new SVGBase;
 Circle.prototype.parent = SVGBase.prototype;
 
 Circle.prototype.constructor = Circle;
-function Circle (x, y, rd, style) {
-	SVGBase.call (this, Circle.type);
+function Circle (x, y, rd, style, zindex) {
+	SVGBase.call (this, Circle.type, zindex);
   this.setPos (x,y);
   this.parent.setAttribute.call (this, "r", rd);
   this.parent.setAttribute.call (this, "style", style);
@@ -135,8 +144,8 @@ Ellipse.prototype = new SVGBase ();
 Ellipse.prototype.parent = SVGBase.prototype;
 
 Ellipse.prototype.constructor = Ellipse;
-function Ellipse (cx, cy, rx, ry, style) {
-  SVGBase.call (this, Ellipse.type);
+function Ellipse (cx, cy, rx, ry, style, zindex) {
+  SVGBase.call (this, Ellipse.type, zindex);
   this.setPos (cx, cy);
   this.parent.setAttribute.call (this, "rx", rx);
   this.parent.setAttribute.call (this, "ry", ry);
@@ -159,8 +168,8 @@ Group.prototype = new SVGBase ();
 Group.prototype.parent = SVGBase.prototype;
 
 Group.prototype.constructor = Group;
-function Group () {
-  SVGBase.call (this, Group.type);
+function Group (zindex) {
+  SVGBase.call (this, Group.type, zindex);
   this.content.children = [];
 };
 
@@ -194,6 +203,13 @@ Group.prototype.toSVG = function () {
   return this.parent.toSVG.call (this, svgString);
 };
 
+Group.prototype.sortChildren = function () {
+  if (this.content.children) {
+    console.log(this.content.children);
+    this.content.children.sort (OrderByZIndex);
+  }
+}
+
 Group.adapt = function (elem) {
   return SVGBase.prototype.adapt.call (elem, Group.prototype);
 }
@@ -205,8 +221,8 @@ Rect.prototype = new SVGBase ();
 Rect.prototype.parent = SVGBase.prototype;
 
 Rect.prototype.constructor = Rect;
-function Rect (x, y, width, height, style) {
-  SVGBase.call (this, Rect.type);
+function Rect (x, y, width, height, style, zindex) {
+  SVGBase.call (this, Rect.type, zindex);
   this.setPos (x, y);
   this.parent.setAttribute.call (this, "width", width);
   this.parent.setAttribute.call (this, "height", height);
@@ -229,17 +245,17 @@ Line.prototype = new SVGBase ();
 Line.prototype.parent = SVGBase.prototype;
 
 Line.prototype.constructor = Line;
-function Line (x0, y0, x1, y1, style) {
-  SVGBase.call (this, Line.type);
-  this.setCoords (x0, y0, x1, y1);
+function Line (x1, y1, x2, y2, style, zindex) {
+  SVGBase.call (this, Line.type, zindex);
+  this.setCoords (x1, y1, x2, y2);
   this.parent.setAttribute.call (this, "style", style);
 };
 
-Line.prototype.setCoords = function (x0, y0, x1, y1) {
-  this.parent.setAttribute.call (this, "x1", x0);
-  this.parent.setAttribute.call (this, "y1", y0);
-  this.parent.setAttribute.call (this, "x2", x1);
-  this.parent.setAttribute.call (this, "y2", y1);
+Line.prototype.setCoords = function (x1, y1, x2, y2) {
+  this.parent.setAttribute.call (this, "x1", x1);
+  this.parent.setAttribute.call (this, "y1", y1);
+  this.parent.setAttribute.call (this, "x2", x2);
+  this.parent.setAttribute.call (this, "y2", y2);
 };
 
 Line.adapt = function (elem) {
@@ -264,7 +280,17 @@ SVGadapter = function (elem) {
   return elem;
 };
 
+OrderByZIndex = function (a, b) {
+  a = SVGadapter (a);
+  b = SVGadapter (b);
+  if (a.getZIndex() && b.getZIndex()) {
+    return a.getZIndex() - b.getZIndex();
+  }
+  return 0; // unchanged
+};
+
 // Export statements to have this as a valid require () in NodeJS
+//
 exports.SVGBase = SVGBase;
 exports.SVG = SVG;
 exports.Circle = Circle;
@@ -273,3 +299,4 @@ exports.Group = Group;
 exports.SVGadapter = SVGadapter;
 exports.Rect = Rect;
 exports.Line = Line;
+exports.OrderByZIndex = OrderByZIndex;

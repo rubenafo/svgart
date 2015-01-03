@@ -38,6 +38,7 @@ module.exports = function(RED) {
                 else
                   group.addChild (elem);
               });
+              group.sortChildren ();
               msg.nrSvg = group;
               node.send(msg);
               context.data = [];

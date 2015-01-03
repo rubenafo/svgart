@@ -20,7 +20,8 @@ module.exports = function(RED) {
         RED.nodes.createNode(this,config);
         var node = this;
         this.on('input', function(msg) {
-            var rect = new svg.Rect (0, 0, 300, 100, "fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)");
+            var rect = new svg.Rect (config.xpos, config.ypos, config.width, config.height, 
+                                     config.func, config.zindex);
             msg.nrSvg = rect;
             node.send(msg);
         });

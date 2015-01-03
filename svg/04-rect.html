@@ -20,8 +20,10 @@
         color: '#a6bbcf',
         defaults: {
             name: {value:""},
-            x: {value: "0"},
-            y: {value: "0"},
+            xpos: {value: "0"},
+            ypos: {value: "0"},
+            width: {value: "0"},
+            height: {value: "0"},
             zindex:{value:"0"},
             func: {value: "//svg style"}
         },
@@ -85,12 +87,20 @@
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
     <div class="form-row">
-      <label for="node-input-x"><i class="icon-tag"></i> X</label>
-      <input type="text" id="node-input-x" placeholder="X position">
+      <label for="node-input-xpos"><i class="icon-tag"></i> X</label>
+      <input type="text" id="node-input-xpos" placeholder="X position">
     </div>
     <div class="form-row">
-      <label for="node-input-y"><i class="icon-tag"></i> Y</label>
-      <input type="text" id="node-input-y" placeholder="Y position">
+      <label for="node-input-ypos"><i class="icon-tag"></i> Y</label>
+      <input type="text" id="node-input-ypos" placeholder="Y position">
+    </div>
+    <div class="form-row">
+      <label for="node-input-width"><i class="icon-tag"></i> Width</label>
+      <input type="text" id="node-input-width" placeholder="Width">
+    </div>
+    <div class="form-row">
+      <label for="node-input-height"><i class="icon-tag"></i> Height</label>
+      <input type="text" id="node-input-height" placeholder="Height">
     </div>
     <div class="form-row">
       <label for="node-input-zindex"><i class="icon-tag"></i> Z-Index</label>

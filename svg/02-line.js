@@ -32,7 +32,9 @@ module.exports = function(RED) {
               node.send (msg);
           }
           else {
-            var line = new svg.Line (0, 0, 0, 0, "stroke:rgb(255,0,0);stroke-width:3");
+            var line = new svg.Line (config.x1, config.y1, config.x2, config.y2, 
+                                     "stroke:rgb(255,0,0);stroke-width:3", 
+                                     config.zindex);
             msg.nrSvg = line;
             node.send (msg);
           }
