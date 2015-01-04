@@ -14,8 +14,6 @@
  * limitations under the License.
  **/
 
-// Group element ///////////////////////
-
 var SVGBase = require ("./SvgBase").SVGBase;
 
 Group.type = "g";

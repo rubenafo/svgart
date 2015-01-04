@@ -48,5 +48,16 @@ OrderByZIndex = function (a, b) {
   return 0; // unchanged
 };
 
+//
+// Taken from stackoverflow: 
+// http://stackoverflow.com/questions/521295/javascript-random-seeds
+//
+RandomGen = function(s) {
+    return function() {
+        s = Math.sin(s) * 10000; return s - Math.floor(s);
+    };
+};
+
 exports.SVGadapter = SVGadapter;
 exports.OrderByZIndex = OrderByZIndex;
+exports.RandomGen = RandomGen;

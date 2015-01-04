@@ -20,44 +20,39 @@ module.exports = function(RED) {
   var Rect = require ("./svg/Rect").Rect;
   var Line = require ("./svg/Line").Line;
   var Text = require ("./svg/Text").Text;
-  function circleNode(config) {
-    RED.nodes.createNode(this, config);
+
+  function shapeNode (ctx) {
+    RED.nodes.createNode(this, ctx);
     var node = this;
     this.on('input', function(msg) {
-      var shapeType = config.shapeType;
-      if (msg.nrSvg && msg.nrSvg.coords) {
-        var elems = new Array();
-        msg.nrSvg.coords.forEach (function (elem) {
-          var ellipse = new Ellipse (elem.x, elem.y, config.rx, config.ry, 
-                                     config.func, config.zindex);
-          elems[elems.length] = ellipse;
-        });
-        msg.nrSvg = elems;
-        node.send (msg);
+      var shape;
+      switch (ctx.shapeType) {
+        case Circle.type: 
+          shape = new Circle (ctx.xpos, ctx.ypos, ctx.radio, ctx.func, ctx.zindex);
+          break;
+        case Ellipse.type:
+          shape = new Ellipse (ctx.xpos, ctx.ypos, ctx.rx, ctx.ry, ctx.func, ctx.zindex);
+          break;
+        case Rect.type:
+          shape = new Rect (ctx.xpos, ctx.ypos, ctx.elemwidth, ctx.elemheight, ctx.func, ctx.zindex);
+          break;
+        case Line.type:
+          shape = new Line (ctx.x1pos, ctx.y1pos, ctx.x2pos, ctx.y2pos, ctx.func, ctx.zindex);
+          break;
+        case Text.type:
+          shape = new Text (ctx.xpos, ctx.ypos, ctx.textString, ctx.func, ctx.zindex);
+          break;
+      }
+      if (msg.nrSvg) {
+        if (msg.nrSvg instanceof Array) {
+          msg.nrSvg.push (shape);
+        }
       }
       else {
-        switch (shapeType)
-        {
-          case "circle": 
-            msg.nrSvg = new Circle (config.xpos, config.ypos, config.radio, config.func, config.zindex);
-            break;
-          case "ellipse":
-            msg.nrSvg = new Ellipse (config.xpos, config.ypos, config.rx, config.ry, 
-                                     config.func, config.zindex);
-            break;
-          case "rect":
-            msg.nrSvg = new Rect (config.xpos, config.ypos, config.elemwidth, config.elemheight, 
-                                     config.func, config.zindex);
-            break;
-          case "line":
-            msg.nrSvg = new Line (config.x1pos, config.y1pos, config.x2pos, config.y2pos, 
-                                     config.func, config.zindex);
-          case "text":
-            msg.nrSvg = new Text (config.xpos, config.ypos, config.textString, config.func, config.zindex);
-        }
-        node.send (msg);
+        msg.nrSvg = [shape];
       }
+      node.send (msg);
     });
   };
-  RED.nodes.registerType("shape", circleNode);
+  RED.nodes.registerType("shape", shapeNode);
 }
