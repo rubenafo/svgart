@@ -44,7 +44,7 @@ module.exports = function(RED) {
           shape = new Text (ctx.xpos, ctx.ypos, ctx.textString, ctx.func, ctx.zindex);
           break;
         case Polygon.type:
-          shape = new Polygon (ctx.pos, ctx.pos, ctx.textString, ctx.func, ctx.zindex);
+          shape = new Polygon (ctx.textString, ctx.func, ctx.zindex);
       }
       if (msg.nrSvg) {
         if (msg.nrSvg instanceof Array) {

@@ -21,16 +21,17 @@ Polygon.prototype = new SVGBase;
 Polygon.prototype.parent = SVGBase.prototype;
 
 Polygon.prototype.constructor = Polygon;
-function Polygon (x, y, text, style, zindex) {
+function Polygon (text, style, zindex) {
   SVGBase.call (this, Polygon.type, zindex);
-  this.setPos (x,y);
   this.parent.setAttribute.call (this, "points", text);
   this.parent.setAttribute.call (this, "style", style);
 };
 
+/* 
+ * Polygons don't accept x,y so we use the transform attribute
+ */
 Polygon.prototype.setPos = function (x,y) {
-  this.parent.setAttribute.call (this, "x", x); 
-  this.parent.setAttribute.call (this, "y", y);
+  this.parent.addTranslate.call (this, x, y);
 };
 
 Polygon.adapt = function (elem) {

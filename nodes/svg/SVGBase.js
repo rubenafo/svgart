@@ -14,10 +14,13 @@
  * limitations under the License.
  **/
 
+SVGBase.prototype.constructor = SVGBase;
 function SVGBase (type, zindex) {
 	this.content = {};
 	this.content.properties = [];
-	this.content.type = type;
+  this.content.transform = new Array();
+	
+  this.content.type = type;
   this.content.zindex = zindex || 0;
 };
 
@@ -40,6 +43,7 @@ SVGBase.prototype.toSVG = function (content) {
   this.content.properties.forEach (function (elem) {
 		retValue += " " + elem + "=\"" + data[elem] + "\" ";
   });
+  retValue += this.getTransformString ();
   retValue += ">";
   if (content) {
 		retValue += content;
@@ -58,6 +62,10 @@ SVGBase.prototype.clone = function () {
     res.content.properties.push (elem);
     res.content [elem] = baseData[elem];
   });
+  res.content.transform = new Array ();
+  this.content.transform.forEach (function (elem) {
+    res.content.transform.push (elem);
+  });
   return res;
 }
 
@@ -68,6 +76,50 @@ SVGBase.prototype.getType = function () {
 SVGBase.prototype.getZIndex = function () {
   return this.content.zindex;
 };
+
+SVGBase.prototype.getTransformString = function () {
+  var resString = "";
+  for (var i = 0; i < this.content.transform.length; i++) {
+    var item = this.content.transform[i];
+    if (i > 0) 
+      resString += ";";
+    switch (item.op) {
+      case "translate": case "scale":
+        resString += item.op + "(" + item.x+ "," + item.y + ")";
+        break;
+      case "rotate": 
+        resString += item.op + "(" + item.degrees + "," + item.x + "," + item.y + ")";
+        break;
+      case "skewX": case "skewY":
+        resString += item.op + "(" + item.val + ")";
+        break;
+    }
+  };
+  if (resString.length > 0) {
+    resString = "transform=\"" + resString + "\"";
+  }
+  return resString;
+}
+
+SVGBase.prototype.addTranslate = function (x, y) {
+  this.content.transform.push ({op:"translate", 'x':x, 'y':y});
+}
+
+SVGBase.prototype.addScale = function (x, y) {
+  this.content.transform.push ({op:"scale", 'x':x, 'y':y});
+}
+
+SVGBase.prototype.addRotate = function (degrees, x, y) {
+  this.content.transform.push ({op:"rotate", 'degrees': degrees, 'x':x, 'y':y});
+}
+
+SVGBase.prototype.addSkewX = function (x) {
+  this.content.transform.push ({op:"skewX", 'val':x});
+}
+
+SVGBase.prototype.addSkewY = function (y) {
+  this.content.transform.push ({op:"skewY", 'val':y});
+}
 
 SVGBase.prototype.adapt = function (prototype) {
   this.__proto__ = prototype;
