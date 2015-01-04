@@ -20,6 +20,7 @@ module.exports = function(RED) {
   var Rect = require ("./svg/Rect").Rect;
   var Line = require ("./svg/Line").Line;
   var Text = require ("./svg/Text").Text;
+  var Polygon = require ("./svg/Polygon").Polygon;
 
   function shapeNode (ctx) {
     RED.nodes.createNode(this, ctx);
@@ -42,6 +43,8 @@ module.exports = function(RED) {
         case Text.type:
           shape = new Text (ctx.xpos, ctx.ypos, ctx.textString, ctx.func, ctx.zindex);
           break;
+        case Polygon.type:
+          shape = new Polygon (ctx.pos, ctx.pos, ctx.textString, ctx.func, ctx.zindex);
       }
       if (msg.nrSvg) {
         if (msg.nrSvg instanceof Array) {

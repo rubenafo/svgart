@@ -16,25 +16,25 @@
 
 var SVGBase = require ("./SVGBase.js").SVGBase;
 
-Circle.type = "circle";
-Circle.prototype = new SVGBase;
-Circle.prototype.parent = SVGBase.prototype;
+Polygon.type = "polygon";
+Polygon.prototype = new SVGBase;
+Polygon.prototype.parent = SVGBase.prototype;
 
-Circle.prototype.constructor = Circle;
-function Circle (x, y, rd, style, zindex) {
-  SVGBase.call (this, Circle.type, zindex);
+Polygon.prototype.constructor = Polygon;
+function Polygon (x, y, text, style, zindex) {
+  SVGBase.call (this, Polygon.type, zindex);
   this.setPos (x,y);
-  this.parent.setAttribute.call (this, "r", rd);
+  this.parent.setAttribute.call (this, "points", text);
   this.parent.setAttribute.call (this, "style", style);
 };
 
-Circle.prototype.setPos = function (x,y) {
-  this.parent.setAttribute.call (this, "cx", x); 
-  this.parent.setAttribute.call (this, "cy", y);
+Polygon.prototype.setPos = function (x,y) {
+  this.parent.setAttribute.call (this, "x", x); 
+  this.parent.setAttribute.call (this, "y", y);
 };
 
-Circle.adapt = function (elem) {
-  return SVGBase.prototype.adapt.call (elem, Circle.prototype);
+Polygon.adapt = function (elem) {
+  return SVGBase.prototype.adapt.call (elem, Polygon.prototype);
 }
 
-exports.Circle = Circle;
+exports.Polygon = Polygon;

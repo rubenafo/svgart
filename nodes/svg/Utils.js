@@ -21,6 +21,7 @@ var Group = require ("./Group").Group;
 var Rect = require ("./Rect").Rect;
 var Line = require ("./Line").Line;
 var Text = require ("./Text").Text;
+var Polygon = require ("./Polygon").Polygon;
 
 SVGadapter = function (elem) {
   if (elem.content && elem.content.type) {
@@ -33,6 +34,7 @@ SVGadapter = function (elem) {
       case Rect.type: return Rect.adapt (elem);
       case Line.type: return Line.adapt (elem);
       case Text.type: return Text.adapt (elem);
+      case Polygon.type: return Polygon.adapt (elem);
     }
   }
   console.log ("Undefined type casting " + elem);
