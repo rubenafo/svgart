@@ -57,6 +57,7 @@ SVGBase.prototype.clone = function () {
   res.content = {};
   res.content.properties = [];
   res.content.type = this.content.type;
+  res.content.zindex = this.content.zindex;
   var baseData = this.content;
   this.content.properties.forEach (function (elem) {
     res.content.properties.push (elem);
@@ -77,12 +78,30 @@ SVGBase.prototype.getZIndex = function () {
   return this.content.zindex;
 };
 
+SVGBase.prototype.applyTransform = function (transf) {
+  if (transf.rotate) {
+    this.addRotate (transf.rotate.deg,0,0);
+  }
+  if (transf.translate) {
+    this.addTranslate (transf.translate.x, transf.translate.y);
+  }
+  if (transf.scale) {
+    this.addScale (transf.scale.x, transf.scale.y);
+  }
+  if (transf.skewX) {
+    this.addSkewX (transf.skewX.x);
+  }
+  if (transf.skewY) {
+    this.addSkewY (transf.skewY.y);
+  }
+}
+
 SVGBase.prototype.getTransformString = function () {
   var resString = "";
   for (var i = 0; i < this.content.transform.length; i++) {
     var item = this.content.transform[i];
     if (i > 0) 
-      resString += ";";
+      resString += " ";
     switch (item.op) {
       case "translate": case "scale":
         resString += item.op + "(" + item.x+ "," + item.y + ")";

@@ -26,13 +26,6 @@ function Group (zindex) {
   this.content.children = [];
 };
 
-Group.prototype.addChild = function (child) {
-  if (child instanceof Array)
-    this.content.children = this.content.children.concat (child.slice());
-  else
-    this.content.children.push (child);
-};
-
 Group.prototype.setPos = function (x, y) {
   var translation = "translate("+ x +","+ y +")";
   this.parent.setAttribute.call (this, "transform", translation);
@@ -54,6 +47,13 @@ Group.prototype.toSVG = function () {
     svgString += item.toSVG();
   });
   return this.parent.toSVG.call (this, svgString);
+};
+
+Group.prototype.addChild = function (child) {
+  if (child instanceof Array)
+    this.content.children = this.content.children.concat (child.slice());
+  else
+    this.content.children.push (child);
 };
 
 Group.prototype.sortChildren = function () {

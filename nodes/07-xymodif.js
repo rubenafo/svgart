@@ -81,7 +81,7 @@ module.exports = function(RED) {
                                         pos.x, pos.y);
                             }
                             else {
-                                elem.setPos (pos.x, pos.y);
+                                elem.applyTransform (pos);
                             }
                             outputElems.push (elem);
                         });
