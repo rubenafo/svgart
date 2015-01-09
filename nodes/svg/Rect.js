@@ -16,7 +16,7 @@
 
  // Rect element ////////////////////////
 
-var SVGBase = require ("./SvgBase").SVGBase;
+var SVGBase = require ("./SVGBase.js").SVGBase;
 
 Rect.type = "rect";
 Rect.prototype = new SVGBase ();

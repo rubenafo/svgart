@@ -17,7 +17,7 @@
 var SVGBase = require ("./SVGBase.js").SVGBase;
 
 Polygon.type = "polygon";
-Polygon.prototype = new SVGBase;
+Polygon.prototype = new SVGBase ();
 Polygon.prototype.parent = SVGBase.prototype;
 
 Polygon.prototype.constructor = Polygon;
