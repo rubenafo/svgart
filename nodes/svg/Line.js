@@ -16,7 +16,7 @@
 
 // Line element ////////////////////////
 
-var SVGBase = require ("./SvgBase").SVGBase;
+var SVGBase = require ("./SVGBase").SVGBase;
 
 Line.type = "line";
 Line.prototype = new SVGBase ();

@@ -14,7 +14,7 @@
  * limitations under the License.
  **/
 
-var SVGBase = require ("./SvgBase").SVGBase;
+var SVGBase = require ("./SVGBase").SVGBase;
 
 Group.type = "g";
 Group.prototype = new SVGBase ();

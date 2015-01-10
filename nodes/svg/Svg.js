@@ -16,7 +16,7 @@
 
 // SVG element /////////////////////////
 
-var SVGBase = require ("./SvgBase").SVGBase;
+var SVGBase = require ("./SVGBase").SVGBase;
 
 SVG.type = "svg";
 SVG.prototype = new SVGBase;
