@@ -23,6 +23,7 @@ var Line = require ("./Line").Line;
 var Text = require ("./Text").Text;
 var Polygon = require ("./Polygon").Polygon;
 var Polyline = require ("./Polyline").Polyline;
+var Path = require ("./Path").Path;
 
 SVGadapter = function (elem) {
   if (elem.content && elem.content.type) {
@@ -37,6 +38,7 @@ SVGadapter = function (elem) {
       case Text.type: return Text.adapt (elem);
       case Polygon.type: return Polygon.adapt (elem);
       case Polyline.type: return Polyline.adapt (elem);
+      case Path.type: return Path.adapt (elem);
     }
   }
   console.log ("Undefined type casting " + elem);

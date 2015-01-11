@@ -22,6 +22,7 @@ module.exports = function(RED) {
   var Text = require ("./svg/Text").Text;
   var Polygon = require ("./svg/Polygon").Polygon;
   var Polyline = require ("./svg/Polyline").Polyline;
+  var Path = require ("./svg/Path").Path;
 
   function shapeNode (ctx) {
     RED.nodes.createNode(this, ctx);
@@ -49,6 +50,9 @@ module.exports = function(RED) {
           break;
         case Polyline.type:
           shape = new Polyline (ctx.textString, ctx.func, ctx.zindex);
+          break;
+        case Path.type:
+          shape = new Path (ctx.textString, ctx.func, ctx.zindex);
       }
       if (msg.nrSvg) {
         if (msg.nrSvg instanceof Array) {
