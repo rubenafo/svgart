@@ -29,12 +29,20 @@ function Line (x1, y1, x2, y2, style, zindex) {
   this.parent.setAttribute.call (this, "style", style);
 };
 
-Line.prototype.setCoords = function (x1, y1, x2, y2) {
-  this.parent.setAttribute.call (this, "x1", x1);
-  this.parent.setAttribute.call (this, "y1", y1);
-  this.parent.setAttribute.call (this, "x2", x2);
-  this.parent.setAttribute.call (this, "y2", y2);
+Line.prototype.setCoords = function (sourceCoord, targetCoord) {
+  this.parent.setAttribute.call (this, "x1", sourceCoord.x);
+  this.parent.setAttribute.call (this, "y1", sourceCoord.y);
+  this.parent.setAttribute.call (this, "x2", targetCoord.x);
+  this.parent.setAttribute.call (this, "y2", targetCoord.y);
 };
+
+Line.prototype.getCenter = function () {
+  var x1 = this.parent.getAttribute("x1");
+  var x2 = this.parent.getAttribute("x2");
+  var y1 = this.parent.getAttribute("y1");
+  var y2 = this.parent.getAttribute("y2");
+  return ({x: (x1+x2)/2, y: (y1+y2)/2 });
+}
 
 Line.adapt = function (elem) {
   return SVGBase.prototype.adapt.call (elem, Line.prototype);

@@ -34,6 +34,11 @@ Polyline.prototype.setPos = function (x,y) {
   this.parent.addTranslate.call (this, x, y);
 };
 
+Polyline.prototype.getCenter = function () {
+  // to be implemented
+  console.log("Polyline::getCenter() not implemented");
+}
+
 Polyline.adapt = function (elem) {
   return SVGBase.prototype.adapt.call (elem, Polyline.prototype);
 }

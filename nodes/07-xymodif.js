@@ -77,8 +77,7 @@ module.exports = function(RED) {
                             {
                                 var current = results.indexOf (pos);
                                 if (current > 0)
-                                    elem.setCoords (results[current-1].x, results[current-1].y, 
-                                        pos.x, pos.y);
+                                    elem.setCoords (results[current-1].translate, pos.translate);
                             }
                             else {
                                 elem.applyTransform (pos);

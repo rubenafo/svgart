@@ -33,6 +33,11 @@ SVGBase.prototype.setAttribute = function (key, value) {
   this.content[lowerStr] = value;
 };
 
+SVGBase.prototype.getAttribute = function (key) {
+  var lowerStr = key.toLowerCase();
+  return this.content[lowerStr];
+}
+
 SVGBase.prototype.getZindex = function () {
   return this.content["zindex"] || 0;
 };
@@ -79,11 +84,18 @@ SVGBase.prototype.getZIndex = function () {
 };
 
 SVGBase.prototype.applyTransform = function (transf) {
-  if (transf.rotate) {
-    this.addRotate (transf.rotate.deg,0,0);
-  }
   if (transf.translate) {
+    this.setPos (0,0);
     this.addTranslate (transf.translate.x, transf.translate.y);
+  }
+  if (transf.rotate) {
+    if (transf.rotate.x && transf.rotate.y) {
+      this.addRotate (transf.rotate.deg, transf.rotate.x, transf.rotate.y);
+    }
+    else {
+      var center = this.getCenter ();
+      this.addRotate (transf.rotate.deg, center.x, center.y);
+    }
   }
   if (transf.scale) {
     this.addScale (transf.scale.x, transf.scale.y);
@@ -103,12 +115,12 @@ SVGBase.prototype.getTransformString = function () {
     if (i > 0) 
       resString += " ";
     switch (item.op) {
-      case "translate": case "scale":
-        resString += item.op + "(" + item.x+ "," + item.y + ")";
-        break;
       case "rotate": 
         resString += item.op + "(" + item.degrees + "," + item.x + "," + item.y + ")";
         break;
+      case "translate": case "scale":
+        resString += item.op + "(" + item.x+ "," + item.y + ")";
+        break;  
       case "skewX": case "skewY":
         resString += item.op + "(" + item.val + ")";
         break;

@@ -36,6 +36,12 @@ Rect.prototype.setPos = function (x,y) {
   this.parent.setAttribute.call (this, "y", y);
 };
 
+Rect.prototype.getCenter = function () {
+  var width = this.parent.getAttribute.call (this, "width");
+  var height= this.parent.getAttribute.call (this, "height");
+  return ({x:width/2, y:height/2});
+}
+
 Rect.adapt = function (elem) {
   return SVGBase.prototype.adapt.call (elem, Rect.prototype);
 }

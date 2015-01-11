@@ -34,6 +34,11 @@ Polygon.prototype.setPos = function (x,y) {
   this.parent.addTranslate.call (this, x, y);
 };
 
+Polygon.prototype.getCenter = function () {
+  // to be implemented
+  console.log("Polygon::getCenter() not implemented");
+}
+
 Polygon.adapt = function (elem) {
   return SVGBase.prototype.adapt.call (elem, Polygon.prototype);
 }

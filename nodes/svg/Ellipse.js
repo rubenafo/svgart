@@ -34,6 +34,12 @@ Ellipse.prototype.setPos = function (x,y) {
   this.parent.setAttribute.call (this, "cy", y);
 };
 
+Ellipse.prototype.getCenter = function () {
+	var x = this.parent.getAttribute ("cx");
+	var y = this.parent.getAttribute ("cy");
+	return ({x:x/2,y:y/2});
+}
+
 Ellipse.adapt = function (elem) {
   return SVGBase.prototype.adapt.call (elem, Ellipse.prototype);
 }

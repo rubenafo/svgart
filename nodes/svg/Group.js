@@ -62,6 +62,11 @@ Group.prototype.sortChildren = function () {
   }
 }
 
+Group.prototype.getCenter = function () {
+  // to be implemented
+  console.log("Group::getCenter() not implemented");
+}
+
 Group.adapt = function (elem) {
   return SVGBase.prototype.adapt.call (elem, Group.prototype);
 }
