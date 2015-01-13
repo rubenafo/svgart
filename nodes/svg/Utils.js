@@ -65,6 +65,41 @@ RandomGen = function(s) {
     };
 };
 
+/*
+ * Center of a non-intersecting polygon,
+ * as described in http://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
+ * - parameters: vertices: {x,y} vertices list
+ */
+NonIntersecPolCenter = function (vertices) {
+  var centroid = {x:0, y:0};
+  var x0, y0, x1, y1, signedArea = 0;
+  var i = 0;
+  for (i=0; i < vertices.length-1; ++i) {
+    x0 = vertices[i].x;
+    y0 = vertices[i].y;
+    x1 = vertices[i+1].x;
+    y1 = vertices[i+1].y;
+    a = x0*y1 - x1*y0;
+    signedArea += a;
+    centroid.x += (x0 + x1)*a;
+    centroid.y += (y0 + y1)*a;
+  }
+  
+  a = x0*y1 - x1*y0; // last vertex
+  signedArea += a;
+  signedArea *= 0.5; // A
+  // Do last vertex
+  x0 = vertices[i].x;
+  y0 = vertices[i].y;
+  x1 = vertices[0].x;
+  y1 = vertices[0].y;
+  centroid.x += (x0 + x1)*a;
+  centroid.y += (y0 + y1)*a;
+  centroid.x /= (6.0*signedArea);
+  centroid.y /= (6.0*signedArea);
+  return centroid;
+};
+
 exports.SVGadapter = SVGadapter;
 exports.OrderByZIndex = OrderByZIndex;
 exports.RandomGen = RandomGen;

@@ -16,7 +16,8 @@
 
 // Path element
 
- var SVGBase = require ("./SVGBase").SVGBase;
+var SVGBase = require ("./SVGBase").SVGBase;
+var PathGrammar = require ("./PathGrammar");
 
 Path.type = "path";
 Path.prototype = new SVGBase ();
@@ -26,6 +27,7 @@ Path.prototype.constructor = Path;
 function Path (d, style, zindex) {
   SVGBase.call (this, Path.type, zindex);
   this.parent.setAttribute.call (this, "d", d);
+  this.content.pathPoints = PathGrammar.parse(d);
   this.parent.setAttribute.call (this, "style", style);
 };
 
@@ -36,9 +38,28 @@ Path.prototype.setPos = function (x,y) {
   this.parent.addTranslate.call (this, x, y);
 };
 
+/*
+ * Takes the vertices of the path and returns its centroid.
+ */
 Path.prototype.getCenter = function () {
-  // to be implemented
-  console.log("Path::getCenter() not implemented");
+  var vertices = [];
+  this.content.pathPoints.forEach (function (instruction) {
+  	if (instruction.values)
+  		instruction.values.forEach (function (point) {
+  			vertices.push (point);
+  		});
+  });
+  var center = NonIntersecPolCenter (vertices);
+  return center;
+}
+
+Path.prototype.clone = function () {
+  var copy = this.parent.clone.call (this);
+  copy.content.pathPoints = new Array();
+  this.content.pathPoints.forEach (function(item) {
+    copy.content.pathPoints.push (item);
+  });
+  return copy;
 }
 
 Path.adapt = function (elem) {

@@ -23,8 +23,10 @@ module.exports = function(RED) {
   var Polygon = require ("./svg/Polygon").Polygon;
   var Polyline = require ("./svg/Polyline").Polyline;
   var Path = require ("./svg/Path").Path;
+  var Utils = require ("./svg/Utils");
 
   function shapeNode (ctx) {
+
     RED.nodes.createNode(this, ctx);
     var node = this;
     this.on('input', function(msg) {
