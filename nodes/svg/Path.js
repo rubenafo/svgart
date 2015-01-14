@@ -17,7 +17,7 @@
 // Path element
 
 var SVGBase = require ("./SVGBase").SVGBase;
-var PathGrammar = require ("./PathGrammar");
+var PathGrammar = require ("./grammars/PathGrammar");
 
 Path.type = "path";
 Path.prototype = new SVGBase ();

@@ -15,15 +15,17 @@
  **/
 
 var SVGBase = require ("./SVGBase.js").SVGBase;
+var PolygonGrammar = require ("./grammars/PolygonGrammar");
 
 Polygon.type = "polygon";
 Polygon.prototype = new SVGBase ();
 Polygon.prototype.parent = SVGBase.prototype;
 
 Polygon.prototype.constructor = Polygon;
-function Polygon (text, style, zindex) {
+function Polygon (pointsStr, style, zindex) {
   SVGBase.call (this, Polygon.type, zindex);
-  this.parent.setAttribute.call (this, "points", text);
+  this.parent.setAttribute.call (this, "points", pointsStr);
+  this.content.pointsList = PolygonGrammar.parse(pointsStr);
   this.parent.setAttribute.call (this, "style", style);
 };
 
@@ -35,8 +37,17 @@ Polygon.prototype.setPos = function (x,y) {
 };
 
 Polygon.prototype.getCenter = function () {
-  // to be implemented
-  console.log("Polygon::getCenter() not implemented");
+  var center = NonIntersecPolCenter (this.content.pointsList[0]);
+  return center;
+}
+
+Polygon.prototype.clone = function () {
+  var copy = this.parent.clone.call (this);
+  copy.content.pointsList = new Array();
+  this.content.pointsList.forEach (function(item) {
+    copy.content.pointsList.push (item);
+  });
+  return copy;
 }
 
 Polygon.adapt = function (elem) {
