@@ -76,7 +76,7 @@ module.exports = function(RED) {
                             if (elem.content.type == "line")
                             {
                                 var current = results.indexOf (pos);
-                                if (current > 0)
+                                if (current % 2)
                                     elem.setCoords (results[current-1].translate, pos.translate);
                             }
                             else {

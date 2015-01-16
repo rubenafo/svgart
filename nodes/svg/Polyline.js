@@ -15,6 +15,7 @@
  **/
 
 var SVGBase = require ("./SVGBase.js").SVGBase;
+var PolygonGrammar = require ("./grammars/PolygonGrammar");
 
 Polyline.type = "polyline";
 Polyline.prototype = new SVGBase;
@@ -24,6 +25,7 @@ Polyline.prototype.constructor = Polyline;
 function Polyline (text, style, zindex) {
   SVGBase.call (this, Polyline.type, zindex);
   this.parent.setAttribute.call (this, "points", text);
+  this.content.polyPoints = PolygonGrammar.parse(text);
   this.parent.setAttribute.call (this, "style", style);
 };
 
@@ -35,8 +37,17 @@ Polyline.prototype.setPos = function (x,y) {
 };
 
 Polyline.prototype.getCenter = function () {
-  // to be implemented
-  console.log("Polyline::getCenter() not implemented");
+  var center = NonIntersecPolCenter (this.content.polyPoints[0]);
+  return center;
+}
+
+Polyline.prototype.clone = function () {
+  var copy = this.parent.clone.call (this);
+  copy.content.polyPoints = new Array();
+  this.content.polyPoints.forEach (function(item) {
+    copy.content.polyPoints.push (item);
+  });
+  return copy;
 }
 
 Polyline.adapt = function (elem) {
