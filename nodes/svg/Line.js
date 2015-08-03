@@ -30,10 +30,11 @@ function Line (x1, y1, x2, y2, style, zindex) {
 };
 
 Line.prototype.setCoords = function (sourceCoord, targetCoord) {
-  this.parent.setAttribute.call (this, "x1", sourceCoord.x);
-  this.parent.setAttribute.call (this, "y1", sourceCoord.y);
-  this.parent.setAttribute.call (this, "x2", targetCoord.x);
-  this.parent.setAttribute.call (this, "y2", targetCoord.y);
+  console.log(sourceCoord, targetCoord);
+  this.parent.setAttribute.call (this, "x1", sourceCoord.xpos);
+  this.parent.setAttribute.call (this, "y1", sourceCoord.ypos);
+  this.parent.setAttribute.call (this, "x2", targetCoord.xpos);
+  this.parent.setAttribute.call (this, "y2", targetCoord.ypos);
 };
 
 Line.prototype.getCenter = function () {

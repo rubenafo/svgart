@@ -32,7 +32,7 @@ module.exports = function(RED) {
     this.on('input', function(msg) {
       var shape;
       switch (ctx.shapeType) {
-        case Circle.type: 
+        case Circle.type:
           shape = new Circle (ctx.xpos, ctx.ypos, ctx.radio, ctx.func, ctx.zindex);
           break;
         case Ellipse.type:

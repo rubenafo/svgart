@@ -65,22 +65,22 @@ module.exports = function(RED) {
                     var node = this;
                     if (msg.nrSvg && results) {
                         var cp = undefined;
-                        if (msg.nrSvg.length != undefined) {
-                        cp = msg.nrSvg[0];
-                    }
-                    else
-                        cp = msg.nrSvg;
+                        if (msg.nrSvg.length != undefined)
+                            cp = msg.nrSvg[0];
+                        else
+                            cp = msg.nrSvg;
                         results.forEach (function (pos) {
                             var elem = cp.clone();
                             elem = SVGadapter (elem);
                             if (elem.content.type == "line")
                             {
                                 var current = results.indexOf (pos);
-                                if (current % 2)
+                                if (current != 0)
                                     elem.setCoords (results[current-1].translate, pos.translate);
                             }
                             else {
-                                elem.applyTransform (pos);
+                                //elem.applyTransform (pos);
+                                elem.setPos (pos.xpos, pos.ypos);
                             }
                             outputElems.push (elem);
                         });
