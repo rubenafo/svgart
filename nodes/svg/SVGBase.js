@@ -14,16 +14,26 @@
  * limitations under the License.
  **/
 
+/** 
+ * Represents the base SVG element.
+ * @constructor
+ * @param {string} type
+ * @param {number} zindex
+ */
 SVGBase.prototype.constructor = SVGBase;
 function SVGBase (type, zindex) {
 	this.content = {};
 	this.content.properties = [];
   this.content.transform = new Array();
-	
   this.content.type = type;
   this.content.zindex = zindex || 0;
 };
 
+/**
+ * Sets an attribute in the properties list
+ * @param {string} key - the key to set
+ * @param {string} value - the value to set
+ */
 SVGBase.prototype.setAttribute = function (key, value) {
   var lowerStr = key.toLowerCase();
   if (this.content.properties.indexOf(lowerStr) == -1)
