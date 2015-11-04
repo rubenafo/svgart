@@ -79,6 +79,10 @@ SVGBase.prototype.toSVG = function (content) {
   return retValue;
 };
 
+/**
+ * Clones the object.
+ * @return - a new SVGBase object
+ */
 SVGBase.prototype.clone = function () {
   var res = new SVGBase ();
   res.content = {};
@@ -97,6 +101,7 @@ SVGBase.prototype.clone = function () {
   return res;
 }
 
+/** Returns the type of the object */
 SVGBase.prototype.getType = function () {
   return this.content.type;
 };
@@ -105,6 +110,10 @@ SVGBase.prototype.getZIndex = function () {
   return this.content.zindex;
 };
 
+/**
+ * Applies a transformation operation
+ * @param {object} trans - translate, rotate, scale, skewx, skewy
+ */
 SVGBase.prototype.applyTransform = function (transf) {
   if (transf.translate) {
     this.setPos (0,0);
@@ -130,6 +139,10 @@ SVGBase.prototype.applyTransform = function (transf) {
   }
 }
 
+/**
+ * Returns the transformation string of the transformation
+ * operations stored in the transform list.
+ */
 SVGBase.prototype.getTransformString = function () {
   var resString = "";
   for (var i = 0; i < this.content.transform.length; i++) {
@@ -154,26 +167,54 @@ SVGBase.prototype.getTransformString = function () {
   return resString;
 }
 
+/**
+ * Adds a translate operation
+ * @param {number} x - x offset
+ * @param {number} y - y offset
+ */
 SVGBase.prototype.addTranslate = function (x, y) {
   this.content.transform.push ({op:"translate", 'x':x, 'y':y});
 }
 
+/**
+ * Adds a scale operation
+ * @param {number} x - x factor
+ * @param {number} y - y factor
+ */
 SVGBase.prototype.addScale = function (x, y) {
   this.content.transform.push ({op:"scale", 'x':x, 'y':y});
 }
 
+/**
+ * Adds a rotate operation
+ * @param {number} degrees
+ * @param {number} x - x position of the reference point
+ * @param {number} y - y position of the reference point
+ */
 SVGBase.prototype.addRotate = function (degrees, x, y) {
   this.content.transform.push ({op:"rotate", 'degrees': degrees, 'x':x, 'y':y});
 }
 
+/**
+ * Adds a skewx operation
+ * @param {number} x - skew factor
+ */
 SVGBase.prototype.addSkewX = function (x) {
   this.content.transform.push ({op:"skewX", 'val':x});
 }
 
+/**
+ * Adds a skewy operation
+ * @param {number} y - skew factor
+ */
 SVGBase.prototype.addSkewY = function (y) {
   this.content.transform.push ({op:"skewY", 'val':y});
 }
 
+/**
+ * Changes the base prototype of the object
+ * @param {object} prototype - the prototype to change to
+ */
 SVGBase.prototype.adapt = function (prototype) {
   this.__proto__ = prototype;
   return this;
