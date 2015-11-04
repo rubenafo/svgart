@@ -14,9 +14,9 @@
  * limitations under the License.
  **/
 
-/** 
- * Represents the base SVG element.
- * @constructor
+/**
+ * @class Represents the base SVG element.
+ * @constructor SVGBase
  * @param {string} type
  * @param {number} zindex
  */
@@ -43,15 +43,27 @@ SVGBase.prototype.setAttribute = function (key, value) {
   this.content[lowerStr] = value;
 };
 
+/**
+ * Returns an attribute by its key (case insenstive)
+ * @param {string} key
+ */
 SVGBase.prototype.getAttribute = function (key) {
   var lowerStr = key.toLowerCase();
   return this.content[lowerStr];
 }
 
+/**
+ * Returns the z-index of the element.
+ * The default value is zero.
+ */
 SVGBase.prototype.getZindex = function () {
   return this.content["zindex"] || 0;
 };
 
+/**
+ * Returns the xml string containing all the properties,
+ * ready to be inserted into a SVG element
+ */
 SVGBase.prototype.toSVG = function (content) {
 	var retValue = "<" + this.content.type;
   var data = this.content;
@@ -122,15 +134,15 @@ SVGBase.prototype.getTransformString = function () {
   var resString = "";
   for (var i = 0; i < this.content.transform.length; i++) {
     var item = this.content.transform[i];
-    if (i > 0) 
+    if (i > 0)
       resString += " ";
     switch (item.op) {
-      case "rotate": 
+      case "rotate":
         resString += item.op + "(" + item.degrees + "," + item.x + "," + item.y + ")";
         break;
       case "translate": case "scale":
         resString += item.op + "(" + item.x+ "," + item.y + ")";
-        break;  
+        break;
       case "skewX": case "skewY":
         resString += item.op + "(" + item.val + ")";
         break;
