@@ -1,4 +1,5 @@
 /**
+ * @license
  * Copyright 2014 Ruben Afonso, ruben@figurebelow.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -55,7 +56,7 @@ OrderByZIndex = function (a, b) {
 };
 
 //
-// Taken from stackoverflow: 
+// Taken from stackoverflow:
 // http://stackoverflow.com/questions/521295/javascript-random-seeds
 //
 RandomGen = function(s) {
@@ -84,7 +85,7 @@ NonIntersecPolCenter = function (vertices) {
     centroid.x += (x0 + x1)*a;
     centroid.y += (y0 + y1)*a;
   }
-  
+
   a = x0*y1 - x1*y0; // last vertex
   signedArea += a;
   signedArea *= 0.5; // A

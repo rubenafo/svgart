@@ -1,4 +1,5 @@
 /**
+ * @license
  * Copyright 2014 Ruben Afonso, ruben@figurebelow.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +32,7 @@ function Path (d, style, zindex) {
   this.parent.setAttribute.call (this, "style", style);
 };
 
-/* 
+/*
  * Paths don't accept x,y so we use the transform attribute
  */
 Path.prototype.setPos = function (x,y) {

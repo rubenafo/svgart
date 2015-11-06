@@ -1,4 +1,5 @@
 /**
+ * @license
  * Copyright 2014 Ruben Afonso, ruben@figurebelow.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +30,7 @@ function Polyline (text, style, zindex) {
   this.parent.setAttribute.call (this, "style", style);
 };
 
-/* 
+/*
  * Polylines don't accept x,y so we use the transform attribute
  */
 Polyline.prototype.setPos = function (x,y) {

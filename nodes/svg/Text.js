@@ -1,4 +1,5 @@
 /**
+ * @license
  * Copyright 2014 Ruben Afonso, ruben@figurebelow.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +34,7 @@ Text.prototype.setString = function (text) {
 };
 
 Text.prototype.setPos = function (x,y) {
-  this.parent.setAttribute.call (this, "x", x); 
+  this.parent.setAttribute.call (this, "x", x);
   this.parent.setAttribute.call (this, "y", y);
 };
 

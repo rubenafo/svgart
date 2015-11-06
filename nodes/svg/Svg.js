@@ -1,4 +1,5 @@
 /**
+ * @license
  * Copyright 2014 Ruben Afonso, ruben@figurebelow.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +36,7 @@ function SVG (width, height, style) {
   this.parent.setAttribute.call (this, "xmlns:svg", "http://www.w3.org/2000/svg");
   this.parent.setAttribute.call (this, "xmlns", "http://www.w3.org/2000/svg");
   this.parent.setAttribute.call (this, "xmlns:xlink", "http://www.w3.org/1999/xlink");
-  
+
   // It takes the style to create a rectangle and use it as a background
   this.backgroundStyle = style;
 };
