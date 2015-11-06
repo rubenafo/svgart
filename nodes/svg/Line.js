@@ -22,6 +22,16 @@ Line.type = "line";
 Line.prototype = new SVGBase ();
 Line.prototype.parent = SVGBase.prototype;
 
+/**
+* @class The SVG Line element
+* @constructor Line
+* @param {number} x1 - source point's x coord
+* @param {number} y1 - source point's y coord
+* @param {number} x2 - end point's x coord
+* @param {number} yy - end point's y coord
+* @param {string} style - CSS style string
+* @param {number} zindex - zindex value
+*/
 Line.prototype.constructor = Line;
 function Line (x1, y1, x2, y2, style, zindex) {
   SVGBase.call (this, Line.type, zindex);
@@ -29,6 +39,11 @@ function Line (x1, y1, x2, y2, style, zindex) {
   this.parent.setAttribute.call (this, "style", style);
 };
 
+/**
+* Sets the coords of the Line
+* @param {number} sourceCoord - source point ({xpos:value, ypos:value})
+* @param {number} targetCoord - destination point ({xpos:value, ypos:value})
+*/
 Line.prototype.setCoords = function (sourceCoord, targetCoord) {
   console.log(sourceCoord, targetCoord);
   this.parent.setAttribute.call (this, "x1", sourceCoord.xpos);
@@ -37,6 +52,10 @@ Line.prototype.setCoords = function (sourceCoord, targetCoord) {
   this.parent.setAttribute.call (this, "y2", targetCoord.ypos);
 };
 
+/**
+* Returns the coords of the center of the Line.
+* @returns - {x:value,y:value} containing the coords
+*/
 Line.prototype.getCenter = function () {
   var x1 = this.parent.getAttribute("x1");
   var x2 = this.parent.getAttribute("x2");
@@ -45,6 +64,9 @@ Line.prototype.getCenter = function () {
   return ({x: (x1+x2)/2, y: (y1+y2)/2 });
 }
 
+/**
+* Adapts an object to the Line class
+*/
 Line.adapt = function (elem) {
   return SVGBase.prototype.adapt.call (elem, Line.prototype);
 }
