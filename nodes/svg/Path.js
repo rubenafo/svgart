@@ -24,6 +24,13 @@ Path.type = "path";
 Path.prototype = new SVGBase ();
 Path.prototype.parent = SVGBase.prototype;
 
+/**
+* @class The SVG Path element
+* @constructor Circle
+* @param {number} d - Path's d attribute
+* @param {string} style - CSS style string
+* @param {number} zindex - zindex value
+*/
 Path.prototype.constructor = Path;
 function Path (d, style, zindex) {
   SVGBase.call (this, Path.type, zindex);
@@ -32,16 +39,22 @@ function Path (d, style, zindex) {
   this.parent.setAttribute.call (this, "style", style);
 };
 
-/*
- * Paths don't accept x,y so we use the transform attribute
- */
+/**
+* Sets the position of the Path.
+* @param {number} x - x coord
+* @param {number} y - y coord
+*/
 Path.prototype.setPos = function (x,y) {
+  // Paths don't have x,y so we use the transform
   this.parent.addTranslate.call (this, x, y);
 };
 
-/*
- * Takes the vertices of the path and returns its centroid.
- */
+/**
+* Returns the coords of the center of the Path.
+* The center is calculated by calculating the centroid of all
+* the vertices.
+* @returns - {x:value,y:value} containing the coords
+*/
 Path.prototype.getCenter = function () {
   var vertices = [];
   this.content.pathPoints.forEach (function (instruction) {
@@ -54,6 +67,10 @@ Path.prototype.getCenter = function () {
   return center;
 }
 
+/**
+ * Returns a noew instance of a Path
+ * @returns a new Path.
+ */
 Path.prototype.clone = function () {
   var copy = this.parent.clone.call (this);
   copy.content.pathPoints = new Array();
@@ -63,6 +80,9 @@ Path.prototype.clone = function () {
   return copy;
 }
 
+/**
+* Adapts an object to the Path class
+*/
 Path.adapt = function (elem) {
   return SVGBase.prototype.adapt.call (elem, Path.prototype);
 }
