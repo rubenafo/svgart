@@ -6,11 +6,14 @@ start = (draws)+
 
 draws = moveTo / lineTo / horLineTo / verLineTo / curveTo / smoothTo / close
 
-close = 
+close =
  "Z" { return { type:"Z" }} / "z" { return { type:"z" } }
 
 int
   = digits:[0-9]+{ return parseInt(digits.join(""), 10); }
+
+curveType =
+ "q" { return { type:"q"} }
 
 moveTo
   = key:("M" / "m") ws* val:([ ]* x:int [ ,] y:int [ ]* { return {"x":x,"y":y} })+
@@ -21,22 +24,21 @@ lineTo
     { return { type:key, values: val }}
 
 horLineTo
-  = key:("H" / "h") ws* val:([ ]* x:int [ ]*)+ 
+  = key:("H" / "h") ws* val:([ ]* x:int [ ]*)+
     { return { type:key, values: val }}
 
 verLineTo
-  = key:("V" / "v") ws* val:([ ]* x:int [ ]*)+ 
+  = key:("V" / "v") ws* val:([ ]* x:int [ ]*)+
     { return { type:key, values: val }}
 
 curveTo
   = key:("C" / "c") ws* val:([ ]* x1:int ws y1:int ws x2:int ws y2:int ws x:int ws y:int [ ]*
-                    { return [x1, y1, x2, y2, x, y]} )+ 
+                    { return [x1, y1, x2, y2, x, y]} )+
     { return { type:key, values: val }}
 
 smoothTo
   = key:("S" / "s") ws* val:([ ]* x2:int ws y2:int ws x:int ws y:int [ ]*
-                    { return [x2, y2, x, y]} )+ 
+                    { return [x2, y2, x, y]} )+
     { return { type: key, values: val }}
 
 ws = [ \t\r\n]
-
