@@ -16,19 +16,11 @@ limitations under the License.
 
 <script type="text/javascript">
 
-hideAllRows = function () {
-  $("#zindex-option").hide();
-  $("#size-option").hide();
-  $("#textString-option").hide();
-  $("#stylelabel-option").hide();
-  $("#stylecontent-option").hide();
-};
-
 RED.nodes.registerType('path',{
   category: 'svg',
   color: '#a6bbcf',
   defaults: {
-    name: {value:""},
+    name: {value:"path"},
     textString: {value: ""},
     zindex: {value:"0"},
     func: {value: "//svg style"}
@@ -36,9 +28,7 @@ RED.nodes.registerType('path',{
    inputs:1,
    outputs:1,
    icon: "file.png",
-   label: function() {
-     return this.name || this.shapeType;
-   },
+   label: "path",
    oneditprepare: function() {
 
     function functionDialogResize() {
@@ -82,29 +72,26 @@ oneditsave: function() {
 </script>
 
 <script type="text/x-red" data-template-name="path">
-  <div class="form-row">
-    <input type="text" id="node-input-name" placeholder="Optional Name" style="width:25%">
-  </div>
 
   <!-- Text -->
-  <div class="form-row hidden" id="textString-option">
+  <div class="form-row" id="textString-option">
     <label for="node-input-textString"><i class="icon-tag"></i> Text</label>
     <input type="text" id="node-input-textString" placeholder="string">
   </div>
 
   <!-- Z-Index -->
-  <div class="form-row hidden" id="zindex-option">
+  <div class="form-row" id="zindex-option">
     <label for="node-input-zindex"><i class="icon-tag"></i> Z-Index</label>
     <input type="number" id="node-input-zindex" placeholder="z-index" value="0">
   </div>
 
   <!-- Style -->
-  <div class="form-row hidden" style="margin-bottom: 0px;" id="stylelabel-option">
+  <div class="form-row" style="margin-bottom: 0px;" id="stylelabel-option">
     <label for="node-input-func"><i class="fa fa-wrench"></i> Style</label>
     <input type="hidden" id="node-input-func" autofocus="autofocus">
   </div>
 
-  <div class="form-row node-text-editor-row hidden" id="stylecontent-option">
+  <div class="form-row node-text-editor-row" id="stylecontent-option">
     <div style="height: 150px;" class="node-text-editor" id="node-input-func-editor" ></div>
   </div>
 </script>

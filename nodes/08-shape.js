@@ -8,7 +8,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,\
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -22,7 +22,6 @@ module.exports = function(RED) {
   var Text = require ("./svg/Text").Text;
   var Polygon = require ("./svg/Polygon").Polygon;
   var Polyline = require ("./svg/Polyline").Polyline;
-  var Path = require ("./svg/Path").Path;
   var Utils = require ("./svg/Utils");
 
   function shapeNode (ctx) {
@@ -53,8 +52,6 @@ module.exports = function(RED) {
         case Polyline.type:
           shape = new Polyline (ctx.textString, ctx.func, ctx.zindex);
           break;
-        case Path.type:
-          shape = new Path (ctx.textString, ctx.func, ctx.zindex);
       }
       if (msg.nrSvg) {
         if (msg.nrSvg instanceof Array) {

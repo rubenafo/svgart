@@ -23,18 +23,17 @@ module.exports = function(RED) {
     RED.nodes.createNode(this, ctx);
     var node = this;
     this.on('input', function(msg) {
-      var shape;
-                        shape = new Path (ctx.textString, ctx.func, ctx.zindex);
-                      if (msg.nrSvg) {
-                        if (msg.nrSvg instanceof Array) {
-                          msg.nrSvg.push (shape);
-                        }
-                      }
-                      else {
-                        msg.nrSvg = [shape];
-                      }
-                      node.send (msg);
-                    });
-                  };
-                  RED.nodes.registerType("path", shapeNode);
-                }
+      var shape = new Path (ctx.textString, ctx.func, ctx.zindex);
+      if (msg.nrSvg) {
+        if (msg.nrSvg instanceof Array) {
+          msg.nrSvg.push (shape);
+        }
+      }
+      else {
+        msg.nrSvg = [shape];
+      }
+      node.send (msg);
+    });
+  };
+  RED.nodes.registerType("path", shapeNode);
+}
