@@ -4,7 +4,7 @@
 
 start = (draws)+
 
-draws = moveTo / lineTo / horLineTo / verLineTo / curveTo / smoothTo / close
+draws = moveTo / lineTo / horLineTo / verLineTo / curveTo / smoothTo / bezierTogetherTo / arcTo / close
 
 close =
  "Z" { return { type:"Z" }} / "z" { return { type:"z" } }
@@ -40,5 +40,15 @@ smoothTo
   = key:("S" / "s") ws* val:([ ]* x2:int ws y2:int ws x:int ws y:int [ ]*
                     { return [x2, y2, x, y]} )+
     { return { type: key, values: val }}
+
+bezierTogetherTo
+  = key:("T" / "t") ws* val:([ ]* x1:int ws y1:int [ ]*
+                    { return [x1, y1]} )+
+    { return { type:key, values: val }}
+
+arcTo
+  = key:("A" / "a") ws* val:([ ]* rx:int ws ry:int ws xrot:int ws arcflag:int ws sweep:int ws x:int y:int [ ]*
+                    { return [rx, ry, xrot, arcflag, sweep, x, y]} )+
+    { return { type:key, values: val }}
 
 ws = [ \t\r\n]

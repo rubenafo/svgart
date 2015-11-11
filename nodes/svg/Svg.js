@@ -46,7 +46,7 @@ SVG.prototype.toSVG = function (content) {
     var backgroundRect = "<rect x=\"0\" y=\"0\" width=\"" + this.content.width +
                            "\" height=\"" + this.content.height + "\" " +
                            "style=\"" + this.backgroundStyle + "\"></rect>";
-    content += backgroundRect;
+    content = backgroundRect + content;
   };
   return this.parent.toSVG.call (this, content);
 };
