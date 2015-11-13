@@ -1,12 +1,12 @@
 <!--
    Copyright 2014 Ruben Afonso, ruben@figurebelow.com
-  
+
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
-  
+
    http://www.apache.org/licenses/LICENSE-2.0
-  
+
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,9 +20,18 @@
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
     <div class="form-row" style="margin-bottom: 0px;">
-            <label for="node-input-func"><i class="fa fa-wrench"></i> Function</label>
-            <input type="hidden" id="node-input-func" autofocus="autofocus">
+      <label for="node-input-func"><i class="fa fa-wrench"></i> Function</label>
+      <input type="hidden" id="node-input-func" autofocus="autofocus">
     </div>
+
+    <div class="form-row">
+      <label for="node-input-shapeType"><i class="fa fa-envelope"></i> Shape</label>
+      <select id="node-input-shapeType" style="width:125px !important">
+        <option value="Custom">Custom</option>
+        <option value="SimpleAtractor">Simple Attractor</option>
+      </select>
+    </div>
+
     <div class="form-row node-text-editor-row">
         <div style="height: 250px;" class="node-text-editor" id="node-input-func-editor" ></div>
     </div>

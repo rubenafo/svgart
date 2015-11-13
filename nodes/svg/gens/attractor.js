@@ -1,7 +1,8 @@
 
 // http://struct.cc/blog/2011/08/15/strange-attractors/
 
-attractor = function (numPoints, entryString)
+Attractor.prototype.constructor = Attractor;
+function Attractor (numPoints, entryString)
 {
 
   // Fractal pattern and coefficients.
@@ -29,9 +30,16 @@ attractor = function (numPoints, entryString)
             + a[9] * x * y + a[10] * y + a[11] * y * y;
     x = nx; y = ny;
     // (x*200,y*200);
-    res.push ({x:x*200, y:y*200});
+    res.push ({xpos:x*800, ypos:y*600});
   }
   return res;
 }
 
-console.log(attractor(10, "QGGVSLMHHGCR"));
+Attractor.getSample = function ()
+{
+    return "var Gens = require (\"./svg/gens/attractor.js\");" +
+           "var coords = new Gens.Attractor (120, \"QGGVSLMHHGCR\");" +
+           "return coords;";
+}
+
+exports.Attractor = Attractor;
