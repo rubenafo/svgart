@@ -19,13 +19,13 @@ module.exports = function(RED) {
     var util = require("util");
     var vm = require("vm");
     var SVGadapter = require ("./svg/Utils.js").SVGadapter;
-    var Generators = require ("./svg/gens/attractor.js");
+    var Generators = require ("./svg/gens/Attractor.js");
 
     function FunctionNode(n) {
         RED.nodes.createNode(this,n);
         this.name = n.name;
         this.func = n.func;
-        this.func = Generators.Attractor.getSample();
+        //this.func = Generators.Attractor.getSample();
         var functionText = "var results = null; results = (function(msg){"+this.func+"\n})(msg);";
         this.topic = n.topic;
         var sandbox = {

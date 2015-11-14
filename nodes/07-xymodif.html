@@ -25,8 +25,8 @@
     </div>
 
     <div class="form-row">
-      <label for="node-input-shapeType"><i class="fa fa-envelope"></i> Shape</label>
-      <select id="node-input-shapeType" style="width:125px !important">
+      <label for="node-input-genType"><i class="fa fa-envelope"></i> Generator</label>
+      <select id="node-input-genType" style="width:125px !important">
         <option value="Custom">Custom</option>
         <option value="SimpleAtractor">Simple Attractor</option>
       </select>
@@ -60,6 +60,21 @@
         oneditprepare: function() {
             $( "#node-input-outputs" ).spinner({
                 min:1
+            });
+            $("#node-input-genType").change(function() {
+              var generator = $("#node-input-genType option:selected").val();
+              switch (generator) {
+                case 'SimpleAtractor':
+                  require(["orion/editor/edit"], function(edit) {
+                    that.editor = edit({
+                      parent:document.getElementById('node-input-func-editor'),
+                      lang:"js",
+                      contents: "var Gens = require (\"./svg/gens/attractor.js\");" +
+                                "var coords = new Gens.Attractor (120, \"QGGVSLMHHGCR\");" +
+                                "return coords;"
+                    });
+                  });
+              }
             });
 
             function functionDialogResize() {
@@ -100,7 +115,6 @@
                     fields:['name','outputs']
                 });
                 $("#node-input-name").focus();
-
             });
         },
         oneditsave: function() {
