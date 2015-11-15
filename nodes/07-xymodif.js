@@ -1,18 +1,10 @@
 /**
- * Copyright 2014 Ruben Afonso, ruben@figurebelow.com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- **/
+* @license
+* Copyright 2015 Ruben Afonso, ruben@figurebelow.com
+*
+* This source code is licensed under the Apache license found in the
+* LICENSE file in the root directory of this source tree.
+**/
 
 module.exports = function(RED) {
     "use strict";
@@ -25,8 +17,7 @@ module.exports = function(RED) {
         RED.nodes.createNode(this,n);
         this.name = n.name;
         this.func = n.func;
-        //this.func = Generators.Attractor.getSample();
-        var functionText = "var results = null; results = (function(msg){"+this.func+"\n})(msg);";
+        var functionText = "var results = null; results = (function(msg){"+this.func + "\n})(msg);";
         this.topic = n.topic;
         var sandbox = {
             console:console,
@@ -68,10 +59,7 @@ module.exports = function(RED) {
                     var node = this;
                     if (msg.nrSvg && results) {
                         var cp = undefined;
-                        if (msg.nrSvg.length != undefined)
-                            cp = msg.nrSvg[0];
-                        else
-                            cp = msg.nrSvg;
+                        cp = msg.nrSvg.length != undefined ? msg.nrSvg[0] : msg.nrSvg;
                         results.forEach (function (pos) {
                             var elem = cp.clone();
                             elem = SVGadapter (elem);
@@ -79,11 +67,11 @@ module.exports = function(RED) {
                             {
                                 var current = results.indexOf (pos);
                                 if (current != 0)
-                                    elem.setCoords (results[current-1].translate, pos.translate);
+                                    elem.setCoords (results[current-1], pos);
                             }
                             else {
                                 //elem.applyTransform (pos);
-                                elem.setPos (pos.xpos, pos.ypos);
+                                elem.setPos (pos.x, pos.y);
                             }
                             outputElems.push (elem);
                         });

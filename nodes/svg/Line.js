@@ -1,19 +1,10 @@
 /**
- * @license
- * Copyright 2014 Ruben Afonso, ruben@figurebelow.com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- **/
+* @license
+* Copyright 2015 Ruben Afonso, ruben@figurebelow.com
+*
+* This source code is licensed under the Apache license found in the
+* LICENSE file in the root directory of this source tree.
+**/
 
 // Line element ////////////////////////
 
@@ -46,11 +37,10 @@ function Line (x1, y1, x2, y2, style, zindex) {
 * @param {number} targetCoord - destination point ({xpos:value, ypos:value})
 */
 Line.prototype.setCoords = function (sourceCoord, targetCoord) {
-  console.log(sourceCoord, targetCoord);
-  this.parent.setAttribute.call (this, "x1", sourceCoord.xpos);
-  this.parent.setAttribute.call (this, "y1", sourceCoord.ypos);
-  this.parent.setAttribute.call (this, "x2", targetCoord.xpos);
-  this.parent.setAttribute.call (this, "y2", targetCoord.ypos);
+  this.parent.setAttribute.call (this, "x1", sourceCoord.x);
+  this.parent.setAttribute.call (this, "y1", sourceCoord.y);
+  this.parent.setAttribute.call (this, "x2", targetCoord.x);
+  this.parent.setAttribute.call (this, "y2", targetCoord.y);
 };
 
 /**

@@ -38,7 +38,7 @@ function Attractor (numPoints, entryString)
             + a[9] * x * y + a[10] * y + a[11] * y * y;
     x = nx; y = ny;
     // (x*200,y*200);
-    res.push ({xpos:x*800, ypos:y*600});
+    res.push ({x:x*800, y:y*600});
   }
   return res;
 }
