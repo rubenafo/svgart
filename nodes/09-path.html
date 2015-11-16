@@ -23,7 +23,8 @@ RED.nodes.registerType('path',{
     name: {value:"path"},
     textString: {value: ""},
     zindex: {value:"0"},
-    func: {value: "//svg style"}
+    styleContent: {value: "//svg style"},
+    genContent: {value: ""}
    },
    inputs:1,
    outputs:1,
@@ -57,16 +58,25 @@ RED.nodes.registerType('path',{
     });
     var that = this;
     require(["orion/editor/edit"], function(edit) {
-      that.editor = edit({
-        parent:document.getElementById('node-input-func-editor'),
+      that.styleEditor = edit({
+        parent:document.getElementById('node-input-style-editor'),
         lang:"css",
-        contents: $("#node-input-func").val()
+        contents: $("#node-input-styleContent").val()
+      });
+    });
+    require(["orion/editor/edit"], function(edit) {
+      that.genEditor = edit({
+        parent:document.getElementById('node-input-gen-editor'),
+        lang:"css",
+        contents: $("#node-input-genContent").val()
       });
     });
 },
 oneditsave: function() {
-  $("#node-input-func").val(this.editor.getText());
-  delete this.editor;
+  $("#node-input-styleContent").val(this.styleEditor.getText());
+  $("#node-input-genContent").val(this.genEditor.getText());
+  delete this.styleEditor;
+  delete this.genEditor;
 }
 });
 </script>
@@ -87,13 +97,22 @@ oneditsave: function() {
 
   <!-- Style -->
   <div class="form-row" style="margin-bottom: 0px;" id="stylelabel-option">
-    <label for="node-input-func"><i class="fa fa-wrench"></i> Style</label>
-    <input type="hidden" id="node-input-func" autofocus="autofocus">
+    <label for="node-input-styleContent"><i class="fa fa-wrench"></i> Style</label>
+    <input type="hidden" id="node-input-styleContent" autofocus="autofocus">
+  </div>
+  <div class="form-row node-text-editor-row" id="stylecontent-option">
+    <div style="height: 150px;" class="node-text-editor" id="node-input-style-editor" ></div>
   </div>
 
-  <div class="form-row node-text-editor-row" id="stylecontent-option">
-    <div style="height: 150px;" class="node-text-editor" id="node-input-func-editor" ></div>
+  <!-- Generator -->
+  <div class="form-row" style="margin-bottom: 0px;" id="genlabel-option">
+    <label for="node-input-genContent"><i class="fa fa-wrench"></i> Generator</label>
+    <input type="hidden" id="node-input-genContent" autofocus="autofocus">
   </div>
+  <div class="form-row node-text-editor-row" id="gencontent-option">
+    <div style="height: 150px;" class="node-text-editor" id="node-input-gen-editor" ></div>
+  </div>
+
 </script>
 
 <script type="text/x-red" data-help-name="path">

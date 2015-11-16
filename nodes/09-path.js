@@ -15,7 +15,7 @@ module.exports = function(RED) {
     RED.nodes.createNode(this, ctx);
     var node = this;
     this.on('input', function(msg) {
-      var shape = new Path (ctx.textString, ctx.func, ctx.zindex);
+      var shape = new Path (ctx.textString, ctx.styleContent, ctx.zindex);
       if (msg.nrSvg) {
         if (msg.nrSvg instanceof Array) {
           msg.nrSvg.push (shape);
