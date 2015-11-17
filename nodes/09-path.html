@@ -97,7 +97,8 @@ oneditsave: function() {
 
   <!-- Style -->
   <div class="form-row" style="margin-bottom: 0px;" id="stylelabel-option">
-    <label for="node-input-styleContent"><i class="fa fa-wrench"></i> Style</label>
+    <label for="node-input-styleContent" data-toggle="collapse" data-target="#stylecontent-option">
+      <i class="fa fa-wrench"></i> Style</label>
     <input type="hidden" id="node-input-styleContent" autofocus="autofocus">
   </div>
   <div class="form-row node-text-editor-row" id="stylecontent-option">
@@ -106,7 +107,8 @@ oneditsave: function() {
 
   <!-- Generator -->
   <div class="form-row" style="margin-bottom: 0px;" id="genlabel-option">
-    <label for="node-input-genContent"><i class="fa fa-wrench"></i> Generator</label>
+    <label for="node-input-genContent" data-toggle="collapse" data-target="#gencontent-option">
+      <i class="fa fa-wrench"></i> Generator</label>
     <input type="hidden" id="node-input-genContent" autofocus="autofocus">
   </div>
   <div class="form-row node-text-editor-row" id="gencontent-option">
