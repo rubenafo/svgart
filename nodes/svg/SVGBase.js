@@ -212,4 +212,14 @@ SVGBase.prototype.adapt = function (prototype) {
   return this;
 }
 
+/**
+ * Duplicates the object to the given coords array
+ * @param {object} coords - array of coords ({x:val,y:val})
+ * @abstract
+ */
+SVGBase.prototype.cloneToCoords = function (coords)
+{
+	throw ("Missing implementation in " + this.content.type + "class");
+}
+
 exports.SVGBase = SVGBase;

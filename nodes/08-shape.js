@@ -15,6 +15,7 @@ module.exports = function(RED) {
   var Polygon = require ("./svg/Polygon").Polygon;
   var Polyline = require ("./svg/Polyline").Polyline;
   var Utils = require ("./svg/Utils");
+  var ExecUtils = require ("./utils/NrSVGutils.js");
 
   function shapeNode (ctx) {
 
@@ -22,7 +23,8 @@ module.exports = function(RED) {
     this.genContent = ctx.genContent;
     this.styleContent = ctx.styleContent;
     var node = this;
-    this.on('input', function(msg) {
+    this.on('input', function(msg)
+    {
       var shape;
       switch (ctx.shapeType) {
         case Circle.type:
@@ -47,16 +49,32 @@ module.exports = function(RED) {
           shape = new Polyline (ctx.textString, ctx.func, ctx.zindex);
           break;
       }
-      if (msg.nrSvg) {
-        if (msg.nrSvg instanceof Array) {
+      var coords = [];
+      if (this.genContent)
+      {
+        try
+        {
+          var results = ExecUtils.JsExecution (RED, console, Buffer, require, msg, this.genContent);
+        }
+        catch (err)
+        {
+          this.err(err);
+        }
+      }
+      if (msg.nrSvg)
+      {
+        if (msg.nrSvg instanceof Array)
+        {
           msg.nrSvg.push (shape);
         }
       }
-      else {
+      else
+      {
         msg.nrSvg = [shape];
       }
       node.send (msg);
     });
+    // on input ends
   };
   RED.nodes.registerType("shape", shapeNode);
 }

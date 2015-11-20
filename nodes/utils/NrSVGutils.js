@@ -12,7 +12,7 @@
 var util = require("util");
 var vm = require ("vm");
 
-getDefaultSandbox = function (RED, console, Buffer, require, msg, func)
+JsExecution = function (RED, console, Buffer, require, msg, func)
 {
   var sandbox = {
     console:console,
@@ -31,4 +31,4 @@ getDefaultSandbox = function (RED, console, Buffer, require, msg, func)
   return context.results;
 }
 
-exports.getDefaultSandbox = getDefaultSandbox;
+exports.JsExecution = JsExecution;

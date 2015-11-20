@@ -23,7 +23,7 @@ module.exports = function(RED) {
             this.on("input", function(msg) {
                 try {
                   var start = process.hrtime();
-                  var results = Utils.getDefaultSandbox (RED, console, Buffer, require, msg, this.func);
+                  var results = Utils.JsExecution (RED, console, Buffer, require, msg, this.func);
                   if (results == null) {
                     results = [];
                   } else if (results.length == null) {
@@ -49,35 +49,35 @@ module.exports = function(RED) {
                       }
                     }
                   }
-                    var outputElems = new Array();
-                    var node = this;
-                    if (msg.nrSvg && results) {
-                        var cp = undefined;
-                        cp = msg.nrSvg.length != undefined ? msg.nrSvg[0] : msg.nrSvg;
-                        results.forEach (function (pos) {
-                            var elem = cp.clone();
-                            elem = SVGadapter (elem);
-                            if (elem.content.type == "line")
-                            {
-                                var current = results.indexOf (pos);
-                                if (current != 0)
-                                    elem.setCoords (results[current-1], pos);
-                            }
-                            else {
-                                //elem.applyTransform (pos);
-                                elem.setPos (pos.x, pos.y);
-                            }
-                            outputElems.push (elem);
-                        });
-                        node.send({nrSvg: outputElems});
+                  var outputElems = new Array();
+                  var node = this;
+                  if (msg.nrSvg && results) {
+                    var cp = undefined;
+                    cp = msg.nrSvg.length != undefined ? msg.nrSvg[0] : msg.nrSvg;
+                    results.forEach (function (pos) {
+                      var elem = cp.clone();
+                      elem = SVGadapter (elem);
+                      if (elem.content.type == "line")
+                      {
+                        var current = results.indexOf (pos);
+                        if (current != 0)
+                          elem.setCoords (results[current-1], pos);
+                        }
+                        else {
+                          //elem.applyTransform (pos);
+                          elem.setPos (pos.x, pos.y);
+                        }
+                        outputElems.push (elem);
+                      });
+                      node.send({nrSvg: outputElems});
                     }
                     var duration = process.hrtime(start);
                     if (process.env.NODE_RED_FUNCTION_TIME) {
-                        this.status({fill:"yellow",shape:"dot",text:""+Math.floor((duration[0]* 1e9 +  duration[1])/10000)/100});
+                      this.status({fill:"yellow",shape:"dot",text:""+Math.floor((duration[0]* 1e9 +  duration[1])/10000)/100});
                     }
-                } catch(err) {
+                  } catch(err) {
                     this.error(err.toString());
-                }
+                  }
             });
         } catch(err) {
             this.error(err);
