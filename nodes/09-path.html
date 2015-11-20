@@ -74,8 +74,8 @@ RED.nodes.registerType('path',{
 },
 oneditsave: function() {
   $("#node-input-styleContent").val(this.styleEditor.getText());
-  $("#node-input-genContent").val(this.genEditor.getText());
   delete this.styleEditor;
+  $("#node-input-genContent").val(this.genEditor.getText());
   delete this.genEditor;
 }
 });
@@ -95,25 +95,36 @@ oneditsave: function() {
     <input type="number" id="node-input-zindex" placeholder="z-index" value="0">
   </div>
 
-  <!-- Style -->
-  <div class="form-row" style="margin-bottom: 0px;" id="stylelabel-option">
-    <label for="node-input-styleContent" data-toggle="collapse" data-target="#stylecontent-option">
-      <i class="fa fa-wrench"></i> Style</label>
-    <input type="hidden" id="node-input-styleContent" autofocus="autofocus">
-  </div>
-  <div class="form-row node-text-editor-row" id="stylecontent-option">
-    <div style="height: 150px;" class="node-text-editor" id="node-input-style-editor" ></div>
-  </div>
-
   <!-- Generator -->
   <div class="form-row" style="margin-bottom: 0px;" id="genlabel-option">
-    <label for="node-input-genContent" data-toggle="collapse" data-target="#gencontent-option">
+    <label for="node-input-genContent" data-toggle="collapse" data-target="#generator">
       <i class="fa fa-wrench"></i> Generator</label>
     <input type="hidden" id="node-input-genContent" autofocus="autofocus">
   </div>
-  <div class="form-row node-text-editor-row" id="gencontent-option">
-    <div style="height: 150px;" class="node-text-editor" id="node-input-gen-editor" ></div>
+  <div class="form-row in" id="generator">
+    <div class="form-row">
+      <label for="node-input-genType"><i class="fa fa-envelope"></i> Generator</label>
+      <select id="node-input-genType" style="width:125px !important">
+        <option value="Custom">Custom</option>
+        <option value="SimpleAtractor">Simple Attractor</option>
+      </select>
+    </div>
+    <div class="form-row node-text-editor-row" id="gencontent-option">
+      <div style="height: 150px;" class="node-text-editor" id="node-input-gen-editor" ></div>
+    </div>
   </div>
+  <!-- Generator ends -->
+
+  <!-- Style -->
+  <div class="form-row" style="margin-bottom: 0px;" id="stylelabel-option">
+    <label for="node-input-styleContent" data-toggle="collapse" data-target="#stylecontent-option">
+    <i class="fa fa-wrench"></i> Style</label>
+    <input type="hidden" id="node-input-styleContent" autofocus="autofocus">
+  </div>
+  <div class="form-row node-text-editor-row in" id="stylecontent-option">
+    <div style="height: 150px;" class="node-text-editor" id="node-input-style-editor" ></div>
+  </div>
+  <!-- Style ends -->
 
 </script>
 

@@ -12,49 +12,43 @@ module.exports = function(RED) {
     var vm = require("vm");
     var SVGadapter = require ("./svg/Utils.js").SVGadapter;
     var Generators = require ("./svg/gens/Attractor.js");
+    var Utils = require ("./utils/NrSVGutils.js");
 
     function FunctionNode(n) {
         RED.nodes.createNode(this,n);
         this.name = n.name;
         this.func = n.func;
-        var functionText = "var results = null; results = (function(msg){"+this.func + "\n})(msg);";
         this.topic = n.topic;
-        var sandbox = {
-            console:console,
-            util:util,
-            Buffer:Buffer,
-            require:require,
-            context: {
-                global:RED.settings.functionGlobalContext || {}
-            }
-        };
-        var context = vm.createContext(sandbox);
         try {
-            this.script = vm.createScript(functionText);
             this.on("input", function(msg) {
                 try {
-                    var start = process.hrtime();
-                    context.msg = msg;
-                    this.script.runInContext(context);
-                    var results = context.results;
-                    if (results == null) {
-                        results = [];
-                    } else if (results.length == null) {
-                        results = [results];
-                    }
-                    if (msg._topic) {
-                        for (var m in results) {
-                            if (results[m]) {
-                                if (util.isArray(results[m])) {
-                                    for (var n=0; n < results[m].length; n++) {
-                                        results[m][n]._topic = msg._topic;
-                                    }
-                                } else {
-                                    results[m]._topic = msg._topic;
-                                }
-                            }
+                  var start = process.hrtime();
+                  var results = Utils.getDefaultSandbox (RED, console, Buffer, require, msg, this.func);
+                  if (results == null) {
+                    results = [];
+                  } else if (results.length == null) {
+                    results = [results];
+                  }
+                  if (msg._topic)
+                  {
+                    for (var m in results)
+                    {
+                      if (results[m])
+                      {
+                        if (util.isArray(results[m]))
+                        {
+                          for (var n=0; n < results[m].length; n++)
+                          {
+                            results[m][n]._topic = msg._topic;
+                          }
                         }
+                        else
+                        {
+                          results[m]._topic = msg._topic;
+                        }
+                      }
                     }
+                  }
                     var outputElems = new Array();
                     var node = this;
                     if (msg.nrSvg && results) {

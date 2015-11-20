@@ -17,11 +17,8 @@
 <script type="text/javascript">
 
     hideAllRows = function () {
-      $("#xypos-option").hide();
       $("#rxry-option").hide();
       $("#radio-option").hide();
-      $("#sourcepos-option").hide();
-      $("#targetpos-option").hide();
       $("#zindex-option").hide();
       $("#size-option").hide();
       $("#textString-option").hide();
@@ -35,20 +32,16 @@
         defaults: {
             name: {value:""},
             shapeType: {value: "circle"},
-            xpos: {value: "0"},
-            ypos: {value: "0"},
             elemwidth: {value :"0"},
             elemheight: {value :"0"},
             radio: {value: "10"},
-            x1pos: {value: "0"},
-            y1pos: {value: "0"},
-            x2pos: {value: "0"},
-            y2pos: {value: "0"},
             rx: {value: "10"},
             ry: {value: "10"},
             textString: {value: ""},
             zindex: {value:"0"},
-            func: {value: "//svg style"}
+            func: {value: "//svg style"},
+            genContent: {value: ""},
+            styleContent: {value: ""}
         },
         inputs:1,
         outputs:1,
@@ -62,35 +55,29 @@
               hideAllRows ();
               switch (shape) {
                 case "circle":
-                  $("#xypos-option").show();
                   $("#radio-option").show();
                   $("#zindex-option").show();
                   $("#stylelabel-option").show();
                   $("#stylecontent-option").show();
                   break;
                 case "ellipse":
-                  $("#xypos-option").show();
                   $("#rxry-option").show();
                   $("#zindex-option").show();
                   $("#stylelabel-option").show();
                   $("#stylecontent-option").show();
                   break;
                 case "rect":
-                  $("#xypos-option").show();
                   $("#size-option").show();
                   $("#zindex-option").show();
                   $("#stylelabel-option").show();
                   $("#stylecontent-option").show();
                   break;
                 case "line":
-                  $("#sourcepos-option").show();
-                  $("#targetpos-option").show();
                   $("#zindex-option").show();
                   $("#stylelabel-option").show();
                   $("#stylecontent-option").show();
                   break;
                 case "text":
-                  $("#xypos-option").show();
                   $("#textString-option").show();
                   $("#zindex-option").show();
                   $("#stylelabel-option").show();
@@ -105,6 +92,25 @@
                 default: // empty;
                 };
             });
+
+            var that = this;
+            // Generator change
+            $("#node-input-genType").change(function() {
+              var generator = $("#node-input-genType option:selected").val();
+              switch (generator) {
+                case 'SimpleAtractor':
+                  require(["orion/editor/edit"], function(edit) {
+                    that.genEditor = edit({
+                      parent:document.getElementById('node-input-genContent-editor'),
+                      lang:"js",
+                      contents: "var Gens = require (\"./svg/gens/Attractor.js\");\n" +
+                      "var coords = new Gens.Attractor (120, \"QGGVSLMHHGCR\", 800, 600);\n" +
+                      "return coords;\n"
+                    });
+                  });
+                }
+            });
+            // End Generator change
 
             function functionDialogResize() {
                 var rows = $("#dialog-form>div:not(.node-text-editor-row)");
@@ -132,26 +138,25 @@
             });
             var that = this;
             require(["orion/editor/edit"], function(edit) {
-                that.editor = edit({
-                    parent:document.getElementById('node-input-func-editor'),
-                    lang:"css",
-                    contents: $("#node-input-func").val()
-                });
+              that.genEditor = edit({
+                parent:document.getElementById('node-input-genContent-editor'),
+                lang:"js",
+                contents: $("#node-input-genContent").val()
+              });
+              that.styleEditor = edit({
+                parent:document.getElementById('node-input-styleContent-editor'),
+                lang:"css",
+                contents: $("#node-input-styleContent").val()
+              });
             });
-            /*if (this.shapeType == null) {
-                this.shapeType = "circle";
-                $("#node-input-shapeType").val(this.shapeType);
-                $("#node-input-shapeType").change();
-            }*/
-            //else {
             $("#node-input-shapeType").val(this.shapeType);
             $("#node-input-shapeType").change();
-            //};
         },
         oneditsave: function() {
-            //$("#node-input-shapeType").val(this.shapeType);
-            $("#node-input-func").val(this.editor.getText());
-            delete this.editor;
+          $("#node-input-styleContent").val(this.styleEditor.getText());
+          delete this.styleEditor;
+          $("#node-input-genContent").val(this.genEditor.getText());
+          delete this.genEditor;
         }
     });
 </script>
@@ -171,31 +176,10 @@
         <input type="text" id="node-input-name" placeholder="Optional Name" style="width:25%">
     </div>
 
-    <!-- X,Y -->
-    <div class="form-row hidden" id="xypos-option">
-      <label for="node-input-xpos"><i class="icon-tag"></i> X,Y coords</label>
-      <input type="number" id="node-input-xpos" placeholder="X position" style="width:25%">
-      <input type="number" id="node-input-ypos" placeholder="Y position" style="width:25%">
-    </div>
-
     <!-- Radio -->
     <div class="form-row hidden"  id="radio-option">
       <label for="node-input-radio"><i class="icon-tag"></i> Radio</label>
       <input type="number" id="node-input-radio" placeholder="Radio">
-    </div>
-
-    <!-- X1,Y1 -->
-    <div class="form-row hidden" id="sourcepos-option">
-      <label for="node-input-sourcepos"><i class="icon-tag"></i> X1, Y1</label>
-      <input type="number" id="node-input-x1pos" placeholder="X1 pos" style="width:25%">
-      <input type="number" id="node-input-y1pos" placeholder="Y1 pos" style="width:25%">
-    </div>
-
-     <!-- X2,Y2 -->
-    <div class="form-row hidden" id="targetpos-option">
-      <label for="node-input-x2pos"><i class="icon-tag"></i> X2,Y2</label>
-      <input type="number" id="node-input-x2pos" placeholder="X2 pos" style="width:25%">
-       <input type="number" id="node-input-y2pos" placeholder="Y2 pos" style="width:25%">
     </div>
 
      <!-- RX,RY -->
@@ -224,15 +208,37 @@
       <input type="number" id="node-input-zindex" placeholder="z-index" value="0">
     </div>
 
+    <!-- Generator -->
+    <div class="form-row" style="margin-bottom: 0px;" id="genlabel-option">
+      <label for="node-input-genContent" >
+      <i class="fa fa-wrench"></i> Generator</label>
+      <input type="hidden" id="node-input-genContent" autofocus="autofocus">
+    </div>
+    <div class="form-row in" id="generator">
+      <div class="form-row">
+      <label for="node-input-genType"><i class="fa fa-envelope"></i> Generator</label>
+      <select id="node-input-genType" style="width:125px !important">
+        <option value="Custom">Custom</option>
+        <option value="SimpleAtractor">Simple Attractor</option>
+        </select>
+      </div>
+      <div class="form-row node-text-editor-row" id="gencontent-option">
+        <div style="height: 150px;" class="node-text-editor" id="node-input-genContent-editor" ></div>
+      </div>
+    </div>
+    <!-- Generator ends -->
+
     <!-- Style -->
-    <div class="form-row hidden" style="margin-bottom: 0px;" id="stylelabel-option">
-      <label for="node-input-func" data-toggle="collapse" data-target="#stylecontent-option">
-        <i class="fa fa-wrench"></i> Style</label>
-      <input type="hidden" id="node-input-func" autofocus="autofocus">
+    <div class="form-row" style="margin-bottom: 0px;" id="stylelabel-option">
+      <label for="node-input-styleContent" data-toggle="collapse" data-target="#stylecontent-option">
+      <i class="fa fa-wrench"></i> Style</label>
+      <input type="hidden" id="node-input-styleContent" autofocus="autofocus">
     </div>
-    <div class="form-row node-text-editor-row hidden" id="stylecontent-option">
-      <div style="height: 150px;" class="node-text-editor" id="node-input-func-editor" ></div>
+    <div class="form-row node-text-editor-row in" id="stylecontent-option">
+      <div style="height: 150px;" class="node-text-editor" id="node-input-styleContent-editor" ></div>
     </div>
+    <!-- Style ends -->
+
 </script>
 
 <script type="text/x-red" data-help-name="shape">

@@ -66,11 +66,12 @@
               switch (generator) {
                 case 'SimpleAtractor':
                   require(["orion/editor/edit"], function(edit) {
+                    //var Gen = require ("./svg/gens/Attractor.js");
                     that.editor = edit({
                       parent:document.getElementById('node-input-func-editor'),
                       lang:"js",
-                      contents: "var Gens = require (\"./svg/gens/attractor.js\");\n" +
-                                "var coords = new Gens.Attractor (120, \"QGGVSLMHHGCR\");\n" +
+                      contents: "var Gens = require (\"./svg/gens/Attractor.js\");\n" +
+                                "var coords = new Gens.Attractor (120, \"QGGVSLMHHGCR\", 800, 600);\n" +
                                 "return coords;\n"
                     });
                   });

@@ -19,24 +19,26 @@ module.exports = function(RED) {
   function shapeNode (ctx) {
 
     RED.nodes.createNode(this, ctx);
+    this.genContent = ctx.genContent;
+    this.styleContent = ctx.styleContent;
     var node = this;
     this.on('input', function(msg) {
       var shape;
       switch (ctx.shapeType) {
         case Circle.type:
-          shape = new Circle (ctx.xpos, ctx.ypos, ctx.radio, ctx.func, ctx.zindex);
+          shape = new Circle (0, 0, ctx.radio, ctx.func, ctx.zindex);
           break;
         case Ellipse.type:
-          shape = new Ellipse (ctx.xpos, ctx.ypos, ctx.rx, ctx.ry, ctx.func, ctx.zindex);
+          shape = new Ellipse (0, 0, ctx.rx, ctx.ry, ctx.func, ctx.zindex);
           break;
         case Rect.type:
-          shape = new Rect (ctx.xpos, ctx.ypos, ctx.elemwidth, ctx.elemheight, ctx.func, ctx.zindex);
+          shape = new Rect (0, 0, ctx.elemwidth, ctx.elemheight, ctx.func, ctx.zindex);
           break;
         case Line.type:
-          shape = new Line (ctx.x1pos, ctx.y1pos, ctx.x2pos, ctx.y2pos, ctx.func, ctx.zindex);
+          shape = new Line (0,0, 0, 0, ctx.func, ctx.zindex);
           break;
         case Text.type:
-          shape = new Text (ctx.xpos, ctx.ypos, ctx.textString, ctx.func, ctx.zindex);
+          shape = new Text (0, 0, ctx.textString, ctx.func, ctx.zindex);
           break;
         case Polygon.type:
           shape = new Polygon (ctx.textString, ctx.func, ctx.zindex);
