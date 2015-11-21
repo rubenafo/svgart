@@ -23,7 +23,7 @@ Path.prototype.parent = SVGBase.prototype;
 */
 Path.prototype.constructor = Path;
 function Path (d, style, zindex) {
-  SVGBase.call (this, Path.type, zindex);
+  SVGBase.call (this, Path.type, zindex, true);
   this.parent.setAttribute.call (this, "d", d);
   this.content.pathPoints = PathGrammar.parse(d);
   this.parent.setAttribute.call (this, "style", style);
@@ -68,6 +68,32 @@ Path.prototype.clone = function () {
     copy.content.pathPoints.push (item);
   });
   return copy;
+}
+
+/**
+* Clones the Path to the given coords array
+* @param {object} coords - array of coords ({x:val,y:val})
+*/
+Path.prototype.cloneToCoords = function (coords)
+{
+  // TODO to be implemented, this should clone all the
+}
+
+/**
+* Update the object coordinates
+* @param {object} coords - array of coords ({x:val, y:val})
+*/
+Path.prototype.updateCoords = function (coords)
+{
+  /*TODO this.content.pointsList = new Array();
+  var newString = "";
+  var that = this;
+  coords.forEach (function (item) {
+  that.content.pointsList.push (item);
+  newString += " " + item.x + "," + item.y;
+});
+this.parent.setAttribute.call (this, "points", newString);
+return this;*/
 }
 
 /**

@@ -62,4 +62,33 @@ Line.adapt = function (elem) {
   return SVGBase.prototype.adapt.call (elem, Line.prototype);
 }
 
+/**
+* Clones a Line
+* @returns - a new Line
+*/
+Line.prototype.clone = function ()
+{
+  var clone = this.parent.clone.call (this);
+  return Line.adapt (clone);
+}
+
+/**
+* Clones the Line to the given coords array
+* @param {object} coords - array of coords ({x:val,y:val})
+*/
+Line.prototype.cloneToCoords = function (coords)
+{
+  var results = [];
+  for (var i = 0; i < coords.length; i++)
+  {
+    if (i)
+    {
+      var line = this.clone ();
+      line.setCoords (coords[i], coords[i-1]);
+      results.push (line);
+    }
+  }
+  return results;
+}
+
 exports.Line = Line;

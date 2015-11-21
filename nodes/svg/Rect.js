@@ -34,6 +34,32 @@ Rect.prototype.getCenter = function () {
   return ({x:width/2, y:height/2});
 }
 
+/**
+* Clones a Rectangle
+* @returns - a new Rectangle object
+*/
+Rect.prototype.clone = function ()
+{
+  var clone = this.parent.clone.call (this);
+  return Rect.adapt (clone);
+}
+
+/**
+* Clones the Rectangle to the given coords array
+* @param {object} coords - array of coords ({x:val,y:val})
+*/
+Rect.prototype.cloneToCoords = function (coords)
+{
+  var results = [];
+  for (var i = 0; i < coords.length; i++)
+  {
+    var rect = this.clone ();
+    rect.setPos (coords[i].x, coords[i].y);
+    results.push (rect);
+  }
+  return results;
+}
+
 Rect.adapt = function (elem) {
   return SVGBase.prototype.adapt.call (elem, Rect.prototype);
 }

@@ -56,4 +56,30 @@ Circle.adapt = function (elem) {
   return SVGBase.prototype.adapt.call (elem, Circle.prototype);
 }
 
+/**
+ * Clones a Circle
+ * @returns - a new Circle
+ */
+Circle.prototype.clone = function ()
+{
+  var clone = this.parent.clone.call (this);
+  return Circle.adapt (clone);
+}
+
+/**
+* Clones the Circle to the given coords array
+* @param {object} coords - array of coords ({x:val,y:val})
+*/
+Circle.prototype.cloneToCoords = function (coords)
+{
+  var results = [];
+  for (var i = 0; i < coords.length; i++)
+  {
+    var circle = this.clone ();
+    circle.setPos (coords[i].x, coords[i].y);
+    results.push (circle);
+  }
+  return results;
+}
+
 exports.Circle = Circle;

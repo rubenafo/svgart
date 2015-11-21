@@ -58,4 +58,30 @@ Ellipse.adapt = function (elem) {
   return SVGBase.prototype.adapt.call (elem, Ellipse.prototype);
 }
 
+/**
+* Clones an Ellipse
+* @returns - a new Ellipse
+*/
+Ellipse.prototype.clone = function ()
+{
+  var clone = this.parent.clone.call (this);
+  return Ellipse.adapt (clone);
+}
+
+/**
+* Clones the Ellipse to the given coords array
+* @param {object} coords - array of coords ({x:val,y:val})
+*/
+Ellipse.prototype.cloneToCoords = function (coords)
+{
+  var results = [];
+  for (var i = 0; i < coords.length; i++)
+  {
+    var ellipse = this.clone ();
+    ellipse.setPos (coords[i].x, coords[i].y);
+    results.push (ellipse);
+  }
+  return results;
+}
+
 exports.Ellipse = Ellipse;

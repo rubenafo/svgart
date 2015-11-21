@@ -15,7 +15,7 @@ Polygon.prototype.parent = SVGBase.prototype;
 
 Polygon.prototype.constructor = Polygon;
 function Polygon (pointsStr, style, zindex) {
-  SVGBase.call (this, Polygon.type, zindex);
+  SVGBase.call (this, Polygon.type, zindex, true);
   this.parent.setAttribute.call (this, "points", pointsStr);
   this.content.pointsList = PolygonGrammar.parse(pointsStr);
   this.parent.setAttribute.call (this, "style", style);
@@ -43,6 +43,32 @@ Polygon.prototype.clone = function () {
     copy.content.pointsList.push (item);
   });
   return copy;
+}
+
+/**
+* Clones the Polygon to the given coords array
+* @param {object} coords - array of coords ({x:val,y:val})
+*/
+Polygon.prototype.cloneToCoords = function (coords)
+{
+  // TODO to be implemented, this should clone all the
+}
+
+/**
+* Update the object coordinates
+* @param {object} coords - array of coords ({x:val, y:val})
+*/
+Polygon.prototype.updateCoords = function (coords)
+{
+  /*TODO this.content.pointsList = new Array();
+  var newString = "";
+  var that = this;
+  coords.forEach (function (item) {
+    that.content.pointsList.push (item);
+    newString += " " + item.x + "," + item.y;
+  });
+  this.parent.setAttribute.call (this, "points", newString);
+  return this;*/
 }
 
 Polygon.adapt = function (elem) {

@@ -28,33 +28,35 @@ module.exports = function(RED) {
       var shape;
       switch (ctx.shapeType) {
         case Circle.type:
-          shape = new Circle (0, 0, ctx.radio, ctx.func, ctx.zindex);
+          shape = new Circle (0, 0, ctx.radio, node.styleContent, ctx.zindex);
           break;
         case Ellipse.type:
-          shape = new Ellipse (0, 0, ctx.rx, ctx.ry, ctx.func, ctx.zindex);
+          shape = new Ellipse (0, 0, ctx.rx, ctx.ry, node.styleContent, ctx.zindex);
           break;
         case Rect.type:
-          shape = new Rect (0, 0, ctx.elemwidth, ctx.elemheight, ctx.func, ctx.zindex);
+          shape = new Rect (0, 0, ctx.elemwidth, ctx.elemheight, node.styleContent, ctx.zindex);
           break;
         case Line.type:
-          shape = new Line (0,0, 0, 0, ctx.func, ctx.zindex);
+          shape = new Line (0,0, 0, 0, node.styleContent, ctx.zindex);
           break;
         case Text.type:
-          shape = new Text (0, 0, ctx.textString, ctx.func, ctx.zindex);
+          shape = new Text (0, 0, ctx.textString, node.styleContent, ctx.zindex);
           break;
         case Polygon.type:
-          shape = new Polygon (ctx.textString, ctx.func, ctx.zindex);
+          shape = new Polygon (ctx.textString, node.styleContent, ctx.zindex);
           break;
         case Polyline.type:
-          shape = new Polyline (ctx.textString, ctx.func, ctx.zindex);
+          shape = new Polyline (ctx.textString, node.styleContent, ctx.zindex);
           break;
       }
       var coords = [];
+      var shapeList = [];
       if (this.genContent)
       {
         try
         {
-          var results = ExecUtils.JsExecution (RED, console, Buffer, require, msg, this.genContent);
+          var coords = ExecUtils.JsExecution (RED, console, Buffer, require, msg, this.genContent);
+          shapeList = shape.applyPoints (coords);
         }
         catch (err)
         {
@@ -65,12 +67,16 @@ module.exports = function(RED) {
       {
         if (msg.nrSvg instanceof Array)
         {
-          msg.nrSvg.push (shape);
+          msg.nrSvg.concat (shapeList);
+        }
+        else
+        {
+          msg.nrSvg = [shapeList];
         }
       }
       else
       {
-        msg.nrSvg = [shape];
+        msg.nrSvg = shapeList;
       }
       node.send (msg);
     });

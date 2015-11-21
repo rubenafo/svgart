@@ -15,10 +15,10 @@ Polyline.prototype.parent = SVGBase.prototype;
 
 Polyline.prototype.constructor = Polyline;
 function Polyline (text, style, zindex) {
-  SVGBase.call (this, Polyline.type, zindex);
+  SVGBase.call (this, Polyline.type, zindex, true);
   this.parent.setAttribute.call (this, "points", text);
-  this.content.polyPoints = PolygonGrammar.parse(text);
   this.parent.setAttribute.call (this, "style", style);
+  this.content.polyPoints = PolygonGrammar.parse(text);
 };
 
 /*
@@ -39,7 +39,33 @@ Polyline.prototype.clone = function () {
   this.content.polyPoints.forEach (function(item) {
     copy.content.polyPoints.push (item);
   });
-  return copy;
+  return Polyline.adapt (copy);
+}
+
+/**
+* Clones the Polyline to the given coords array
+* @param {object} coords - array of coords ({x:val,y:val})
+*/
+Polyline.prototype.cloneToCoords = function (coords)
+{
+  // to be implemented, this should clone all the
+}
+
+/**
+ * Update the object coordinates
+ * @param {object} coords - array of coords ({x:val, y:val})
+ */
+Polyline.prototype.updateCoords = function (coords)
+{
+  this.content.polyPoints = new Array();
+  var newString = "";
+  var that = this;
+  coords.forEach (function (item) {
+    that.content.polyPoints.push (item);
+    newString += " " + item.x + "," + item.y;
+  });
+  this.parent.setAttribute.call (this, "points", newString);
+  return this;
 }
 
 Polyline.adapt = function (elem) {

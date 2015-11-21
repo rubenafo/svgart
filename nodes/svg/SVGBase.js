@@ -13,12 +13,13 @@
  * @param {number} zindex
  */
 SVGBase.prototype.constructor = SVGBase;
-function SVGBase (type, zindex) {
+function SVGBase (type, zindex, definedByPoints) {
 	this.content = {};
 	this.content.properties = [];
   this.content.transform = new Array();
   this.content.type = type;
   this.content.zindex = zindex || 0;
+	this.content.definedByPoints = definedByPoints || false;
 };
 
 /**
@@ -212,14 +213,37 @@ SVGBase.prototype.adapt = function (prototype) {
   return this;
 }
 
+SVGBase.prototype.isDefinedByPoints = function ()
+{
+	return this.content.definedByPoints;
+}
+
 /**
  * Duplicates the object to the given coords array
  * @param {object} coords - array of coords ({x:val,y:val})
- * @abstract
+ * @returns {object} - an array objects
  */
 SVGBase.prototype.cloneToCoords = function (coords)
 {
 	throw ("Missing implementation in " + this.content.type + "class");
+}
+
+/**
+ * Apply multiple points to an object.
+ * If the object is defined by points (paths, poly's) then the object definition
+ * is updated using the coords, otherwise it gets cloned and an array is returned.
+ * @return {Object} - an object or an array of them
+ */
+SVGBase.prototype.applyPoints = function (coords)
+{
+	if (this.isDefinedByPoints())
+	{
+		return this.updateCoords (coords);
+	}
+	else
+	{
+		return this.cloneToCoords (coords);
+	}
 }
 
 exports.SVGBase = SVGBase;
