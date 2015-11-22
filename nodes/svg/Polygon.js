@@ -39,10 +39,8 @@ Polygon.prototype.getCenter = function () {
 Polygon.prototype.clone = function () {
   var copy = this.parent.clone.call (this);
   copy.content.pointsList = new Array();
-  this.content.pointsList.forEach (function(item) {
-    copy.content.pointsList.push (item);
-  });
-  return copy;
+  copy.content.pointsList = this.content.pointsList.slice ();
+  return Polygon.adapt (copy);
 }
 
 /**
@@ -51,7 +49,7 @@ Polygon.prototype.clone = function () {
 */
 Polygon.prototype.cloneToCoords = function (coords)
 {
-  // TODO to be implemented, this should clone all the
+  // TODO to be implemented, this should clone and move the path to the coords
 }
 
 /**
@@ -60,7 +58,7 @@ Polygon.prototype.cloneToCoords = function (coords)
 */
 Polygon.prototype.updateCoords = function (coords)
 {
-  /*TODO this.content.pointsList = new Array();
+  this.content.pointsList = new Array();
   var newString = "";
   var that = this;
   coords.forEach (function (item) {
@@ -68,7 +66,7 @@ Polygon.prototype.updateCoords = function (coords)
     newString += " " + item.x + "," + item.y;
   });
   this.parent.setAttribute.call (this, "points", newString);
-  return this;*/
+  return this;
 }
 
 Polygon.adapt = function (elem) {

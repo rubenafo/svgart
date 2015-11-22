@@ -15,6 +15,7 @@ module.exports = function(RED) {
   var Polygon = require ("./svg/Polygon").Polygon;
   var Polyline = require ("./svg/Polyline").Polyline;
   var Utils = require ("./svg/Utils");
+  var Path = require ("./svg/Path").Path;
   var ExecUtils = require ("./utils/NrSVGutils.js");
 
   function shapeNode (ctx) {
@@ -47,6 +48,9 @@ module.exports = function(RED) {
           break;
         case Polyline.type:
           shape = new Polyline (ctx.textString, node.styleContent, ctx.zindex);
+          break;
+        case Path.type:
+          shape = new Path (ctx.textString, ctx.styleContent, ctx.zindex);
           break;
       }
       var coords = [];

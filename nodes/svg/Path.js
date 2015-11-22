@@ -25,7 +25,7 @@ Path.prototype.constructor = Path;
 function Path (d, style, zindex) {
   SVGBase.call (this, Path.type, zindex, true);
   this.parent.setAttribute.call (this, "d", d);
-  this.content.pathPoints = PathGrammar.parse(d);
+  //this.content.pathPoints = PathGrammar.parse(d);
   this.parent.setAttribute.call (this, "style", style);
 };
 
@@ -63,11 +63,8 @@ Path.prototype.getCenter = function () {
  */
 Path.prototype.clone = function () {
   var copy = this.parent.clone.call (this);
-  copy.content.pathPoints = new Array();
-  this.content.pathPoints.forEach (function(item) {
-    copy.content.pathPoints.push (item);
-  });
-  return copy;
+  copy.content.pathPoints = this.content.pathPoints.slice();
+  return Path.adapt (copy);
 }
 
 /**
@@ -76,7 +73,7 @@ Path.prototype.clone = function () {
 */
 Path.prototype.cloneToCoords = function (coords)
 {
-  // TODO to be implemented, this should clone all the
+  // TODO to be implemented, this should clone and move the path to the coords
 }
 
 /**
@@ -85,15 +82,16 @@ Path.prototype.cloneToCoords = function (coords)
 */
 Path.prototype.updateCoords = function (coords)
 {
-  /*TODO this.content.pointsList = new Array();
+  this.content.pathPoints = new Array();
   var newString = "";
-  var that = this;
-  coords.forEach (function (item) {
-  that.content.pointsList.push (item);
-  newString += " " + item.x + "," + item.y;
-});
-this.parent.setAttribute.call (this, "points", newString);
-return this;*/
+  newString += "M" + coords[0].x + "," + coords[0].y;
+  for (var i = 1; i < coords.length/2; i++)
+  {
+    this.content.pathPoints.push (coords[i]);
+    newString += " S" + coords[i].x + " " + coords[i].y + " " + coords[i+1].x + " " + coords[i+1].y;
+  }
+  this.parent.setAttribute.call (this, "d", newString);
+  return this;
 }
 
 /**

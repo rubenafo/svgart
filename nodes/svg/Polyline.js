@@ -48,7 +48,7 @@ Polyline.prototype.clone = function () {
 */
 Polyline.prototype.cloneToCoords = function (coords)
 {
-  // to be implemented, this should clone all the
+  // TODO to be implemented, this should clone and move the path to the coords
 }
 
 /**
