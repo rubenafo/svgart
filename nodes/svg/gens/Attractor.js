@@ -26,21 +26,19 @@ function Attractor (numPoints, entryString, width, height)
   {
     a[i] = (entryString.charCodeAt(i) - 65 - 12) / 10;
   }
-  res.push ({x:width/2, y:height/2});
+  res.push ({x:(width/2) + 50 * Math.cos(r),y:(height/2) + 58 * Math.sin(r)});
   // Make 25 iterations each drawing cycle.
   for (i = 0; i < numPoints; i++)
   {
-    //p.point(x * 200, y * 200);
-    //p.rotate(r);
-    //res.push ({x:x*800, y:y*600});
     var nx = a[0] + a[1]  * x + a[2]  * x * x
             + a[3] * x * y + a[4]  * y + a[5]  * y * y;
     var ny = a[6] + a[7]  * x + a[8]  * x * x
             + a[9] * x * y + a[10] * y + a[11] * y * y;
     x = nx; y = ny;
-    // (x*200,y*200);
-    var xvalue = (width/2)*x; xvalue += width/2;
-    var yvalue = (height/2)*y; yvalue += height/2;
+    var xvalue = (width/2)*x;
+    xvalue += width/2;
+    var yvalue = (height/2)*y;
+    yvalue += height/2;
     res.push ({x:xvalue, y:yvalue});
   }
   return res;
