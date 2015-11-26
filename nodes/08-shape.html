@@ -16,6 +16,7 @@
       $("#textString-option").hide();
       $("#stylelabel-option").hide();
       $("#stylecontent-option").hide();
+      $("#node-input-segmented").hide();
     };
 
     RED.nodes.registerType('shape',{
@@ -31,9 +32,11 @@
             ry: {value: "10"},
             textString: {value: ""},
             zindex: {value:"0"},
-            //func: {value: ""},
             genContent: {value: ""},
-            styleContent: {value: ""}
+            styleContent: {value: ""},
+            segmented: {value:""},
+            showGenContent : {value: "false"},
+            showStyleContent: {value: "false"}
         },
         inputs:1,
         outputs:1,
@@ -63,6 +66,7 @@
                   $("#zindex-option").show();
                   $("#stylelabel-option").show();
                   $("#stylecontent-option").show();
+                  $("#node-input-segmented").show();
                   break;
                 case "line":
                   $("#zindex-option").show();
@@ -80,10 +84,31 @@
                   $("#zindex-option").show();
                   $("#stylelabel-option").show();
                   $("#stylecontent-option").show();
+                  $("#node-input-segmented").show();
                   break;
                 default: // empty;
                 };
             });
+
+            // collapse or display Generator and Style sections
+            if (!this.showStyleConten)
+            {
+              //$("#generator").collapse();
+              //this.showGenContent = true;
+            }
+            if (!this.showStyleContent)
+            {
+              //$("#stylecontent-option").collapse();
+              //this.showStyleConten = true;
+            }
+            $("#generator").on("hidden.bs.collapse")
+            {
+              this.showGenContent = false;
+            }
+            $("#generator").on("hidden.bs.show")
+            {
+              this.showGenContent = true;
+            }
 
             var that = this;
             // Generator change
@@ -198,7 +223,7 @@
     <!-- Z-Index -->
     <div class="form-row hidden" id="zindex-option">
       <label for="node-input-zindex"><i class="icon-tag"></i> Z-Index</label>
-      <input type="number" id="node-input-zindex" placeholder="z-index" value="0">
+        <input type="number" id="node-input-zindex" placeholder="z-index" value="0">
     </div>
 
     <!-- Generator -->
@@ -206,15 +231,20 @@
       <label for="node-input-genContent" data-toggle="collapse" data-target="#generator">
       <i class="fa fa-wrench"></i> Generator</label>
       <input type="hidden" id="node-input-genContent" autofocus="autofocus">
+      <input type="hidden" id="node-input-showStyleContent" autofocus="autofocus">
     </div>
     <div class="form-row in" id="generator">
       <div class="form-row">
-      <label for="node-input-genType"><i class="fa fa-envelope"></i> Generator</label>
-      <select id="node-input-genType" style="width:125px !important">
-        <option value="Custom">Custom</option>
-        <option value="SimpleAtractor">Simple Attractor</option>
-        </select>
+        <label for="node-input-genType"><i class="fa fa-envelope"></i> Generator</label>
+        <select id="node-input-genType" style="width:125px !important">
+          <option value="Custom">Custom</option>
+          <option value="SimpleAtractor">Simple Attractor</option>
+          </select>
+
+          <input type="checkbox" id="node-input-segmented" style="width:10%">
+          <!--<label for="node-input-segmented"><i class="icon-tag" style="width:10%"></i>Segmented</label>-->
       </div>
+
       <div class="form-row node-text-editor-row" id="gencontent-option">
         <div style="height: 150px;" class="node-text-editor" id="node-input-genContent-editor" ></div>
       </div>
@@ -226,6 +256,7 @@
       <label for="node-input-styleContent" data-toggle="collapse" data-target="#stylecontent-option">
       <i class="fa fa-wrench"></i> Style</label>
       <input type="hidden" id="node-input-styleContent" autofocus="autofocus">
+      <input type="hidden" id="node-input-showStyleContent" autofocus="autofocus">
     </div>
     <div class="form-row node-text-editor-row in" id="stylecontent-option">
       <div style="height: 150px;" class="node-text-editor" id="node-input-styleContent-editor" ></div>

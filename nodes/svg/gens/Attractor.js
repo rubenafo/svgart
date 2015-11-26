@@ -19,7 +19,7 @@ function Attractor (numPoints, entryString, width, height)
 
   // Parameters.
   var x = 0.1, y = 0.1;
-  var r = Math.random(360);
+  var r = 360 % entryString.length;
 
   // Initialize coefficients.
   for (i = 0; i < entryString.length; i++)
@@ -27,7 +27,6 @@ function Attractor (numPoints, entryString, width, height)
     a[i] = (entryString.charCodeAt(i) - 65 - 12) / 10;
   }
   res.push ({x:(width/2) + 50 * Math.cos(r),y:(height/2) + 58 * Math.sin(r)});
-  // Make 25 iterations each drawing cycle.
   for (i = 0; i < numPoints; i++)
   {
     var nx = a[0] + a[1]  * x + a[2]  * x * x

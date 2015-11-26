@@ -21,8 +21,9 @@ module.exports = function(RED) {
   function shapeNode (ctx) {
 
     RED.nodes.createNode(this, ctx);
-    this.genContent = ctx.genContent;
-    this.styleContent = ctx.styleContent;
+    this.genContent = ctx.genContent;     // generator content
+    this.styleContent = ctx.styleContent; // style content
+    this.segmented = ctx.segmented;       // the path/line is segmented
     var node = this;
     this.on('input', function(msg)
     {
