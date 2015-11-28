@@ -34,9 +34,7 @@
             zindex: {value:"0"},
             genContent: {value: ""},
             styleContent: {value: ""},
-            segmented: {value:""},
-            showGenContent : {value: "false"},
-            showStyleContent: {value: "false"}
+            segmented: {value:""}
         },
         inputs:1,
         outputs:1,
@@ -89,26 +87,6 @@
                 default: // empty;
                 };
             });
-
-            // collapse or display Generator and Style sections
-            if (!this.showStyleConten)
-            {
-              //$("#generator").collapse();
-              //this.showGenContent = true;
-            }
-            if (!this.showStyleContent)
-            {
-              //$("#stylecontent-option").collapse();
-              //this.showStyleConten = true;
-            }
-            $("#generator").on("hidden.bs.collapse")
-            {
-              this.showGenContent = false;
-            }
-            $("#generator").on("hidden.bs.show")
-            {
-              this.showGenContent = true;
-            }
 
             var that = this;
             // Generator change
@@ -231,7 +209,6 @@
       <label for="node-input-genContent" data-toggle="collapse" data-target="#generator">
       <i class="fa fa-wrench"></i> Generator</label>
       <input type="hidden" id="node-input-genContent" autofocus="autofocus">
-      <input type="hidden" id="node-input-showStyleContent" autofocus="autofocus">
     </div>
     <div class="form-row in" id="generator">
       <div class="form-row">
@@ -256,7 +233,6 @@
       <label for="node-input-styleContent" data-toggle="collapse" data-target="#stylecontent-option">
       <i class="fa fa-wrench"></i> Style</label>
       <input type="hidden" id="node-input-styleContent" autofocus="autofocus">
-      <input type="hidden" id="node-input-showStyleContent" autofocus="autofocus">
     </div>
     <div class="form-row node-text-editor-row in" id="stylecontent-option">
       <div style="height: 150px;" class="node-text-editor" id="node-input-styleContent-editor" ></div>

@@ -63,17 +63,26 @@ Path.prototype.getCenter = function () {
  */
 Path.prototype.clone = function () {
   var copy = this.parent.clone.call (this);
-  copy.content.pathPoints = this.content.pathPoints.slice();
+  //copy.content.pathPoints = this.content.pathPoints.slice();
   return Path.adapt (copy);
 }
 
 /**
-* Clones the Path to the given coords array
+* Clones the Path to the given coords array, generating a path between
+* each par of coords
 * @param {object} coords - array of coords ({x:val,y:val})
+* @return {object} - array of Path's
 */
 Path.prototype.cloneToCoords = function (coords)
 {
-  // TODO to be implemented, this should clone and move the path to the coords
+  var paths = [];
+  for (var i = 1; i < coords.length; i++)
+  {
+    var path = this.clone();
+    path.updateCoords (coords.slice (i-1, i+1));
+    paths.push (path);
+  }
+  return paths
 }
 
 /**
@@ -85,10 +94,15 @@ Path.prototype.updateCoords = function (coords)
   this.content.pathPoints = new Array();
   var newString = "";
   newString += "M" + coords[0].x + "," + coords[0].y;
-  for (var i = 1; i < coords.length/2; i++)
+  //TODO for (var i = 1; i < coords.length/2; i++)
+  //{
+  //  this.content.pathPoints.push (coords[i]);
+  //  newString += " S" + coords[i].x + " " + coords[i].y + " " + coords[i+1].x + " " + coords[i+1].y;
+  //}
+  for (var i = 1; i < coords.length; i++)
   {
     this.content.pathPoints.push (coords[i]);
-    newString += " S" + coords[i].x + " " + coords[i].y + " " + coords[i+1].x + " " + coords[i+1].y;
+    newString += " T" + Math.round(coords[i].x) + " " + Math.round(coords[i].y);
   }
   this.parent.setAttribute.call (this, "d", newString);
   return this;

@@ -225,20 +225,22 @@ SVGBase.prototype.isDefinedByPoints = function ()
  */
 SVGBase.prototype.cloneToCoords = function (coords)
 {
-	throw ("Missing implementation in " + this.content.type + "class");
+	throw ("Missing cloneToCoords implementation for " + this.content.type + "class");
 }
 
 /**
  * Apply multiple points to an object.
  * If the object is defined by points (paths, poly's) then the object definition
  * is updated using the coords, otherwise it gets cloned and an array is returned.
+ * @param {coords} - list of coords ({x:val, y:val})
+ * @param {segmented} - whether the object should clone or segment along the coords
  * @return {Object} - an object or an array of them
  */
-SVGBase.prototype.applyPoints = function (coords)
+SVGBase.prototype.applyPoints = function (coords, segmented)
 {
 	if (this.isDefinedByPoints())
 	{
-		return this.updateCoords (coords);
+		return segmented ? this.cloneToCoords (coords) : this.updateCoords (coords);
 	}
 	else
 	{

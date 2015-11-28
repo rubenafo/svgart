@@ -24,6 +24,7 @@ module.exports = function(RED) {
     this.genContent = ctx.genContent;     // generator content
     this.styleContent = ctx.styleContent; // style content
     this.segmented = ctx.segmented;       // the path/line is segmented
+    this.showGenContent = ctx.showGenContent;
     var node = this;
     this.on('input', function(msg)
     {
@@ -61,7 +62,7 @@ module.exports = function(RED) {
         try
         {
           var coords = ExecUtils.JsExecution (RED, console, Buffer, require, msg, this.genContent);
-          shapeList = shape.applyPoints (coords);
+          shapeList = shape.applyPoints (coords, this.segmented);
         }
         catch (err)
         {
