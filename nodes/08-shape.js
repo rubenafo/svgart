@@ -73,7 +73,7 @@ module.exports = function(RED) {
       {
         if (msg.nrSvg instanceof Array)
         {
-          msg.nrSvg.concat (shapeList);
+          msg.nrSvg = msg.nrSvg.concat (shapeList);
         }
         else
         {
@@ -82,7 +82,7 @@ module.exports = function(RED) {
       }
       else
       {
-        msg.nrSvg = shapeList;
+        msg.nrSvg = [shapeList];
       }
       node.send (msg);
     });

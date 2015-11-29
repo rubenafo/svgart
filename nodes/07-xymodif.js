@@ -49,36 +49,41 @@ module.exports = function(RED) {
                       }
                     }
                   }
-                  var outputElems = new Array();
+                  var outputElems = [];
                   var node = this;
                   if (msg.nrSvg && results) {
-                    var cp = undefined;
-                    cp = msg.nrSvg.length != undefined ? msg.nrSvg[0] : msg.nrSvg;
-                    results.forEach (function (pos) {
-                      var elem = cp.clone();
-                      elem = SVGadapter (elem);
-                      if (elem.content.type == "line")
+                    var max = msg.nrSvg.length > results.length ? msg.nrSvg.length : results.length;
+                    for (var i = 0; i < max; i++)
+                    {
+                      var elem = msg.nrSvg[i];
+                      var pos = results[i];
+                      if (elem && pos)
                       {
-                        var current = results.indexOf (pos);
-                        if (current != 0)
-                          elem.setCoords (results[current-1], pos);
-                        }
-                        else {
-                          //elem.applyTransform (pos);
-                          elem.setPos (pos.x, pos.y);
-                        }
-                        outputElems.push (elem);
-                      });
-                      node.send({nrSvg: outputElems});
+                        var elem2 = SVGadapter (msg.nrSvg[i]);
+                        var elem3 = elem2.cloneToCoords ([pos]);
+                        outputElems = outputElems.concat (elem3);
+                      }
+                      else if (elem) // !pos
+                      {
+                        outputElems = outputElems.concat (elem);
+                      }
+                      else // not elem, just pos
+                      {
+                        var elem2 = SVGadapter (msg.nrSvg[msg.nrSvg.length-1]);
+                        var elem3 = elem2.cloneToCoords ([pos]);
+                        outputElems = outputElems.concat (elem3);
+                      }
                     }
-                    var duration = process.hrtime(start);
-                    if (process.env.NODE_RED_FUNCTION_TIME) {
-                      this.status({fill:"yellow",shape:"dot",text:""+Math.floor((duration[0]* 1e9 +  duration[1])/10000)/100});
-                    }
-                  } catch(err) {
-                    this.error(err.toString());
+                    node.send({nrSvg: outputElems});
                   }
-            });
+                  var duration = process.hrtime(start);
+                  if (process.env.NODE_RED_FUNCTION_TIME) {
+                    this.status({fill:"yellow",shape:"dot",text:""+Math.floor((duration[0]* 1e9 +  duration[1])/10000)/100});
+                  }
+                } catch(err) {
+                  this.error(err.toString());
+              }
+          });
         } catch(err) {
             this.error(err);
           }

@@ -58,7 +58,7 @@ SVGBase.prototype.getZindex = function () {
  * ready to be inserted into a SVG element
  */
 SVGBase.prototype.toSVG = function (content) {
-	var retValue = "<" + this.content.type;
+	var retValue = "<" + this.content.type + " ";
   var data = this.content;
   this.content.properties.forEach (function (elem) {
 		retValue += " " + elem + "=\"" + data[elem] + "\" ";
@@ -225,7 +225,7 @@ SVGBase.prototype.isDefinedByPoints = function ()
  */
 SVGBase.prototype.cloneToCoords = function (coords)
 {
-	throw ("Missing cloneToCoords implementation for " + this.content.type + "class");
+	throw ("Missing cloneToCoords implementation for " + this.content.type + " class");
 }
 
 /**

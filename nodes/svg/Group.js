@@ -19,17 +19,16 @@ function Group (zindex) {
 };
 
 Group.prototype.setPos = function (x, y) {
-  var translation = "translate("+ x +","+ y +")";
-  this.parent.setAttribute.call (this, "transform", translation);
+  this.parent.addTranslate.call (this, x, y);
 };
 
 Group.prototype.clone = function () {
   var copy = this.parent.clone.call (this);
-  copy.content.children = new Array();
+  copy.content.children = [];
   this.content.children.forEach (function(item) {
     copy.content.children.push (item);
   });
-  return copy;
+  return Group.adapt (copy);
 }
 
 Group.prototype.toSVG = function () {
@@ -57,6 +56,22 @@ Group.prototype.sortChildren = function () {
 Group.prototype.getCenter = function () {
   // to be implemented
   console.log("Group::getCenter() not implemented");
+}
+
+/**
+* Clones the Group to the given coords array
+* @param {object} coords - array of coords ({x:val,y:val})
+*/
+Group.prototype.cloneToCoords = function (coords)
+{
+  var results = [];
+  for (var i = 0; i < coords.length; i++)
+  {
+    var newGroup = this.clone();
+    newGroup.setPos (coords[i].x, coords[i].y);
+    results.push (newGroup);
+  }
+  return results;
 }
 
 Group.adapt = function (elem) {

@@ -17,7 +17,8 @@ module.exports = function(RED) {
                 if (msg.nrSvg.constructor === Array) {
                     var svgString = new String ();
                     msg.nrSvg.forEach (function (item) {
-                        svgString += item.toSVG();
+                      var svgElem = SVGadapter (item);
+                      svgString += svgElem.toSVG();
                     });
                     msg.payload = svgDoc.toSVG (svgString);
                 }

@@ -25,13 +25,15 @@ module.exports = function(RED) {
               var group = new Group ();
               context.data.forEach (function (elem) {
                 if (elem instanceof Array) {
-                  group.addChild (elem.slice());
+                  elem.forEach (function (item) {
+                    group.addChild (item);
+                  });
                 }
                 else
                   group.addChild (elem);
               });
               group.sortChildren ();
-              msg.nrSvg = group;
+              msg.nrSvg = [group];
               node.send(msg);
               context.data = [];
             }
