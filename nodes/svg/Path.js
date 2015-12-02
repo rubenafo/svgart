@@ -17,15 +17,18 @@ Path.prototype.parent = SVGBase.prototype;
 /**
 * @class The SVG Path element
 * @constructor Circle
-* @param {number} d - Path's d attribute
+* @param {number} pathString - Path's d attribute
 * @param {string} style - CSS style string
 * @param {number} zindex - zindex value
 */
 Path.prototype.constructor = Path;
-function Path (d, style, zindex) {
+function Path (pathString, style, zindex) {
   SVGBase.call (this, Path.type, zindex, true);
-  this.parent.setAttribute.call (this, "d", d);
-  //this.content.pathPoints = PathGrammar.parse(d);
+  this.parent.setAttribute.call (this, "d", pathString);
+  //if (pathString.length)
+  //{
+  //  this.content.pathPoints = PathGrammar.parse(pathString);
+  //}
   this.parent.setAttribute.call (this, "style", style);
 };
 

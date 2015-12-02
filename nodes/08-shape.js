@@ -18,6 +18,8 @@ module.exports = function(RED) {
   var Path = require ("./svg/Path").Path;
   var ExecUtils = require ("./utils/NrSVGutils.js");
 
+  var PathGrammar = require ("./svg/grammars/PathGrammar");
+
   function shapeNode (ctx) {
 
     RED.nodes.createNode(this, ctx);
@@ -52,6 +54,10 @@ module.exports = function(RED) {
           shape = new Polyline (ctx.textString, node.styleContent, ctx.zindex);
           break;
         case Path.type:
+          if (ctx.textString.length)
+          {
+            var d = PathGrammar.parse(ctx.textString);
+          }
           shape = new Path (ctx.textString, ctx.styleContent, ctx.zindex);
           break;
       }
@@ -59,16 +65,23 @@ module.exports = function(RED) {
       var shapeList = [];
       if (this.genContent)
       {
-        try
+        if (Path.type == Path.type && ctx.textString.length) // we use the textString as generator
         {
-          var coords = ExecUtils.JsExecution (RED, console, Buffer, require, msg, this.genContent);
-          shapeList = shape.applyPoints (coords, this.segmented);
+          shapeList = shape;
         }
-        catch (err)
-        {
-          this.err(err);
-        }
+        else
+          try
+          {
+            var coords = ExecUtils.JsExecution (RED, console, Buffer, require, msg, this.genContent);
+            shapeList = shape.applyPoints (coords, this.segmented);
+          }
+          catch (err)
+          {
+            this.err(err);
+          }
       }
+
+      // Prepare the node output
       if (msg.nrSvg)
       {
         if (msg.nrSvg instanceof Array)
@@ -84,6 +97,8 @@ module.exports = function(RED) {
       {
         msg.nrSvg = [shapeList];
       }
+
+      // Send the output, only msg.nrSvg field is modified
       node.send (msg);
     });
     // on input ends
