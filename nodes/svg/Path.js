@@ -27,7 +27,8 @@ function Path (pathString, style, zindex) {
   this.parent.setAttribute.call (this, "d", pathString);
   //if (pathString.length)
   //{
-  //  this.content.pathPoints = PathGrammar.parse(pathString);
+  //this.content.pathPoints = PathGrammar.parse(pathString);
+  this.content.pathPoints = pathString;
   //}
   this.parent.setAttribute.call (this, "style", style);
 };
@@ -79,13 +80,13 @@ Path.prototype.clone = function () {
 Path.prototype.cloneToCoords = function (coords)
 {
   var paths = [];
-  for (var i = 1; i < coords.length; i++)
+  for (var i = 0; i < coords.length; i++)
   {
     var path = this.clone();
     path.updateCoords (coords.slice (i-1, i+1));
     paths.push (path);
   }
-  return paths
+  return paths;
 }
 
 /**

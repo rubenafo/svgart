@@ -65,7 +65,7 @@ module.exports = function(RED) {
       var shapeList = [];
       if (this.genContent)
       {
-        if (Path.type == Path.type && ctx.textString.length) // we use the textString as generator
+        if (shape.type == Path.type && ctx.textString.length) // we use the textString as generator
         {
           shapeList = shape;
         }
@@ -90,12 +90,15 @@ module.exports = function(RED) {
         }
         else
         {
-          msg.nrSvg = [shapeList];
+          msg.nrSvg = [];
+          msg.nrSvg = msg.nrSvg.concat (shapeList);
         }
       }
       else
       {
-        msg.nrSvg = [shapeList];
+        //msg.nrSvg = [shapeList];
+        msg.nrSvg = [];
+        msg.nrSvg = msg.nrSvg.concat (shapeList);
       }
 
       // Send the output, only msg.nrSvg field is modified

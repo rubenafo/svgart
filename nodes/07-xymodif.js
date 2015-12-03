@@ -48,7 +48,7 @@ module.exports = function(RED) {
                         }
                       }
                     }
-                  }
+                  } // end if tpoic
                   var outputElems = [];
                   var node = this;
                   if (msg.nrSvg && results) {
@@ -59,9 +59,10 @@ module.exports = function(RED) {
                       var pos = results[i];
                       if (elem && pos)
                       {
-                        var elem2 = SVGadapter (msg.nrSvg[i]);
-                        var elem3 = elem2.cloneToCoords ([pos]);
-                        outputElems = outputElems.concat (elem3);
+                        elem = SVGadapter (msg.nrSvg[i]);
+                        elem = elem.clone();
+                        elem.setPos (pos.x, pos.y);
+                        outputElems = outputElems.concat (elem);
                       }
                       else if (elem) // !pos
                       {
@@ -70,8 +71,9 @@ module.exports = function(RED) {
                       else // not elem, just pos
                       {
                         var elem2 = SVGadapter (msg.nrSvg[msg.nrSvg.length-1]);
-                        var elem3 = elem2.cloneToCoords ([pos]);
-                        outputElems = outputElems.concat (elem3);
+                        elem2 = elem2.clone();
+                        elem2.setPos (pos.x, pos.y);
+                        outputElems = outputElems.concat (elem2);
                       }
                     }
                     node.send({nrSvg: outputElems});
