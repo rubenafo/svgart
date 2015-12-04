@@ -80,27 +80,18 @@ module.exports = function(RED) {
             this.err(err);
           }
       }
-
-      // Prepare the node output
-      if (msg.nrSvg)
-      {
-        if (msg.nrSvg instanceof Array)
-        {
-          msg.nrSvg = msg.nrSvg.concat (shapeList);
-        }
-        else
-        {
-          msg.nrSvg = [];
-          msg.nrSvg = msg.nrSvg.concat (shapeList);
-        }
-      }
       else
       {
-        //msg.nrSvg = [shapeList];
-        msg.nrSvg = [];
-        msg.nrSvg = msg.nrSvg.concat (shapeList);
+        shapeList.push (shape);
       }
 
+      // Prepare the node output
+      if (!msg.nrSvg || !msg.nrSvg instanceof Array)
+      {
+        msg.nrSvg = [];
+      }
+      msg.nrSvg = msg.nrSvg.concat (shapeList);
+      
       // Send the output, only msg.nrSvg field is modified
       node.send (msg);
     });

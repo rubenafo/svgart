@@ -92,6 +92,20 @@ NonIntersecPolCenter = function (vertices) {
   return centroid;
 };
 
+/*
+ * Determines the angle of a straight line drawn between point one and two.
+ * The number returned, which is a float in degrees, tells us how much we have
+ * to rotate a horizontal line clockwise for it to match the line between the
+ * two points.
+ */
+calculateAngle = function (point1, point2)
+{
+  var xDiff = point2.x - point1.x;
+  var yDiff = point2.y - point1.y;
+  return Math.atan2 (yDiff, xDiff) * (180 / Math.PI);
+}
+
 exports.SVGadapter = SVGadapter;
 exports.OrderByZIndex = OrderByZIndex;
 exports.RandomGen = RandomGen;
+exports.calculateAngle = calculateAngle;

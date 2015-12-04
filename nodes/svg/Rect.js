@@ -29,9 +29,11 @@ Rect.prototype.setPos = function (x,y) {
 };
 
 Rect.prototype.getCenter = function () {
+  var x = this.parent.getAttribute.call (this, "x");
+  var y = this.parent.getAttribute.call (this, "y");
   var width = this.parent.getAttribute.call (this, "width");
   var height= this.parent.getAttribute.call (this, "height");
-  return ({x:width/2, y:height/2});
+  return ({x: x + width/2, y: y + height/2});
 }
 
 /**

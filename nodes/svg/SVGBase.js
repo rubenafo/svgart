@@ -42,6 +42,10 @@ SVGBase.prototype.setAttribute = function (key, value) {
  */
 SVGBase.prototype.getAttribute = function (key) {
   var lowerStr = key.toLowerCase();
+	if (!this.content[lowerStr])
+	{
+		throw ("Error: invalid attribute " + lowerStr + " in class " + this.content.type);
+	}
   return this.content[lowerStr];
 }
 

@@ -56,6 +56,7 @@ Group.prototype.sortChildren = function () {
 Group.prototype.getCenter = function () {
   // to be implemented
   console.log("Group::getCenter() not implemented");
+  return {x:0, y:0};
 }
 
 /**

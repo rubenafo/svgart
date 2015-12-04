@@ -49,6 +49,8 @@ module.exports = function(RED) {
                       }
                     }
                   } // end if tpoic
+
+                  // Prepare output
                   var outputElems = [];
                   var node = this;
                   if (msg.nrSvg && results) {
@@ -62,6 +64,7 @@ module.exports = function(RED) {
                         elem = SVGadapter (msg.nrSvg[i]);
                         elem = elem.clone();
                         elem.setPos (pos.x, pos.y);
+                        elem.parent.applyTransform.call (elem, {rotate:{deg:pos.r}});
                         outputElems = outputElems.concat (elem);
                       }
                       else if (elem) // !pos
@@ -73,11 +76,13 @@ module.exports = function(RED) {
                         var elem2 = SVGadapter (msg.nrSvg[msg.nrSvg.length-1]);
                         elem2 = elem2.clone();
                         elem2.setPos (pos.x, pos.y);
+                        elem2.parent.applyTransform.call (elem2, {rotate:{deg:pos.r}});
                         outputElems = outputElems.concat (elem2);
                       }
                     }
                     node.send({nrSvg: outputElems});
                   }
+
                   var duration = process.hrtime(start);
                   if (process.env.NODE_RED_FUNCTION_TIME) {
                     this.status({fill:"yellow",shape:"dot",text:""+Math.floor((duration[0]* 1e9 +  duration[1])/10000)/100});

@@ -8,6 +8,8 @@
 
 // http://struct.cc/blog/2011/08/15/strange-attractors/
 
+var Functions = require ("../Utils.js");
+
 Attractor.type = "SimpleAttractor";
 Attractor.prototype.constructor = Attractor;
 function Attractor (numPoints, entryString, width, height)
@@ -26,7 +28,7 @@ function Attractor (numPoints, entryString, width, height)
   {
     a[i] = (entryString.charCodeAt(i) - 65 - 12) / 10;
   }
-  res.push ({x:(width/2) + 50 * Math.cos(r),y:(height/2) + 58 * Math.sin(r)});
+  res.push ({x:(width/2) + 50 * Math.cos(r),y:(height/2) + 58 * Math.sin(r), r:0});
   for (i = 0; i < numPoints; i++)
   {
     var nx = a[0] + a[1]  * x + a[2]  * x * x
@@ -38,7 +40,9 @@ function Attractor (numPoints, entryString, width, height)
     xvalue += width/2;
     var yvalue = (height/2)*y;
     yvalue += height/2;
-    res.push ({x:xvalue, y:yvalue});
+    var previousPoint = res[res.length-1];
+    res.push ({x:xvalue, y:yvalue,
+               r: Functions.calculateAngle (previousPoint, {x:xvalue, y:yvalue})});
   }
   return res;
 }
