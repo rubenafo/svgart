@@ -16,7 +16,9 @@ module.exports = function(RED) {
   var Polyline = require ("./svg/Polyline").Polyline;
   var Utils = require ("./svg/Utils");
   var Path = require ("./svg/Path").Path;
+  var Group = require ("./svg/Group").Group;
   var ExecUtils = require ("./utils/NrSVGutils.js");
+  var vm = require ("vm");
 
   var PathGrammar = require ("./svg/grammars/PathGrammar");
 
@@ -27,6 +29,8 @@ module.exports = function(RED) {
     this.styleContent = ctx.styleContent; // style content
     this.segmented = ctx.segmented;       // the path/line is segmented
     this.showGenContent = ctx.showGenContent;
+    var context = vm.createContext ();
+    context.data = context.data || [];
     var node = this;
     this.on('input', function(msg)
     {
@@ -60,42 +64,56 @@ module.exports = function(RED) {
           }
           shape = new Path (ctx.textString, ctx.styleContent, ctx.zindex);
           break;
+        case Group.type:
+          shape = new Group (ctx.zindex);
+          break;
       }
       var coords = [];
       var shapeList = [];
-      if (this.genContent)
+      if (shape.content.type == Group.type) // just for groups
       {
-        if (shape.type == Path.type && ctx.textString.length) // we use the textString as generator
-        {
+        if (msg.nrSvg) {
+          if (context.data.length < 2) {
+            //node.send (null);
+            context.data.push (msg.nrSvg);
+            msg.nrSvg = [];
+
+          }
+          if (context.data.length == 2) { // waiting is over, send!
+            context.data.forEach (function (elem) {
+                  shape.addChild (elem);
+            });
+            shape.sortChildren ();
+            context.data = [];
+          }
+        }
+      } // end Group
+      if (this.genContent) {
+        if (shape.type == Path.type && ctx.textString.length) { // we use the textString as generator
           shapeList = shape;
         }
         else
-          try
-          {
+          try {
             var coords = ExecUtils.JsExecution (RED, console, Buffer, require, msg, this.genContent);
-            shapeList = shape.applyPoints (coords, this.segmented);
+            if (coords)
+              shapeList = shape.applyPoints (coords, this.segmented);
+            else
+              shapeList.push(shape);
           }
-          catch (err)
-          {
+          catch (err) {
             this.err(err);
           }
       }
-      else
-      {
+      else {
         shapeList.push (shape);
       }
-
       // Prepare the node output
-      if (!msg.nrSvg || !msg.nrSvg instanceof Array)
-      {
+      if (!msg.nrSvg || !msg.nrSvg instanceof Array) {
         msg.nrSvg = [];
       }
       msg.nrSvg = msg.nrSvg.concat (shapeList);
-      
-      // Send the output, only msg.nrSvg field is modified
       node.send (msg);
-    });
-    // on input ends
+    }); // this.on(input)
   };
   RED.nodes.registerType("shape", shapeNode);
-}
+} // module.exports

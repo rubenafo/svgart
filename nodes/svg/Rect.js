@@ -17,15 +17,17 @@ Rect.prototype.parent = SVGBase.prototype;
 Rect.prototype.constructor = Rect;
 function Rect (x, y, width, height, style, zindex) {
   SVGBase.call (this, Rect.type, zindex, true);
-  this.setPos (x, y);
   this.parent.setAttribute.call (this, "width", width);
   this.parent.setAttribute.call (this, "height", height);
   this.parent.setAttribute.call (this, "style", style);
+  this.setPos (x, y);
 };
 
 Rect.prototype.setPos = function (x,y) {
-  this.parent.setAttribute.call (this, "x", x);
-  this.parent.setAttribute.call (this, "y", y);
+  var width = this.parent.getAttribute.call (this, "width");
+  var height= this.parent.getAttribute.call (this, "height");
+  this.parent.setAttribute.call (this, "x", x - width/2);
+  this.parent.setAttribute.call (this, "y", y - height/2);
 };
 
 Rect.prototype.getCenter = function () {
@@ -84,6 +86,7 @@ Rect.prototype.updateCoords = function (coords)
   {
     var rect = this.clone ();
     rect.setPos (coords[i].x, coords[i].y);
+    rect.applyTransform.call (rect, {rotate:{deg:coords[i].r}});
     results.push (rect);
   }
   return results;

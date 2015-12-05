@@ -24,19 +24,9 @@ Circle.prototype.parent = SVGBase.prototype;
 Circle.prototype.constructor = Circle;
 function Circle (x, y, rd, style, zindex) {
   SVGBase.call (this, Circle.type, zindex);
-  this.setPos (x,y);
   this.parent.setAttribute.call (this, "r", rd);
   this.parent.setAttribute.call (this, "style", style);
-};
-
-/**
- * Sets the position of the circle
- * @param {number} x - x coord
- * @param {number} y - y coord
- */
-Circle.prototype.setPos = function (x,y) {
-  this.parent.setAttribute.call (this, "cx", x);
-  this.parent.setAttribute.call (this, "cy", y);
+  this.setPos (x,y);
 };
 
 /**
@@ -48,6 +38,16 @@ Circle.prototype.getCenter = function () {
 	var y = this.parent.getAttribute ("cy");
 	return ({x:x/2,y:y/2});
 }
+
+/**
+ * Sets the position of the circle
+ * @param {number} x - x coord
+ * @param {number} y - y coord
+ */
+Circle.prototype.setPos = function (x,y) {
+  this.parent.setAttribute.call (this, "cx", x);
+  this.parent.setAttribute.call (this, "cy", y);
+};
 
 /**
  * Adapts an object to the Circle class
