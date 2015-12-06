@@ -62,34 +62,19 @@ RandomGen = function(s) {
  * as described in http://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
  * - parameters: vertices: {x,y} vertices list
  */
-NonIntersecPolCenter = function (vertices) {
-  var centroid = {x:0, y:0};
-  var x0, y0, x1, y1, signedArea = 0;
-  var i = 0;
-  for (i=0; i < vertices.length-1; ++i) {
-    x0 = vertices[i].x;
-    y0 = vertices[i].y;
-    x1 = vertices[i+1].x;
-    y1 = vertices[i+1].y;
-    a = x0*y1 - x1*y0;
-    signedArea += a;
-    centroid.x += (x0 + x1)*a;
-    centroid.y += (y0 + y1)*a;
+NonIntersecPolCenter = function (pts) {
+  var first = pts[0], last = pts[pts.length-1];
+  if (first.x != last.x || first.y != last.y) pts.push(first);
+  var twicearea=0, x=0, y=0, nPts = pts.length, p1, p2, f;
+  for ( var i=0, j=nPts-1 ; i<nPts ; j=i++ ) {
+    p1 = pts[i]; p2 = pts[j];
+    f = p1.x*p2.y - p2.x*p1.y;
+    twicearea += f;
+    x += ( p1.x + p2.x ) * f;
+    y += ( p1.y + p2.y ) * f;
   }
-
-  a = x0*y1 - x1*y0; // last vertex
-  signedArea += a;
-  signedArea *= 0.5; // A
-  // Do last vertex
-  x0 = vertices[i].x;
-  y0 = vertices[i].y;
-  x1 = vertices[0].x;
-  y1 = vertices[0].y;
-  centroid.x += (x0 + x1)*a;
-  centroid.y += (y0 + y1)*a;
-  centroid.x /= (6.0*signedArea);
-  centroid.y /= (6.0*signedArea);
-  return centroid;
+  f = twicearea * 3;
+  return { x:x/f, y:y/f };
 };
 
 /*

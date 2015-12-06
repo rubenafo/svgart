@@ -25,11 +25,10 @@ Path.prototype.constructor = Path;
 function Path (pathString, style, zindex) {
   SVGBase.call (this, Path.type, zindex, true);
   this.parent.setAttribute.call (this, "d", pathString);
-  //if (pathString.length)
-  //{
-  //this.content.pathPoints = PathGrammar.parse(pathString);
-  this.content.pathPoints = pathString;
-  //}
+  if (pathString.length)
+  {
+    this.content.pathPoints = PathGrammar.parse(pathString);
+  }
   this.parent.setAttribute.call (this, "style", style);
 };
 
@@ -40,7 +39,8 @@ function Path (pathString, style, zindex) {
 */
 Path.prototype.setPos = function (x,y) {
   // Paths don't have x,y so we use the transform
-  this.parent.addTranslate.call (this, x, y);
+  var center = this.getCenter();
+  this.parent.addTranslate.call (this, x - center.x, y - center.y);
 };
 
 /**
@@ -67,7 +67,7 @@ Path.prototype.getCenter = function () {
  */
 Path.prototype.clone = function () {
   var copy = this.parent.clone.call (this);
-  //copy.content.pathPoints = this.content.pathPoints.slice();
+  copy.content.pathPoints = this.content.pathPoints.slice();
   return Path.adapt (copy);
 }
 
@@ -83,7 +83,9 @@ Path.prototype.cloneToCoords = function (coords)
   for (var i = 0; i < coords.length; i++)
   {
     var path = this.clone();
-    path.updateCoords (coords.slice (i-1, i+1));
+    path.setPos (coords[i].x, coords[i].y);
+    //path.applyTransform.call (path, {rotate:{deg:coords[i].r}} );
+    //path.updateCoords (coords.slice (i-1, i+1));
     paths.push (path);
   }
   return paths;

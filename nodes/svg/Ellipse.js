@@ -46,9 +46,9 @@ Ellipse.prototype.setPos = function (x,y) {
 * @returns - {x:value,y:value} containing the coords
 */
 Ellipse.prototype.getCenter = function () {
-	var x = this.parent.getAttribute ("cx");
-	var y = this.parent.getAttribute ("cy");
-	return ({x:x/2,y:y/2});
+	var x = this.parent.getAttribute.call (this, "cx");
+	var y = this.parent.getAttribute.call (this, "cy");
+	return ({x:x,y:y});
 }
 
 /**
@@ -79,6 +79,7 @@ Ellipse.prototype.cloneToCoords = function (coords)
   {
     var ellipse = this.clone ();
     ellipse.setPos (coords[i].x, coords[i].y);
+    ellipse.applyTransform.call(ellipse, {rotate:{deg:coords[i].r}} );
     results.push (ellipse);
   }
   return results;

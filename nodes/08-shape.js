@@ -73,13 +73,13 @@ module.exports = function(RED) {
       if (shape.content.type == Group.type) // just for groups
       {
         if (msg.nrSvg) {
-          if (context.data.length < 2) {
-            //node.send (null);
+          if (context.data.length < ctx.zindex) {
+            node.send (null)
             context.data.push (msg.nrSvg);
             msg.nrSvg = [];
 
           }
-          if (context.data.length == 2) { // waiting is over, send!
+          if (context.data.length == ctx.zindex) { // waiting is over, send!
             context.data.forEach (function (elem) {
                   shape.addChild (elem);
             });
@@ -88,11 +88,12 @@ module.exports = function(RED) {
           }
         }
       } // end Group
+
       if (this.genContent) {
         if (shape.type == Path.type && ctx.textString.length) { // we use the textString as generator
-          shapeList = shape;
+          //shapeList = shape;
         }
-        else
+        //else
           try {
             var coords = ExecUtils.JsExecution (RED, console, Buffer, require, msg, this.genContent);
             if (coords)
