@@ -9,46 +9,46 @@ draws = moveTo / lineTo / horLineTo / verLineTo / curveTo / smoothTo / bezierTog
 close =
  "Z" { return { type:"Z" }} / "z" { return { type:"z" } }
 
-int
-  = digits:[0-9]+{ return parseInt(digits.join(""), 10); }
+number
+  = digits:[0-9]+"."?[0-9]+{ return parseFloat(digits.join(""), 10); }
 
 curveType =
  "q" { return { type:"q"} }
 
 moveTo
-  = key:("M" / "m") ws* val:([ ]* x:int [ ,] y:int [ ]* { return {"x":x,"y":y} })+
+  = key:("M" / "m") ws* val:([ ]* x:number [ ,] y:number [ ]* { return {"x":x,"y":y} })+
     { return { type:key, values: val }}
 
 lineTo
-  = key:("L" / "l") ws* val:([ ]* x:int [ ,] y:int [ ]* { return {"x":x,"y":y} })+
+  = key:("L" / "l") ws* val:([ ]* x:number [ ,] y:number [ ]* { return {"x":x,"y":y} })+
     { return { type:key, values: val }}
 
 horLineTo
-  = key:("H" / "h") ws* val:([ ]* x:int [ ]*)+
+  = key:("H" / "h") ws* val:([ ]* x:number [ ]*)+
     { return { type:key, values: val }}
 
 verLineTo
-  = key:("V" / "v") ws* val:([ ]* x:int [ ]*)+
+  = key:("V" / "v") ws* val:([ ]* x:number [ ]*)+
     { return { type:key, values: val }}
 
 curveTo
-  = key:("C" / "c") ws* val:([ ]* x1:int ws y1:int ws x2:int ws y2:int ws x:int ws y:int [ ]*
+  = key:("C" / "c") ws* val:([ ]* x1:number ws y1:number ws x2:number ws y2:number ws x:number ws y:number [ ]*
                     { return [x1, y1, x2, y2, x, y]} )+
     { return { type:key, values: val }}
 
 smoothTo
-  = key:("S" / "s") ws* val:([ ]* x2:int ws y2:int ws x:int ws y:int [ ]*
+  = key:("S" / "s") ws* val:([ ]* x2:number ws y2:number ws x:number ws y:number [ ]*
                     { return [x2, y2, x, y]} )+
     { return { type: key, values: val }}
 
 bezierTogetherTo
-  = key:("T" / "t") ws* val:([ ]* x1:int ws y1:int [ ]*
+  = key:("T" / "t") ws* val:([ ]* x1:number ws y1:number [ ]*
                     { return [x1, y1]} )+
     { return { type:key, values: val }}
 
 arcTo
-  = key:("A" / "a") ws* val:([ ]* rx:int ws ry:int ws xrot:int ws arcflag:int ws sweep:int ws x:int y:int [ ]*
+  = key:("A" / "a") ws* val:([ ]* rx:number ws ry:number ws xrot:number ws arcflag:number ws sweep:number ws x:number y:number [ ]*
                     { return [rx, ry, xrot, arcflag, sweep, x, y]} )+
     { return { type:key, values: val }}
 
-ws = [ \t\r\n]
+ws = [" "\t\r\n\,]
