@@ -48,7 +48,15 @@ Polyline.prototype.clone = function () {
 */
 Polyline.prototype.cloneToCoords = function (coords)
 {
-  // TODO to be implemented, this should clone and move the path to the coords
+  var polylines = [];
+  for (var i = 0; i < coords.length; i++)
+  {
+    var pol = this.clone();
+    pol.setPos (coords[i].x, coords[i].y);
+    pol.applyTransform.call (pol, {rotate:{deg:coords[i].r}} );
+    polylines.push (pol);
+  }
+  return polylines;
 }
 
 /**

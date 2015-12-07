@@ -29,6 +29,7 @@ module.exports = function(RED) {
     this.styleContent = ctx.styleContent; // style content
     this.segmented = ctx.segmented;       // the path/line is segmented
     this.showGenContent = ctx.showGenContent;
+    this.groupLength = ctx.groupLength;
     var context = vm.createContext ();
     context.data = context.data || [];
     var node = this;
@@ -73,13 +74,13 @@ module.exports = function(RED) {
       if (shape.content.type == Group.type) // just for groups
       {
         if (msg.nrSvg) {
-          if (context.data.length < ctx.zindex) {
+          if (context.data.length < this.groupLength) {
             node.send (null)
             context.data.push (msg.nrSvg);
             msg.nrSvg = [];
 
           }
-          if (context.data.length == ctx.zindex) { // waiting is over, send!
+          if (context.data.length == this.groupLength) { // waiting is over, send!
             context.data.forEach (function (elem) {
                   shape.addChild (elem);
             });

@@ -49,7 +49,15 @@ Polygon.prototype.clone = function () {
 */
 Polygon.prototype.cloneToCoords = function (coords)
 {
-  // TODO to be implemented, this should clone and move the path to the coords
+  var polygons = [];
+  for (var i = 0; i < coords.length; i++)
+  {
+    var pol = this.clone();
+    pol.setPos (coords[i].x, coords[i].y);
+    pol.applyTransform.call (pol, {rotate:{deg:coords[i].r}} );
+    polygons.push (pol);
+  }
+  return polygons;
 }
 
 /**

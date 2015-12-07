@@ -17,6 +17,7 @@
       $("#stylelabel-option").hide();
       $("#stylecontent-option").hide();
       $("#node-input-segmented").hide();
+      $("#node-input-groupLength").hide();
     };
 
     RED.nodes.registerType('shape',{
@@ -34,7 +35,8 @@
             zindex: {value:"0"},
             genContent: {value: ""},
             styleContent: {value: ""},
-            segmented: {value:""}
+            segmented: {value:""},
+            groupLength: {value:0}
         },
         inputs:1,
         outputs:1,
@@ -88,6 +90,7 @@
                   $("#zindex-option").show();
                   $("#stylelabel-option").show();
                   $("#stylecontent-option").show();
+                  $("#node-input-groupLength").show();
                   break;
                 default: // empty;
                 };
@@ -164,7 +167,7 @@
 <script type="text/x-red" data-template-name="shape">
     <div class="form-row">
       <label for="node-input-shapeType"><i class="fa fa-envelope"></i> Shape</label>
-        <select id="node-input-shapeType" style="width:125px !important">
+        <select id="node-input-shapeType" style="width:25% !important">
           <option value="circle">Circle</option>
           <option value="ellipse">Ellipse</option>
           <option value="rect">Rect</option>
@@ -176,6 +179,7 @@
           <option value="g">Group</option>
         </select>
         <input type="text" id="node-input-name" placeholder="Optional Name" style="width:25%">
+        <input type="text" id="node-input-groupLength" placeholder="Size" style="width:15%">
     </div>
 
     <!-- Radio -->
