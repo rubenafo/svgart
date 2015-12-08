@@ -70,6 +70,8 @@ Group.prototype.cloneToCoords = function (coords)
   {
     var newGroup = this.clone();
     newGroup.setPos (coords[i].x, coords[i].y);
+    //if (coords[i].r)
+      // TODO rotate
     results.push (newGroup);
   }
   return results;

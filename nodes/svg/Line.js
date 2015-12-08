@@ -85,6 +85,8 @@ Line.prototype.cloneToCoords = function (coords)
     {
       var line = this.clone ();
       line.setCoords (coords[i], coords[i-1]);
+      //if (coords[i].r)
+      // TODO line.applyTransform.call(line, {rotate:{deg:coords[i].r}} );
       results.push (line);
     }
   }

@@ -98,7 +98,8 @@ Path.prototype.cloneToCoords = function (coords)
     {
       var path = this.clone();
       path.setPos (coords[i].x, coords[i].y);
-      path.applyTransform.call (path, {rotate:{deg:coords[i].r}} );
+      if (coords[i].r)
+        path.applyTransform.call (path, {rotate:{deg:coords[i].r}} );
       paths.push (path);
     }
     return paths;

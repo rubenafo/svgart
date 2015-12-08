@@ -69,7 +69,6 @@ Rect.prototype.cloneToCoords = function (coords)
     var angleDeg = Math.atan2(x2.y - x1.y, x2.x - x1.x) * 180 / Math.PI;
     rect.parent.setAttribute.call (rect, "width", length);
     rect.parent.addRotate.call (rect, angleDeg, x1.x, x1.y);
-
     results.push(rect);
   }
   return results;
@@ -86,7 +85,8 @@ Rect.prototype.updateCoords = function (coords)
   {
     var rect = this.clone ();
     rect.setPos (coords[i].x, coords[i].y);
-    rect.applyTransform.call (rect, {rotate:{deg:coords[i].r}});
+    if (coords[i].r != undefined)
+      rect.applyTransform.call (rect, {rotate:{deg:coords[i].r}});
     results.push (rect);
   }
   return results;

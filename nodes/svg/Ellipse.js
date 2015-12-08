@@ -79,7 +79,8 @@ Ellipse.prototype.cloneToCoords = function (coords)
   {
     var ellipse = this.clone ();
     ellipse.setPos (coords[i].x, coords[i].y);
-    ellipse.applyTransform.call(ellipse, {rotate:{deg:coords[i].r}} );
+    if (coords[i].r)
+      ellipse.applyTransform.call(ellipse, {rotate:{deg:coords[i].r}} );
     results.push (ellipse);
   }
   return results;
