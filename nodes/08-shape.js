@@ -91,20 +91,16 @@ module.exports = function(RED) {
       } // end Group
 
       if (this.genContent) {
-        if (shape.type == Path.type && ctx.textString.length) { // we use the textString as generator
-          //shapeList = shape;
+        try {
+          var coords = ExecUtils.JsExecution (RED, console, Buffer, require, msg, this.genContent);
+          if (coords)
+            shapeList = shape.applyPoints (coords, this.segmented);
+          else
+            shapeList.push(shape);
         }
-        //else
-          try {
-            var coords = ExecUtils.JsExecution (RED, console, Buffer, require, msg, this.genContent);
-            if (coords)
-              shapeList = shape.applyPoints (coords, this.segmented);
-            else
-              shapeList.push(shape);
-          }
-          catch (err) {
-            this.err(err);
-          }
+        catch (err) {
+          this.err(err);
+        }
       }
       else {
         shapeList.push (shape);

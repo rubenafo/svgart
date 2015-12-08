@@ -67,7 +67,8 @@ Path.prototype.getCenter = function () {
  */
 Path.prototype.clone = function () {
   var copy = this.parent.clone.call (this);
-  copy.content.pathPoints = this.content.pathPoints.slice();
+  if (this.content.pathPoints)
+    copy.content.pathPoints = this.content.pathPoints.slice();
   return Path.adapt (copy);
 }
 
@@ -79,15 +80,29 @@ Path.prototype.clone = function () {
 */
 Path.prototype.cloneToCoords = function (coords)
 {
-  var paths = [];
-  for (var i = 0; i < coords.length; i++)
+  if (!this.content.pathPoints)
   {
-    var path = this.clone();
-    path.setPos (coords[i].x, coords[i].y);
-    path.applyTransform.call (path, {rotate:{deg:coords[i].r}} );
-    paths.push (path);
+    var paths = [];
+    for (var i = 1; i < coords.length; i++)
+    {
+      var path = this.clone();
+      path.parent.setAttribute.call (path, "d", "M" + coords[i-1].x + "," + coords[i-1].y +
+                                                " " + coords[i].x   + "," + coords[i].y);
+      paths.push (path);
+    }
+    return paths;
   }
-  return paths;
+  else {
+    var paths = [];
+    for (var i = 0; i < coords.length; i++)
+    {
+      var path = this.clone();
+      path.setPos (coords[i].x, coords[i].y);
+      path.applyTransform.call (path, {rotate:{deg:coords[i].r}} );
+      paths.push (path);
+    }
+    return paths;
+  }
 }
 
 /**
