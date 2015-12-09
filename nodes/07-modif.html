@@ -1,0 +1,188 @@
+/**
+* @license
+* Copyright 2015 Ruben Afonso, ruben@figurebelow.com
+*
+* This source code is licensed under the Apache license found in the
+* LICENSE file in the root directory of this source tree.
+**/
+
+<script type="text/javascript">
+
+    hideAllRows = function () {
+      $("#rxry-option").hide();
+      $("#radio-option").hide();
+      $("#zindex-option").hide();
+      $("#size-option").hide();
+      $("#textString-option").hide();
+      $("#stylelabel-option").hide();
+      $("#stylecontent-option").hide();
+      $("#node-input-segmented").hide();
+      $("#node-input-groupLength").hide();
+    };
+
+    RED.nodes.registerType('modif',{
+        category: 'svg',
+        color: '#a6bhcf',
+        defaults: {
+            name: {value:""},
+            shapeType: {value: "circle"},
+            elemwidth: {value :"0"},
+            elemheight: {value :"0"},
+            radio: {value: "10"},
+            rx: {value: "10"},
+            ry: {value: "10"},
+            textString: {value: ""},
+            zindex: {value:"0"},
+            genContent: {value: ""},
+            styleContent: {value: ""},
+            segmented: {value:""},
+            groupLength: {value:0}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            return this.name || this.shapeType;
+        },
+        oneditprepare: function() {
+            var that = this;
+          
+            function functionDialogResize() {
+                var rows = $("#dialog-form>div:not(.node-text-editor-row)");
+                var height = $("#dialog-form").height();
+                for (var i=0;i<rows.size();i++) {
+                    height -= $(rows[i]).outerHeight(true);
+                }
+                var editorRow = $("#dialog-form>div.node-text-editor-row");
+                height -= (parseInt(editorRow.css("marginTop"))+parseInt(editorRow.css("marginBottom")));
+                $(".node-text-editor").css("height",height+"px");
+            };
+
+            $( "#dialog" ).on("dialogresize", functionDialogResize);
+            $( "#dialog" ).one("dialogopen", function(ev) {
+                var size = $( "#dialog" ).dialog('option','sizeCache-function');
+                if (size) {
+                    $("#dialog").dialog('option','width',size.width);
+                    $("#dialog").dialog('option','height',size.height);
+                    functionDialogResize();
+                }
+            });
+            $( "#dialog" ).one("dialogclose", function(ev,ui) {
+                var height = $( "#dialog" ).dialog('option','height');
+                $( "#dialog" ).off("dialogresize",functionDialogResize);
+            });
+            var that = this;
+            require(["orion/editor/edit"], function(edit) {
+              that.genEditor = edit({
+                parent:document.getElementById('node-input-genContent-editor'),
+                lang:"js",
+                contents: $("#node-input-genContent").val()
+              });
+              that.styleEditor = edit({
+                parent:document.getElementById('node-input-styleContent-editor'),
+                lang:"css",
+                contents: $("#node-input-styleContent").val()
+              });
+            });
+            $("#node-input-shapeType").val(this.shapeType);
+            $("#node-input-shapeType").change();
+        },
+        oneditsave: function() {
+          $("#node-input-styleContent").val(this.styleEditor.getText());
+          delete this.styleEditor;
+          $("#node-input-genContent").val(this.genEditor.getText());
+          delete this.genEditor;
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="modif">
+    <div class="form-row">
+      <label for="node-input-shapeType"><i class="fa fa-envelope"></i> Shape</label>
+        <select id="node-input-shapeType" style="width:25% !important">
+          <option value="circle">Circle</option>
+          <option value="ellipse">Ellipse</option>
+          <option value="rect">Rect</option>
+          <option value="line">Line</option>
+          <option value="text">Text</option>
+          <option value="polygon">Polygon</option>
+          <option value="polyline">Polyline</option>
+          <option value="path">Path</option>
+          <option value="g">Group</option>
+        </select>
+        <input type="text" id="node-input-name" placeholder="Optional Name" style="width:25%">
+        <input type="text" id="node-input-groupLength" placeholder="Size" style="width:15%">
+    </div>
+
+    <!-- Radio -->
+    <div class="form-row hidden"  id="radio-option">
+      <label for="node-input-radio"><i class="icon-tag"></i> Radio</label>
+      <input type="number" id="node-input-radio" placeholder="Radio">
+    </div>
+
+     <!-- RX,RY -->
+    <div class="form-row hidden" id="rxry-option">
+      <label for="node-input-rx"><i class="icon-tag"></i> RX,RY</label>
+      <input type="number" id="node-input-rx" placeholder="X radio" style="width:25%">
+      <input type="number" id="node-input-ry" placeholder="Y radio" style="width:25%">
+    </div>
+
+    <!-- Width,Height -->
+    <div class="form-row hidden" id="size-option">
+      <label for="node-input-rx"><i class="icon-tag"></i> Size</label>
+      <input type="number" id="node-input-elemwidth" placeholder="Width" style="width:25%">
+      <input type="number" id="node-input-elemheight" placeholder="Height" style="width:25%">
+    </div>
+
+    <!-- Text -->
+    <div class="form-row hidden" id="textString-option">
+      <label for="node-input-textString"><i class="icon-tag"></i> Text</label>
+      <input type="text" id="node-input-textString" placeholder="string">
+    </div>
+
+    <!-- Z-Index -->
+    <div class="form-row hidden" id="zindex-option">
+      <label for="node-input-zindex"><i class="icon-tag"></i> Z-Index</label>
+        <input type="number" id="node-input-zindex" placeholder="z-index" value="0">
+    </div>
+
+    <!-- Generator -->
+    <div class="form-row" style="margin-bottom: 0px;" id="genlabel-option">
+      <label for="node-input-genContent" data-toggle="collapse" data-target="#generator">
+      <i class="fa fa-wrench"></i> Generator</label>
+      <input type="hidden" id="node-input-genContent" autofocus="autofocus">
+    </div>
+    <div class="form-row in" id="generator">
+      <div class="form-row">
+        <label for="node-input-genType"><i class="fa fa-envelope"></i> Generator</label>
+        <select id="node-input-genType" style="width:125px !important">
+          <option value="Custom">Custom</option>
+          <option value="SimpleAtractor">Simple Attractor</option>
+          </select>
+
+          <input type="checkbox" id="node-input-segmented" style="width:10%">
+          <!--<label for="node-input-segmented"><i class="icon-tag" style="width:10%"></i>Segmented</label>-->
+      </div>
+
+      <div class="form-row node-text-editor-row" id="gencontent-option">
+        <div style="height: 150px;" class="node-text-editor" id="node-input-genContent-editor" ></div>
+      </div>
+    </div>
+    <!-- Generator ends -->
+
+    <!-- Style -->
+    <div class="form-row" style="margin-bottom: 0px;" id="stylelabel-option">
+      <label for="node-input-styleContent" data-toggle="collapse" data-target="#stylecontent-option">
+      <i class="fa fa-wrench"></i> Style</label>
+      <input type="hidden" id="node-input-styleContent" autofocus="autofocus">
+    </div>
+    <div class="form-row node-text-editor-row in" id="stylecontent-option">
+      <div style="height: 150px;" class="node-text-editor" id="node-input-styleContent-editor" ></div>
+    </div>
+    <!-- Style ends -->
+
+</script>
+
+<script type="text/x-red" data-help-name="modif">
+    <p>SVG graphics elements</p>
+</script>
