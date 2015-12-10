@@ -54,4 +54,41 @@ Attractor.getSample = function ()
            "return coords;";
 }
 
+/**
+  Rossler Attractor code.
+  http://paulbourke.net/fractals/rossler/
+*/
+function Rossler (numPoints, x0, y0, width, height)
+{
+  function rosslerPoint (x, y, z, a, b, c) {
+    var dx = -(y + z);
+    var dy = x + a * y;
+    var dz = b + z * (x - c);
+    return {x:dx, y:dy, z:dz};
+  };
+
+  var center = {x: width/2, y:height/2};   // center in the screen
+  var a = 0.2, b = 0.2, c = 8, h = 0.05;
+  var x = x0 || 0.1;
+  var y = y0 || 0.1;
+  var z = 0.1;
+  var tmpx = 0, tmpy = 0, tmpz =0;
+  var res = [];
+  res.push ({x:x, y:y, z:z});
+  for (var i = 0; i < numPoints; i++)
+  {
+    var dt = rosslerPoint (x, y, z, a, b, c);
+    tmpx = x + h * dt.x;
+    tmpy = y + h * dt.y;
+    tmpz = z + h * dt.z;
+    if (Math.abs(tmpx*1000 - x*1000) > 5 || Math.abs(tmpy*1000 - y*1000) > 5)
+      res.push ({x: tmpx*500 + center.x, y: tmpy*500 + center.y, z:tmpz});
+    x = tmpx;
+    y = tmpy;
+    z = tmpz;
+  }
+  return res;
+}
+
 exports.Attractor = Attractor;
+exports.Rossler = Rossler;
