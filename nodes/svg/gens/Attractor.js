@@ -47,18 +47,12 @@ function Attractor (numPoints, entryString, width, height)
   return res;
 }
 
-Attractor.getSample = function ()
-{
-    return "var Gens = require (\"./svg/gens/attractor.js\");" +
-           "var coords = new Gens.Attractor (120, \"QGGVSLMHHGCR\", 800, 600);" +
-           "return coords;";
-}
-
 /**
   Rossler Attractor code.
   http://paulbourke.net/fractals/rossler/
 */
-function Rossler (numPoints, x0, y0, width, height)
+//function Rossler (numPoints, a, b, c, h, x0, y0, scale, width, height)
+function Rossler (params)
 {
   function rosslerPoint (x, y, z, a, b, c) {
     var dx = -(y + z);
@@ -67,22 +61,53 @@ function Rossler (numPoints, x0, y0, width, height)
     return {x:dx, y:dy, z:dz};
   };
 
-  var center = {x: width/2, y:height/2};   // center in the screen
-  var a = 0.2, b = 0.2, c = 8, h = 0.05;
-  var x = x0 || 0.1;
-  var y = y0 || 0.1;
+  var center = {x: params.width/2, y: params.height/2};   // center in the screen
+  var x = params.x0 || 0.1;
+  var y = params.y0 || 0.1;
   var z = 0.1;
   var tmpx = 0, tmpy = 0, tmpz =0;
   var res = [];
-  res.push ({x:x, y:y, z:z});
-  for (var i = 0; i < numPoints; i++)
+  for (var i = 0; i < params.points; i++)
   {
-    var dt = rosslerPoint (x, y, z, a, b, c);
-    tmpx = x + h * dt.x;
-    tmpy = y + h * dt.y;
-    tmpz = z + h * dt.z;
-    if (Math.abs(tmpx*1000 - x*1000) > 5 || Math.abs(tmpy*1000 - y*1000) > 5)
-      res.push ({x: tmpx*500 + center.x, y: tmpy*500 + center.y, z:tmpz});
+    var dt = rosslerPoint (x, y, z, params.a, params.b, params.c);
+    tmpx = x + params.h * dt.x;
+    tmpy = y + params.h * dt.y;
+    tmpz = z + params.h * dt.z;
+    //if (Math.abs(tmpx*20 - x*20) > 5 || Math.abs(tmpy*20 - y*20) > 5)
+    res.push ({x: tmpx * params.scale + center.x, y: tmpy * params.scale + center.y, z:tmpz});
+    x = tmpx;
+    y = tmpy;
+    z = tmpz;
+  }
+  return res;
+}
+
+/**
+  Lorentz Attractor code.
+  http://www.algosome.com/articles/lorenz-attractor-programming-code.html
+*/
+function Lorentz (params)
+{
+  function rosslerPoint (x, y, z, a, b, c) {
+    var dx = a * (y - x);
+    var dy = x * (b - z) - y;
+    var dz = x * y - c * z;
+    return {x:dx, y:dy, z:dz};
+  };
+
+  var center = {x: params.width/2, y: params.height/2};   // center in the screen
+  var x = params.x0 || 0.1;
+  var y = params.y0 || 0.1;
+  var z = 0.1;
+  var tmpx = 0, tmpy = 0, tmpz =0;
+  var res = [];
+  for (var i = 0; i < params.points; i++)
+  {
+    var dt = rosslerPoint (x, y, z, params.a, params.b, params.c);
+    tmpx = x + params.h * dt.x;
+    tmpy = y + params.h * dt.y;
+    tmpz = z + params.h * dt.z;
+    res.push ({x: tmpx * params.scale + center.x, y: tmpy * params.scale + center.y, z:tmpz});
     x = tmpx;
     y = tmpy;
     z = tmpz;
@@ -92,3 +117,4 @@ function Rossler (numPoints, x0, y0, width, height)
 
 exports.Attractor = Attractor;
 exports.Rossler = Rossler;
+exports.Lorentz = Lorentz;
