@@ -34,8 +34,8 @@ function Circle (x, y, rd, style, zindex) {
  * @returns - {x:value,y:value} containing the coords
  */
 Circle.prototype.getCenter = function () {
-	var x = this.parent.getAttribute ("cx");
-	var y = this.parent.getAttribute ("cy");
+	var x = this.parent.getAttribute.call (this, "cx");
+	var y = this.parent.getAttribute.call (this, "cy");
 	return ({x:x/2,y:y/2});
 }
 

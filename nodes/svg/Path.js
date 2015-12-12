@@ -9,6 +9,7 @@
 
 var SVGBase = require ("./SVGBase").SVGBase;
 var PathGrammar = require ("./grammars/PathGrammar");
+var Utils = require ("./Utils");
 
 Path.type = "path";
 Path.prototype = new SVGBase ();
@@ -25,6 +26,7 @@ Path.prototype.constructor = Path;
 function Path (pathString, style, zindex) {
   SVGBase.call (this, Path.type, zindex, true);
   this.parent.setAttribute.call (this, "d", pathString);
+  this.content.pathPoints = [];
   if (pathString.length)
   {
     this.content.pathPoints = PathGrammar.parse(pathString);
@@ -52,14 +54,14 @@ Path.prototype.setPos = function (x,y) {
 Path.prototype.getCenter = function () {
   var vertices = [];
   this.content.pathPoints.forEach (function (instruction) {
-  	if (instruction.values)
+  	if (instruction.values != undefined)
   		instruction.values.forEach (function (point) {
   			vertices.push (point);
   		});
   });
-  var center = NonIntersecPolCenter (vertices);
+  var center = Utils.NonIntersecPolCenter (vertices);
   return center;
-}
+};
 
 /**
  * Returns a noew instance of a Path
@@ -67,8 +69,10 @@ Path.prototype.getCenter = function () {
  */
 Path.prototype.clone = function () {
   var copy = this.parent.clone.call (this);
-  if (this.content.pathPoints)
+  if (this.content.pathPoints.length)
     copy.content.pathPoints = this.content.pathPoints.slice();
+  else
+    copy.content.pathPoints = [];
   return Path.adapt (copy);
 }
 
@@ -80,7 +84,7 @@ Path.prototype.clone = function () {
 */
 Path.prototype.cloneToCoords = function (coords)
 {
-  if (!this.content.pathPoints)
+  if (!this.content.pathPoints.length)
   {
     var paths = [];
     for (var i = 1; i < coords.length; i++)
@@ -88,6 +92,8 @@ Path.prototype.cloneToCoords = function (coords)
       var path = this.clone();
       path.parent.setAttribute.call (path, "d", "M" + coords[i-1].x + "," + coords[i-1].y +
                                                 " " + coords[i].x   + "," + coords[i].y);
+      path.content.pathPoints.push ({type:"M", values:{x:coords[i-1].x, y:coords[i-1].y}});
+      path.content.pathPoints.push ({type:"L", values:{x:coords[i].x, y:coords[i].y}});
       paths.push (path);
     }
     return paths;

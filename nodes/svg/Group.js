@@ -19,6 +19,8 @@ function Group (zindex) {
 };
 
 Group.prototype.setPos = function (x, y) {
+  // TODO get the group center and translate accordingly
+  var center = this.getCenter();
   this.parent.addTranslate.call (this, x, y);
 };
 
@@ -54,8 +56,11 @@ Group.prototype.sortChildren = function () {
 }
 
 Group.prototype.getCenter = function () {
-  // to be implemented
-  console.log("Group::getCenter() not implemented");
+  for (var i = 0; i < this.content.children.length; i++)
+  {
+    var child = this.content.children[i];
+    // TODO console.log(child.getCenter());
+  }
   return {x:0, y:0};
 }
 
