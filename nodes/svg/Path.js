@@ -41,8 +41,16 @@ function Path (pathString, style, zindex) {
 */
 Path.prototype.setPos = function (x,y) {
   // Paths don't have x,y so we use the transform
-  var center = this.getCenter();
-  this.parent.addTranslate.call (this, x - center.x, y - center.y);
+  if (this.content.transform.length)
+  {
+    var lastTransform = this.content.transform[this.content.transform.length-1];
+    this.parent.addTranslate.call (this, lastTransform.x, lastTransform.y);
+  }
+  else
+  {
+    var center = this.getCenter();
+    this.parent.addTranslate.call (this, x - center.x, y - center.y);
+  }
 };
 
 /**
@@ -53,14 +61,25 @@ Path.prototype.setPos = function (x,y) {
 */
 Path.prototype.getCenter = function () {
   var vertices = [];
-  this.content.pathPoints.forEach (function (instruction) {
-  	if (instruction.values != undefined)
-  		instruction.values.forEach (function (point) {
-  			vertices.push (point);
-  		});
-  });
-  var center = Utils.NonIntersecPolCenter (vertices);
-  return center;
+  //if (this.content.transform.length)
+  //{
+  //  var lastTransform = this.content.transform[this.content.transform.length-1];
+  //  return {x: lastTransform.x, y: lastTransform.y};
+  //}
+  //else
+  {
+    this.content.pathPoints.forEach (function (instruction) {
+  	   if (instruction.values != undefined)
+       {
+         vertices = vertices.concat (instruction.values)
+       }
+  	   //instruction.values.forEach (function (point) {
+  	   //	vertices.push (point);
+  	   //});
+     });
+     var center = Utils.NonIntersecPolCenter (vertices);
+     return center;
+  }
 };
 
 /**

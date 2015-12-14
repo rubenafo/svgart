@@ -7,6 +7,7 @@
 **/
 
 var SVGBase = require ("./SVGBase").SVGBase;
+var Utils = require ("./Utils");
 
 Group.type = "g";
 Group.prototype = new SVGBase ();
@@ -19,9 +20,8 @@ function Group (zindex) {
 };
 
 Group.prototype.setPos = function (x, y) {
-  // TODO get the group center and translate accordingly
   var center = this.getCenter();
-  this.parent.addTranslate.call (this, x, y);
+  this.parent.addTranslate.call (this, x - center.x, y - center.y);
 };
 
 Group.prototype.clone = function () {
@@ -56,12 +56,14 @@ Group.prototype.sortChildren = function () {
 }
 
 Group.prototype.getCenter = function () {
+  var childrenCenter = [];
   for (var i = 0; i < this.content.children.length; i++)
   {
     var child = this.content.children[i];
-    // TODO console.log(child.getCenter());
+    child = SVGadapter (child);
+    childrenCenter.push (child.getCenter());
   }
-  return {x:0, y:0};
+  return Utils.NonIntersecPolCenter (childrenCenter);
 }
 
 /**

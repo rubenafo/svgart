@@ -69,16 +69,17 @@ module.exports = function(RED) {
           shape = new Group (ctx.zindex);
           break;
       }
+      var valid = true;
       var coords = [];
       var shapeList = [];
       if (shape.content.type == Group.type) // just for groups
       {
         if (msg.nrSvg) {
           if (context.data.length < this.groupLength) {
-            node.send (null)
             context.data.push (msg.nrSvg);
             msg.nrSvg = [];
-
+            node.send (null);
+            valid = false;
           }
           if (context.data.length == this.groupLength) { // waiting is over, send!
             context.data.forEach (function (elem) {
@@ -86,10 +87,13 @@ module.exports = function(RED) {
             });
             shape.sortChildren ();
             context.data = [];
+            valid = true;
           }
         }
       } // end Group
 
+      if (valid)
+      {
       if (this.genContent) {
         try {
           var coords = ExecUtils.JsExecution (RED, console, Buffer, require, msg, this.genContent);
@@ -111,6 +115,7 @@ module.exports = function(RED) {
       }
       msg.nrSvg = msg.nrSvg.concat (shapeList);
       node.send (msg);
+    }
     }); // this.on(input)
   };
   RED.nodes.registerType("shape", shapeNode);
