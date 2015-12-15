@@ -36,7 +36,7 @@ function Circle (x, y, rd, style, zindex) {
 Circle.prototype.getCenter = function () {
 	var x = this.parent.getAttribute.call (this, "cx");
 	var y = this.parent.getAttribute.call (this, "cy");
-	return ({x:x/2,y:y/2});
+	return ({x:x,y:y});
 }
 
 /**

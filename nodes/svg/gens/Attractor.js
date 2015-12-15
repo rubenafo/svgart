@@ -6,12 +6,11 @@
 * LICENSE file in the root directory of this source tree.
 **/
 
-// http://struct.cc/blog/2011/08/15/strange-attractors/
-
 var Functions = require ("../Utils.js");
 
-Attractor.type = "SimpleAttractor";
-Attractor.prototype.constructor = Attractor;
+/**
+ * http://struct.cc/blog/2011/08/15/strange-attractors/
+ */
 function Attractor (numPoints, entryString, width, height)
 {
 
@@ -115,6 +114,28 @@ function Lorentz (params)
   return res;
 }
 
+/**
+ * Returns a grid of x,y values
+ * @param {number} x - number of points
+ * @param {number} width - total width
+ * @param {number} height - total height
+ * @return {array} list of values {x:val, y:val}
+ */
+function Grid (params)
+{
+  console.log(params)
+  var points = [];
+  var xspan = params.width / (params.xrows || 10);
+  var yspan = params.height / (params.yrows || 10);
+  console.log(xspan, yspan)
+  for (var ypoints = 1; ypoints < params.yrows ; ypoints++)
+    for (var xpoints = 1;  xpoints < params.xrows; xpoints++)
+    {
+      points.push ({x: xpoints * xspan, y: ypoints * yspan});
+    }
+  return points;
+}
 exports.Attractor = Attractor;
 exports.Rossler = Rossler;
 exports.Lorentz = Lorentz;
+exports.Grid = Grid;
