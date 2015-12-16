@@ -1,0 +1,28 @@
+{
+  "name": "nr-svg",
+  "version": "1.0.0",
+  "description": "NR-SVG\r ======",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha nodes/nr-svg/tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/figurebelow/nr-svg.git"
+  },
+  "keywords": [
+    "svg",
+    "nodered",
+    "nodejs",
+    "generative"
+  ],
+  "author": "Ruben <ruben@figurebelow.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/figurebelow/nr-svg/issues"
+  },
+  "homepage": "https://github.com/figurebelow/nr-svg",
+  "devDependencies": {
+    "mocha":"*"
+  }
+}

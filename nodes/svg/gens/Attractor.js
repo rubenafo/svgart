@@ -123,11 +123,9 @@ function Lorentz (params)
  */
 function Grid (params)
 {
-  console.log(params)
   var points = [];
   var xspan = params.width / (params.xrows || 10);
   var yspan = params.height / (params.yrows || 10);
-  console.log(xspan, yspan)
   for (var ypoints = 1; ypoints < params.yrows ; ypoints++)
     for (var xpoints = 1;  xpoints < params.xrows; xpoints++)
     {
@@ -135,6 +133,7 @@ function Grid (params)
     }
   return points;
 }
+
 exports.Attractor = Attractor;
 exports.Rossler = Rossler;
 exports.Lorentz = Lorentz;
