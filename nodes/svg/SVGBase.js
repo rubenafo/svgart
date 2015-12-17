@@ -86,6 +86,7 @@ SVGBase.prototype.clone = function () {
   res.content.properties = [];
   res.content.type = this.content.type;
   res.content.zindex = this.content.zindex;
+	res.content.definedByPoints = this.content.definedByPoints;
   var baseData = this.content;
   this.content.properties.forEach (function (elem) {
     res.content.properties.push (elem);

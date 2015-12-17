@@ -27,7 +27,7 @@ Line.prototype.parent = SVGBase.prototype;
 Line.prototype.constructor = Line;
 function Line (x1, y1, x2, y2, style, zindex) {
   SVGBase.call (this, Line.type, zindex);
-  this.setCoords (x1, y1, x2, y2);
+  this.setPos ({x:x1, y:y1}, {x:x2, y:y2});
   this.parent.setAttribute.call (this, "style", style);
 };
 
@@ -36,7 +36,7 @@ function Line (x1, y1, x2, y2, style, zindex) {
 * @param {number} sourceCoord - source point ({xpos:value, ypos:value})
 * @param {number} targetCoord - destination point ({xpos:value, ypos:value})
 */
-Line.prototype.setCoords = function (sourceCoord, targetCoord) {
+Line.prototype.setPos = function (sourceCoord, targetCoord) {
   this.parent.setAttribute.call (this, "x1", sourceCoord.x);
   this.parent.setAttribute.call (this, "y1", sourceCoord.y);
   this.parent.setAttribute.call (this, "x2", targetCoord.x);
@@ -48,10 +48,10 @@ Line.prototype.setCoords = function (sourceCoord, targetCoord) {
 * @returns - {x:value,y:value} containing the coords
 */
 Line.prototype.getCenter = function () {
-  var x1 = this.parent.getAttribute("x1");
-  var x2 = this.parent.getAttribute("x2");
-  var y1 = this.parent.getAttribute("y1");
-  var y2 = this.parent.getAttribute("y2");
+  var x1 = this.parent.getAttribute.call (this, "x1");
+  var x2 = this.parent.getAttribute.call (this, "x2");
+  var y1 = this.parent.getAttribute.call (this, "y1");
+  var y2 = this.parent.getAttribute.call (this, "y2");
   return ({x: (x1+x2)/2, y: (y1+y2)/2 });
 }
 
@@ -84,7 +84,7 @@ Line.prototype.cloneToCoords = function (coords)
     if (i)
     {
       var line = this.clone ();
-      line.setCoords (coords[i], coords[i-1]);
+      line.setPos (coords[i-1], coords[i]);
       //if (coords[i].r)
       // TODO line.applyTransform.call(line, {rotate:{deg:coords[i].r}} );
       results.push (line);
