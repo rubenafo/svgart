@@ -7,16 +7,16 @@ This project adds different SVG nodes to the Node-RED palette so the SVG standar
 
 Installation
 ------------
-1. Install Node-RED following the instructions in http://nodered.org
+Install Node-RED following the instructions in http://nodered.org
 ```
 sudo npm install -g node-red
 ```
-2. Go to the /nodes folder inside your new created Node-RED setup.
+Go to the /nodes folder inside your new created Node-RED setup.
 ```
 cd node-red/nodes
 ```
-3. Clone this repository:
+Clone this repository:
 ```git
 git clone https://github.com/figurebelow/svgart.git
 ```
-4. The plugin will be installed in the svgart folder
+The plugin will be installed in the svgart folder
