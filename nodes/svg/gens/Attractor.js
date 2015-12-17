@@ -134,7 +134,39 @@ function Grid (params)
   return points;
 }
 
+/* Returns a Spiral of points centered at x,y
+* @param {number} points - number of points
+* @param {number} x - initial x coord
+* @param {number} y - initial y
+* @param {number} c - constant grow factor
+* @return {array} list of values {x:val, y:val}
+*/
+function Spiral (params)
+{
+  var points = [];
+  var centerX = 800/2,
+    centerY = 600/2,
+    radius = 150,
+    coils = 8;
+
+  var rotation = 2 * Math.PI;
+  var thetaMax = coils * 2 * Math.PI;
+  var awayStep = radius / thetaMax;
+  var chord = 40;
+
+  for (theta = chord / awayStep; theta <= thetaMax; ) {
+    away = awayStep * theta;
+    around = theta + rotation;
+    x = centerX + Math.cos ( around ) * away;
+    y = centerY + Math.sin ( around ) * away;
+    theta += chord / away;
+    points.push({x: x, y: y, r: theta});
+  }
+  return points;
+}
+
 exports.Attractor = Attractor;
 exports.Rossler = Rossler;
 exports.Lorentz = Lorentz;
 exports.Grid = Grid;
+exports.Spiral = Spiral;
