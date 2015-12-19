@@ -16,6 +16,7 @@ SVGBase.prototype.constructor = SVGBase;
 function SVGBase (type, zindex, definedByPoints) {
 	this.content = {};
 	this.content.properties = [];
+	this.content.generators = {};
   this.content.transform = new Array();
   this.content.type = type;
   this.content.zindex = zindex || 0;
@@ -34,6 +35,18 @@ SVGBase.prototype.setAttribute = function (key, value) {
     this.content.properties.push (lowerStr);
   }
   this.content[lowerStr] = value;
+};
+
+/**
+ * Sets a generator
+ * @param {string} key - the key to set
+ * @param {string} generator - generator string
+ * @param {boolean} generate - if false, the attribute wont be generated
+ */
+SVGBase.prototype.setGenerator = function (key, generator) {
+	var lowerStr = key.toLowerCase();
+  this.content.generators[lowerStr] = generator;
+	this.setAttribute (key, eval(generator));
 };
 
 /**
@@ -84,14 +97,19 @@ SVGBase.prototype.clone = function () {
   var res = new SVGBase ();
   res.content = {};
   res.content.properties = [];
+	res.content.generators = {};
   res.content.type = this.content.type;
   res.content.zindex = this.content.zindex;
 	res.content.definedByPoints = this.content.definedByPoints;
   var baseData = this.content;
   this.content.properties.forEach (function (elem) {
     res.content.properties.push (elem);
-    res.content [elem] = baseData[elem];
+    res.content[elem] = baseData[elem];
   });
+	for (key in this.content.generators) {
+		res.content.generators[key] = this.content.generators[key];
+		res.content[key] = eval(res.content.generators[key]);
+	};
   res.content.transform = new Array ();
   this.content.transform.forEach (function (elem) {
     res.content.transform.push (elem);

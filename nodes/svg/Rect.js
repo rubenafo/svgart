@@ -15,10 +15,12 @@ Rect.prototype = new SVGBase ();
 Rect.prototype.parent = SVGBase.prototype;
 
 Rect.prototype.constructor = Rect;
-function Rect (x, y, width, height, style, zindex) {
+function Rect (x, y, widthStr, heightStr, style, zindex) {
   SVGBase.call (this, Rect.type, zindex, true);
-  this.parent.setAttribute.call (this, "width", width);
-  this.parent.setAttribute.call (this, "height", height);
+  this.parent.setGenerator.call (this, "width", widthStr);
+  this.parent.setGenerator.call (this, "height", heightStr);
+  //this.parent.setAttribute.call (this, "width", eval(width));
+  //this.parent.setAttribute.call (this, "height", eval(height));
   this.parent.setAttribute.call (this, "style", style);
   this.setPos (x, y);
 };
@@ -45,6 +47,8 @@ Rect.prototype.getCenter = function () {
 Rect.prototype.clone = function ()
 {
   var clone = this.parent.clone.call (this);
+  //clone.content.widthExp = this.content.widthExp;
+  //clone.setAttribute ("width", eval(this.content.widthExp));
   return Rect.adapt (clone);
 }
 

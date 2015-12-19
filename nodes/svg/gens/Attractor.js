@@ -138,23 +138,25 @@ function Grid (params)
 * @param {number} points - number of points
 * @param {number} x - initial x coord
 * @param {number} y - initial y
-* @param {number} c - constant grow factor
+* @param {number} radius - radio
+* @param {number} coils - number of coils
+* @param {number} chord - chord value
 * @return {array} list of values {x:val, y:val}
 */
 function Spiral (params)
 {
   var points = [];
-  var centerX = 800/2,
-    centerY = 600/2,
-    radius = 150,
-    coils = 8;
+  var centerX = params.x,
+      centerY = params.y,
+      radius = params.radius,
+      coils = params.coils;
+      chord = params.chord;
 
   var rotation = 2 * Math.PI;
   var thetaMax = coils * 2 * Math.PI;
   var awayStep = radius / thetaMax;
-  var chord = 40;
 
-  for (theta = chord / awayStep; theta <= thetaMax; ) {
+  for (theta = chord / awayStep, i = 0; theta <= thetaMax && i < params.points; i++) {
     away = awayStep * theta;
     around = theta + rotation;
     x = centerX + Math.cos ( around ) * away;
