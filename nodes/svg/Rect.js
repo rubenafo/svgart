@@ -16,10 +16,9 @@ Rect.prototype.parent = SVGBase.prototype;
 
 Rect.prototype.constructor = Rect;
 function Rect (x, y, widthStr, heightStr, style, zindex) {
-  SVGBase.call (this, Rect.type, zindex, true);
+  SVGBase.call (this, Rect.type, style, zindex, true);
   this.parent.setGenerator.call (this, "width", widthStr);
   this.parent.setGenerator.call (this, "height", heightStr);
-  this.parent.setAttribute.call (this, "style", style);
   this.setPos (x, y);
 };
 

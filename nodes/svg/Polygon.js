@@ -15,10 +15,9 @@ Polygon.prototype.parent = SVGBase.prototype;
 
 Polygon.prototype.constructor = Polygon;
 function Polygon (pointsStr, style, zindex) {
-  SVGBase.call (this, Polygon.type, zindex, true);
+  SVGBase.call (this, Polygon.type, style, zindex, true);
   this.parent.setAttribute.call (this, "points", pointsStr);
   this.content.pointsList = PolygonGrammar.parse(pointsStr);
-  this.parent.setAttribute.call (this, "style", style);
 };
 
 /*

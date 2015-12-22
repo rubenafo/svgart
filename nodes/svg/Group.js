@@ -15,7 +15,7 @@ Group.prototype.parent = SVGBase.prototype;
 
 Group.prototype.constructor = Group;
 function Group (zindex) {
-  SVGBase.call (this, Group.type, zindex);
+  SVGBase.call (this, Group.type, "", zindex); // TODO: style for groups
   this.content.children = [];
 };
 

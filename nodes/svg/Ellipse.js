@@ -24,11 +24,10 @@ Ellipse.prototype.parent = SVGBase.prototype;
 */
 Ellipse.prototype.constructor = Ellipse;
 function Ellipse (cx, cy, rxStr, ryStr, style, zindex) {
-  SVGBase.call (this, Ellipse.type, zindex);
+  SVGBase.call (this, Ellipse.type, style, zindex);
   this.setPos (cx, cy);
   this.parent.setGenerator.call (this, "rx", rxStr);
   this.parent.setGenerator.call (this, "ry", ryStr);
-  this.parent.setAttribute.call (this, "style", style);
 };
 
 /**

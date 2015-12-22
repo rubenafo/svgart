@@ -23,9 +23,8 @@ Circle.prototype.parent = SVGBase.prototype;
 */
 Circle.prototype.constructor = Circle;
 function Circle (x, y, radioStr, style, zindex) {
-  SVGBase.call (this, Circle.type, zindex);
+  SVGBase.call (this, Circle.type, style, zindex);
   this.parent.setGenerator.call (this, "r", radioStr);
-  this.parent.setAttribute.call (this, "style", style);
   this.setPos (x,y);
 };
 

@@ -26,9 +26,8 @@ Line.prototype.parent = SVGBase.prototype;
 */
 Line.prototype.constructor = Line;
 function Line (x1, y1, x2, y2, style, zindex) {
-  SVGBase.call (this, Line.type, zindex);
+  SVGBase.call (this, Line.type, style, zindex);
   this.setPos ({x:x1, y:y1}, {x:x2, y:y2});
-  this.parent.setAttribute.call (this, "style", style);
 };
 
 /**

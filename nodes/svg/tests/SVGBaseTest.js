@@ -8,19 +8,19 @@ describe ("SVG", function () {
 
   it ("initializes zindex", function ()
   {
-    var svg = new SVGBase (Circle.type, 1);
+    var svg = new SVGBase (Circle.type, "", 1);
     assert.equal (1, svg.getZIndex());
   });
 
   it ("initializes default definedByPoints", function ()
   {
-    var svg = new SVGBase (Circle.type, 1);
+    var svg = new SVGBase (Circle.type, "", 1);
     assert.equal (false, svg.isDefinedByPoints());
   });
 
   it ("initializes definedByPoints when defined", function ()
   {
-    var svg = new SVGBase (Circle.type, 1, true);
+    var svg = new SVGBase (Circle.type, "", 1, true);
     assert.equal (true, svg.isDefinedByPoints());
   });
 
@@ -32,7 +32,7 @@ describe ("SVG", function () {
 
   it ("sets attribute", function ()
   {
-    var svg = new SVGBase (Circle.type, 1);
+    var svg = new SVGBase (Circle.type, "", 1);
     var strings = ["height", "HEIGHT", "HeIGHT"];
     strings.forEach (function (attr) {
       svg.setAttribute (attr, 90);
@@ -43,12 +43,12 @@ describe ("SVG", function () {
 
   it ("sets generator", function ()
   {
-    var svg = new SVGBase (Rect.type, 1);
+    var svg = new SVGBase (Rect.type, "", 1);
     svg.setAttribute ("width", 10);
     svg.setAttribute ("height", 20);
     svg.setGenerator ("width", "50+150");
     svg.setGenerator ("height", "Math.max(10, 20)");
-    assert.deepEqual (["width", "height"], svg.content.properties)
+    assert.deepEqual ([ "style","width", "height"], svg.content.properties)
     assert.deepEqual ({"width":"50+150", "height": "Math.max(10, 20)"},
                       svg.content.generators)
     assert.equal (200, svg.content["width"]); // attrs didn't change
@@ -57,7 +57,7 @@ describe ("SVG", function () {
 
   it ("clones", function ()
   {
-    var svg = new SVGBase (Rect.type, 1);
+    var svg = new SVGBase (Rect.type, "", 1);
     svg.setAttribute ("width", 50);
     svg.setAttribute ("height", 60);
     svg.setGenerator ("width", "50+150");

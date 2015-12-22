@@ -13,13 +13,15 @@
  * @param {number} zindex
  */
 SVGBase.prototype.constructor = SVGBase;
-function SVGBase (type, zindex, definedByPoints) {
+function SVGBase (type, style, zindex, definedByPoints) {
 	this.content = {};
 	this.content.properties = [];
 	this.content.generators = {};
   this.content.transform = new Array();
   this.content.type = type;
   this.content.zindex = zindex || 0;
+	this.content.filter = "";
+	this.setAttribute ("style", style);
 	this.content.definedByPoints = definedByPoints || false;
 };
 
@@ -100,6 +102,7 @@ SVGBase.prototype.clone = function () {
 	res.content.generators = {};
   res.content.type = this.content.type;
   res.content.zindex = this.content.zindex;
+	res.content.filter = this.content.filter;
 	res.content.definedByPoints = this.content.definedByPoints;
   var baseData = this.content;
   this.content.properties.forEach (function (elem) {
@@ -269,6 +272,24 @@ SVGBase.prototype.applyPoints = function (coords, segmented)
 	{
 		return this.cloneToCoords (coords);
 	}
+}
+
+/**
+ * Sets the filter element
+ * @param{string} - SVG filter
+ */
+SVGBase.prototype.setFilter = function (filterStr)
+{
+	this.content.filter = filterStr;
+}
+
+/**
+ * Gets the filter element
+ * @return {string} - filter string
+ */
+SVGBase.prototype.getFilter = function (filterStr)
+{
+	return this.content.filter;
 }
 
 exports.SVGBase = SVGBase;

@@ -24,14 +24,13 @@ Path.prototype.parent = SVGBase.prototype;
 */
 Path.prototype.constructor = Path;
 function Path (pathString, style, zindex) {
-  SVGBase.call (this, Path.type, zindex, true);
+  SVGBase.call (this, Path.type, style, zindex, true);
   this.parent.setAttribute.call (this, "d", pathString);
   this.content.pathPoints = [];
   if (pathString.length)
   {
     this.content.pathPoints = PathGrammar.parse(pathString);
   }
-  this.parent.setAttribute.call (this, "style", style);
 };
 
 /**

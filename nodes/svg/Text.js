@@ -14,10 +14,9 @@ Text.prototype.parent = SVGBase.prototype;
 
 Text.prototype.constructor = Text;
 function Text (x, y, text, style, zindex) {
-  SVGBase.call (this, Text.type, zindex);
+  SVGBase.call (this, Text.type, style, zindex);
   this.setPos (x, y);
   this.setString (text);
-  this.parent.setAttribute.call (this, "style", style);
 };
 
 Text.prototype.setString = function (text) {
