@@ -6,6 +6,8 @@
 * LICENSE file in the root directory of this source tree.
 **/
 
+var ExecUtils = require ("../utils/NrSVGutils.js");
+
 /**
  * @class Represents the base SVG element.
  * @constructor SVGBase
@@ -20,8 +22,9 @@ function SVGBase (type, style, zindex, definedByPoints) {
   this.content.transform = new Array();
   this.content.type = type;
   this.content.zindex = zindex || 0;
+	this.content.filterElem = "";
 	this.content.filter = "";
-	this.setAttribute ("style", style);
+	this.setStyle (style || "");
 	this.content.definedByPoints = definedByPoints || false;
 };
 
@@ -88,6 +91,8 @@ SVGBase.prototype.toSVG = function (content) {
 		retValue += content;
   }
 	retValue += "</" + this.content.type + ">";
+	if (this.content.filter != "")
+		retValue += this.content.filterElem;
   return retValue;
 };
 
@@ -103,6 +108,7 @@ SVGBase.prototype.clone = function () {
   res.content.type = this.content.type;
   res.content.zindex = this.content.zindex;
 	res.content.filter = this.content.filter;
+	res.content.filterElem = this.content.filterElem;
 	res.content.definedByPoints = this.content.definedByPoints;
   var baseData = this.content;
   this.content.properties.forEach (function (elem) {
@@ -280,7 +286,7 @@ SVGBase.prototype.applyPoints = function (coords, segmented)
  */
 SVGBase.prototype.setFilter = function (filterStr)
 {
-	this.content.filter = filterStr;
+	this.content.filterElem = filterStr;
 }
 
 /**
@@ -289,7 +295,31 @@ SVGBase.prototype.setFilter = function (filterStr)
  */
 SVGBase.prototype.getFilter = function (filterStr)
 {
-	return this.content.filter;
+	return this.content.filterElem;
+}
+
+/**
+ * Sets the element style attribute, extracting the filter if needed.
+ * @param{string} - The style string content
+ */
+SVGBase.prototype.setStyle = function (styleStr)
+{
+	if (styleStr.length)
+	{
+		var matchFilter =   /.*light\s*:\s*(.*);/i;
+		var filterFunction = styleStr.match (matchFilter);
+		if (filterFunction != null)
+		{
+			var filter = filterFunction[1];
+			var result = eval ("var Filter = require ('./Filters.js');" + filter);
+			this.setFilter(result);
+			styleStr = styleStr.replace (filter, "");
+			styleStr = styleStr.replace("light:", "");
+			styleStr = styleStr.replace(/\n/g, "");
+			this.setAttribute ("filter", "url(#id33)");
+		}
+	}
+	this.setAttribute ("style", styleStr);
 }
 
 exports.SVGBase = SVGBase;

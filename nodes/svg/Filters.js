@@ -8,16 +8,16 @@
 
 /* SVG Filters */
 
-DiffuseLightning = function (color, result, x, y, z, intensity)
+DiffuseLight = function (color, result, x, y, z, intensity)
 {
   var filterString = "";
-  filterString += "<filter id=" + Math.random() + ">";
-  filterString += "<feDiffuseLighting in=\"SourceGraphic\" result=\"light\"
-                  lighting-color=\"white\">";
-  filterString += "<fePointLight y=\"10\" x=\"120\" z=\"20\"></fePointLight>";
+  filterString += "<filter id=\"id" + 33 + "\">";
+  filterString += "<feDiffuseLighting in=\"SourceGraphic\" result=\"" + result + "\" lighting-color=\"" + color + "\" diffuseConstant=\"" + intensity + "\">";
+  filterString += "<fePointLight y=\"" + 50 + "\" x=\"" + 100 + "\" z=\"" + z + "\"/>";
   filterString += "</feDiffuseLighting>";
-  filterString += "<feComposite in=\"SourceGraphic\" in2=\"light\"
-      operator=\"arithmetic\" k1=\"1\" k2=\"0\" k3=\"0\" k4=\"0\"/></feComposite>";
+  filterString += "<feComposite in=\"SourceGraphic\" in2=\"light\" operator=\"arithmetic\" k1=\"1\" k2=\"0\" k3=\"0\" k4=\"0\"/>";
   filterString += "</filter>";
   return filterString;
 }
+
+exports.DiffuseLight = DiffuseLight;
