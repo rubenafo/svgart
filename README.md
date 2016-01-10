@@ -20,3 +20,7 @@ Clone this repository:
 git clone https://github.com/figurebelow/svgart.git
 ```
 The plugin will be installed in the svgart folder
+
+Gallery
+-------
+There is a gallery with some examples in Flickr: https://www.flickr.com/photos/figurebelow
