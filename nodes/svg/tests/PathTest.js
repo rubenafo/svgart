@@ -23,4 +23,27 @@ describe ("Path", function () {
       assert.equal (3, path.getZIndex());
     }).should.not.throw();
   })
+
+  it ("initializes a path with a line", function ()
+  {
+    var path = new Path ("M0,0 L10,20Z", "", 1);
+  })
+
+  it ("initializes a path with a non-closed line", function ()
+  {
+    var path = new Path ("M0,0 L10,20", "", 1);
+  })
+
+  it ("initializes a path with a multiline", function ()
+  {
+    var path = new Path ("M0,0 L10,20 L30,50Z", "", 1);
+  })
+
+  it ("gets the center of a square path correctly", function ()
+  {
+    var path = new Path ("M0,0 L20,0 20,20 0,20Z", "", 1);
+    var center = path.getCenter();
+    assert.deepEqual ({x:10, y:10}, center);
+  })
+
 });
