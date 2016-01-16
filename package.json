@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/figurebelow/svgart",
   "devDependencies": {
-    "mocha":"*"
+    "mocha":"*",
+    "should":"*"
   }
 }
