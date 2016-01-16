@@ -165,6 +165,15 @@ SVGBase.prototype.applyTransform = function (transf) {
 }
 
 /**
+ * Gets the list of transformations
+ * @returns list of transformations (translates, rotates and skews)
+ */
+SVGBase.prototype.getTransforms = function ()
+{
+	return this.content.transform;
+}
+
+/**
  * Returns the transformation string of the transformation
  * operations stored in the transform list.
  */

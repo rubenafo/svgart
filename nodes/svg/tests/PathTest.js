@@ -46,4 +46,18 @@ describe ("Path", function () {
     assert.deepEqual ({x:10, y:10}, center);
   })
 
+  it ("gets the center of a line correctly", function ()
+  {
+    var path = new Path ("M10,10 L20,10Z", "", 1);
+    var center = path.getCenter();
+    assert.deepEqual ({x:15, y:10}, center);
+  })
+
+  it ("clones", function ()
+  {
+    var path = new Path ("M10,10 L20,10Z", "", 1);
+    path.setPos (40, 50);
+    var path2 = path.clone();
+    assert.deepEqual (path, path2);
+  })
 });

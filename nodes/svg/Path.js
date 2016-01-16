@@ -60,25 +60,13 @@ Path.prototype.setPos = function (x,y) {
 */
 Path.prototype.getCenter = function () {
   var vertices = [];
-  //if (this.content.transform.length)
-  //{
-  //  var lastTransform = this.content.transform[this.content.transform.length-1];
-  //  return {x: lastTransform.x, y: lastTransform.y};
-  //}
-  //else
-  {
-    this.content.pathPoints.forEach (function (instruction) {
-  	   if (instruction.values != undefined)
-       {
+  this.content.pathPoints.forEach (function (instruction) {
+    if (instruction.values != undefined) {
          vertices = vertices.concat (instruction.values)
-       }
-  	   //instruction.values.forEach (function (point) {
-  	   //	vertices.push (point);
-  	   //});
-     });
-     var center = Utils.NonIntersecPolCenter (vertices);
-     return center;
-  }
+    }
+  });
+  var center = Utils.NonIntersecPolCenter (vertices);
+  return center;
 };
 
 /**

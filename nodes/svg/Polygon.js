@@ -8,6 +8,7 @@
 
 var SVGBase = require ("./SVGBase.js").SVGBase;
 var PolygonGrammar = require ("./grammars/PolygonGrammar");
+var Utils = require ("./Utils");
 
 Polygon.type = "polygon";
 Polygon.prototype = new SVGBase ();
@@ -31,7 +32,7 @@ Polygon.prototype.setPos = function (x,y) {
  * Returns the center of the polygon using one of the standard algorithms for this.
  */
 Polygon.prototype.getCenter = function () {
-  var center = NonIntersecPolCenter (this.content.pointsList[0]);
+  var center = Utils.NonIntersecPolCenter (this.content.pointsList[0]);
   return center;
 }
 
