@@ -7,7 +7,7 @@
 **/
 
 var SVGBase = require ("./SVGBase").SVGBase;
-var Utils = require ("./Utils");
+var Functions = require ("./Functions");
 
 Group.type = "g";
 Group.prototype = new SVGBase ();
@@ -63,7 +63,7 @@ Group.prototype.getCenter = function () {
     child = SVGadapter (child);
     childrenCenter.push (child.getCenter());
   }
-  return Utils.NonIntersecPolCenter (childrenCenter);
+  return Functions.NonIntersecPolCenter (childrenCenter);
 }
 
 /**

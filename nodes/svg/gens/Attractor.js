@@ -6,7 +6,7 @@
 * LICENSE file in the root directory of this source tree.
 **/
 
-var Functions = require ("../Utils.js");
+var Functions = require ("../Functions.js");
 
 /**
  * http://struct.cc/blog/2011/08/15/strange-attractors/

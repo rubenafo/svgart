@@ -8,6 +8,7 @@
 
 var SVGBase = require ("./SVGBase.js").SVGBase;
 var PolygonGrammar = require ("./grammars/PolygonGrammar");
+var Functions = require ("./Functions");
 
 Polyline.type = "polyline";
 Polyline.prototype = new SVGBase;
@@ -28,7 +29,7 @@ Polyline.prototype.setPos = function (x,y) {
 };
 
 Polyline.prototype.getCenter = function () {
-  var center = NonIntersecPolCenter (this.content.polyPoints[0]);
+  var center = Functions.NonIntersecPolCenter (this.content.polyPoints[0]);
   return center;
 }
 

@@ -103,6 +103,7 @@ module.exports = function(RED) {
             shapeList.push(shape);
         }
         catch (err) {
+          console.log(err)
           this.err(err);
         }
       }

@@ -9,7 +9,7 @@
 
 var SVGBase = require ("./SVGBase").SVGBase;
 var PathGrammar = require ("./grammars/PathGrammar");
-var Utils = require ("./Utils");
+var Functions = require ("./Functions");
 
 Path.type = "path";
 Path.prototype = new SVGBase ();
@@ -65,7 +65,7 @@ Path.prototype.getCenter = function () {
          vertices = vertices.concat (instruction.values)
     }
   });
-  var center = Utils.NonIntersecPolCenter (vertices);
+  var center = Functions.NonIntersecPolCenter (vertices);
   return center;
 };
 
