@@ -1,7 +1,7 @@
 {
   "name": "svgart",
   "version": "1.0.0",
-  "description": "SVGART\r ======",
+  "description": "A node-based SVG art generator",
   "main": "index.js",
   "scripts": {
     "test": "mocha nodes/svg/tests"
@@ -15,7 +15,9 @@
     "nodered",
     "nodejs",
     "generative",
-    "svgart"
+    "svgart",
+    "javascript",
+    "iot"
   ],
   "author": "Ruben <ruben@figurebelow.com>",
   "license": "ISC",
