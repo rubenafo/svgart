@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/figurebelow/svgart.svg?branch=master)](https://travis-ci.org/figurebelow/svgart)
-[![Coverage Status](https://coveralls.io/repos/github/figurebelow/svgart/badge.svg?branch=maste)r](https://coveralls.io/github/figurebelow/svgart?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/figurebelow/svgart/badge.svg?branch=master)](https://coveralls.io/github/figurebelow/svgart?branch=master)
 
 Svgart
 ======
