@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha nodes/svg/tests"
+    "test-travis" : "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec ./nodes/svg/tests/"
   },
   "repository": {
     "type": "git",
@@ -26,7 +27,9 @@
   },
   "homepage": "https://github.com/figurebelow/svgart",
   "devDependencies": {
-    "mocha":"*",
-    "should":"*"
+    "coveralls": "^2.11.6",
+    "istanbul": "^0.4.2",
+    "mocha": "*",
+    "should": "*"
   }
 }
