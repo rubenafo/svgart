@@ -36,7 +36,8 @@
             genContent: {value: ""},
             styleContent: {value: ""},
             segmented: {value:""},
-            groupLength: {value:0}
+            groupLength: {value:0},
+            genType: {value:"SimpleAtractor"}
         },
         inputs:1,
         outputs:1,
@@ -94,24 +95,43 @@
                   break;
                 default: // empty;
                 };
-            });
+            }); // end shape type changes
 
             var that = this;
             // Generator change
             $("#node-input-genType").change(function() {
               var generator = $("#node-input-genType option:selected").val();
+              console.log(generator);
+              var str = "";
               switch (generator) {
                 case 'SimpleAtractor':
-                  require(["orion/editor/edit"], function(edit) {
-                    that.genEditor = edit({
-                      parent:document.getElementById('node-input-genContent-editor'),
-                      lang:"js",
-                      contents: "var Gens = require (\"./svg/gens/Attractor.js\");\n" +
-                      "var coords = new Gens.Attractor (120, \"QGGVSLMHHGCR\", 800, 600);\n" +
-                      "return coords;\n"
-                    });
-                  });
-                }
+                  str = "var Gens = require (\"./svg/gens/Attractor.js\");\n" +
+                        "var coords = new Gens.Attractor (120, \"QGGVSLMHHGCR\", 800, 600);\n" +
+                        "return coords;\n";
+                  break;
+                case 'Rossler':
+                  str = "var Gens = require (\"./svg/gens/Attractor.js\");\n"+
+                          "var params =\n" +
+                          "{\n" +
+                          "  a: 0.1, b: 0.1, c: 6, h: 0.05,\n" +
+                          "  points: 2000,\n" +
+                          "  x0: 0.001, y0: 0.001,\n" +
+                          "  scale: 25,\n" +
+                          "  width:800,\n" +
+                          "  height:600\n" +
+                          "};\n" +
+                          "return new Gens.Rossler (params);\n";
+                  break;
+                case 'Lorentz':
+                  
+              };
+              require(["orion/editor/edit"], function(edit) {
+                that.genEditor = edit({
+                  parent:document.getElementById('node-input-genContent-editor'),
+                  lang:"js",
+                  contents: str
+                });
+              });
             });
             // End Generator change
 
@@ -154,6 +174,10 @@
             });
             $("#node-input-shapeType").val(this.shapeType);
             $("#node-input-shapeType").change();
+
+            console.log ("Setting to " + this.genType);
+            $("#node-input-genType").val(this.genType);
+            $("#node-input-genType").change();
         },
         oneditsave: function() {
           $("#node-input-styleContent").val(this.styleEditor.getText());
@@ -220,12 +244,16 @@
       <i class="fa fa-wrench"></i> Generator</label>
       <input type="hidden" id="node-input-genContent" autofocus="autofocus">
     </div>
-    <div class="form-row in" id="generator">
+    <div id="generator">
       <div class="form-row">
         <label for="node-input-genType"><i class="fa fa-envelope"></i> Generator</label>
         <select id="node-input-genType" style="width:125px !important">
           <option value="Custom">Custom</option>
           <option value="SimpleAtractor">Simple Attractor</option>
+          <option value="Rossler">Rossler</option>
+          <option value="Lorentz">Lorentz</option>
+          <option value="Grid">Grid</option>
+          <option value="Spiral">Spiral</option>
           </select>
 
           <input type="checkbox" id="node-input-segmented" style="width:10%">
