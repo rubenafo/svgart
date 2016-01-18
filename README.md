@@ -23,6 +23,10 @@ git clone https://github.com/figurebelow/svgart.git
 ```
 The plugin will be installed in the svgart folder
 
+Documentation
+-------------
+The most-detailed documentation can be found in the wiki: https://github.com/figurebelow/svgart/wiki
+
 Gallery
 -------
 There is a gallery with some examples in Flickr: https://www.flickr.com/photos/figurebelow
