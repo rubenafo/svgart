@@ -123,13 +123,26 @@
                           "return new Gens.Rossler (params);\n";
                   break;
                 case 'Lorentz':
-                  
+                  str = "var Gens = require ("./svg/gens/Attractor.js");\n" +
+                        "var params =\n" +
+                        "{\n" +
+                        "a: 10, b: 28, c: 2.66, h: 0.01,\n" +
+                        "points: 4000,\n" +
+                        "x0: 0.001, y0: 0.001,\n" +
+                        "scale: 10,\n" +
+                        "width:800,\n" +
+                        "height:600\n" +
+                        "};\n" +
+                        "var coords = new Gens.Lorentz (params);\n" +
+                        "return coords;\n";
+                  break;
               };
+
               require(["orion/editor/edit"], function(edit) {
                 that.genEditor = edit({
                   parent:document.getElementById('node-input-genContent-editor'),
                   lang:"js",
-                  contents: str
+                  contents: $("#node-input-genContent").val()
                 });
               });
             });
@@ -176,8 +189,8 @@
             $("#node-input-shapeType").change();
 
             console.log ("Setting to " + this.genType);
-            $("#node-input-genType").val(this.genType);
-            $("#node-input-genType").change();
+            //$("#node-input-genType").val(this.genType);
+            //$("#node-input-genType").change();
         },
         oneditsave: function() {
           $("#node-input-styleContent").val(this.styleEditor.getText());
