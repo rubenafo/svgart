@@ -123,7 +123,7 @@
                           "return new Gens.Rossler (params);\n";
                   break;
                 case 'Lorentz':
-                  str = "var Gens = require ("./svg/gens/Attractor.js");\n" +
+                  str = "var Gens = require (\"./svg/gens/Attractor.js\");\n" +
                         "var params =\n" +
                         "{\n" +
                         "a: 10, b: 28, c: 2.66, h: 0.01,\n" +
@@ -185,13 +185,21 @@
                 contents: $("#node-input-styleContent").val()
               });
             });
+
+            // When the reset button is clicked, the generator content is reset
+            $('$node-input-reset').on ("click", function () {
+
+            });
+            // end rest button click
+
             $("#node-input-shapeType").val(this.shapeType);
             $("#node-input-shapeType").change();
 
-            console.log ("Setting to " + this.genType);
+            //console.log ("Setting to " + this.genType);
             //$("#node-input-genType").val(this.genType);
             //$("#node-input-genType").change();
-        },
+        }, // end oneditprepare
+
         oneditsave: function() {
           $("#node-input-styleContent").val(this.styleEditor.getText());
           delete this.styleEditor;
@@ -271,6 +279,8 @@
 
           <input type="checkbox" id="node-input-segmented" style="width:10%">
           <!--<label for="node-input-segmented"><i class="icon-tag" style="width:10%"></i>Segmented</label>-->
+
+          <a id="node-input-reset" class="editor-button"><i class="fa fa-pencil"></i></a>
       </div>
 
       <div class="form-row node-text-editor-row" id="gencontent-option">
