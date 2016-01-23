@@ -18,18 +18,28 @@ Polyline.prototype.constructor = Polyline;
 function Polyline (text, style, zindex) {
   SVGBase.call (this, Polyline.type, style, zindex, true);
   this.parent.setAttribute.call (this, "points", text);
-  this.content.polyPoints = PolygonGrammar.parse(text);
+  this.content.polyPoints = PolygonGrammar.parse(text)[0];
 };
 
 /*
  * Polylines don't accept x,y so we use the transform attribute
  */
 Polyline.prototype.setPos = function (x,y) {
-  this.parent.addTranslate.call (this, x, y);
+  var center = this.getCenter();
+  var newStrPoints = "";
+  var newX = (x - center.x);
+  var newY = (y - center.y);
+  for (var i = 0; i < this.content.polyPoints.length; i++)
+  {
+    this.content.polyPoints[i].x += newX;
+    this.content.polyPoints[i].y += newY;
+    newStrPoints += this.content.polyPoints[i].x + "," + this.content.polyPoints[i].y + " ";
+  }
+  this.parent.setAttribute.call (this, "points", newStrPoints);
 };
 
 Polyline.prototype.getCenter = function () {
-  var center = Functions.NonIntersecPolCenter (this.content.polyPoints[0]);
+  var center = Functions.NonIntersecPolCenter (this.content.polyPoints);
   return center;
 }
 
@@ -37,7 +47,7 @@ Polyline.prototype.clone = function () {
   var copy = this.parent.clone.call (this);
   copy.content.polyPoints = new Array();
   this.content.polyPoints.forEach (function(item) {
-    copy.content.polyPoints.push (item);
+    copy.content.polyPoints.push ({x:item.x, y:item.y});
   });
   return Polyline.adapt (copy);
 }
@@ -45,17 +55,20 @@ Polyline.prototype.clone = function () {
 /**
 * Clones the Polyline to the given coords array
 * @param {object} coords - array of coords ({x:val,y:val})
+* @returns {object} polys - list of polylines at the coords given
 */
 Polyline.prototype.cloneToCoords = function (coords)
 {
   var polylines = [];
-  for (var i = 0; i < coords.length; i++)
+  var that = this;
+  coords.forEach (function (coord, i)
   {
-    var pol = this.clone();
-    pol.setPos (coords[i].x, coords[i].y);
+    var pol = that.clone();
+    pol.setPos (coord.x, coord.y);
     pol.applyTransform.call (pol, {rotate:{deg:coords[i].r}} );
     polylines.push (pol);
-  }
+
+  });
   return polylines;
 }
 

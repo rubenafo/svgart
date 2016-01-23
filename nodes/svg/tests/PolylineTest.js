@@ -21,7 +21,7 @@ describe ("Polyline", function () {
 
   it ("stores the points correctly", function () {
     var polyline = new Polyline ("0,0 10,10 20,40", "stroke: red", 1);
-    assert.equal (3, polyline.content.polyPoints[0].length);
+    assert.equal (3, polyline.content.polyPoints.length);
   });
 
   it ("gets the center correctly", function () {
@@ -34,5 +34,27 @@ describe ("Polyline", function () {
     var polyline = new Polyline ("0,0 10,0 10,10 0,10", "stroke: red", 1);
     var poly2 = polyline.clone();
     assert.deepEqual (poly2, polyline);
+  });
+
+  it ("translates to a new position up in the coords (x2 > x1, y2 > y1)", function () {
+    var polyline = new Polyline ("0,0 10,0 10,10 0,10", "stroke: red", 1);
+    polyline.setPos (50, 50);
+    assert.deepEqual ({x:50, y:50}, polyline.getCenter());
+  });
+
+  it ("translates to a new position down in the coords (x2 < x1, y2 < y1)", function () {
+    var polyline = new Polyline ("50,50 70,50 70,70 50,70", "stroke: red", 1);
+    polyline.setPos (20, 20);
+    assert.deepEqual ({x:20, y:20}, polyline.getCenter());
+  });
+
+  it ("clones to coords", function () {
+    var polyline = new Polyline ("50,50 70,50 70,70 50,70", "stroke: red", 1);
+    var coords = [{x:20, y:30}, {x:0, y:0}, {x:10, y:10}];
+    var polys = polyline.cloneToCoords (coords);
+    assert.equal (3, polys.length);
+    polys.forEach (function (elem, i) {
+      assert.deepEqual (elem.getCenter(), coords[i]);
+    });
   });
 });

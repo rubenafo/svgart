@@ -22,7 +22,8 @@ RandomGen = function(s) {
  * as described in http://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
  * - parameters: vertices: {x,y} vertices list
  */
-NonIntersecPolCenter = function (pts) {
+NonIntersecPolCenter = function (points) {
+  var pts = points.slice(0);
   if (pts != undefined && pts.length)
   {
     if (pts.length == 2)
