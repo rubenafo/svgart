@@ -12,9 +12,9 @@
 //
 RandomGen = function(s) {
   s = s || Math.random ();
-    return function() {
-        s = Math.sin(s) * 10000; return s - Math.floor(s);
-    };
+  return function() {
+    s = Math.sin(s) * 10000; return s - Math.floor(s);
+  };
 };
 
 /*
@@ -23,7 +23,8 @@ RandomGen = function(s) {
  * - parameters: vertices: {x,y} vertices list
  */
 NonIntersecPolCenter = function (points) {
-  var pts = points.slice(0);
+  if (points)
+    var pts = points.slice(0);
   if (pts != undefined && pts.length)
   {
     if (pts.length == 2)
@@ -49,8 +50,7 @@ NonIntersecPolCenter = function (points) {
       return { x:x/f, y:y/f };
     }
   }
-  console.log ("Warning: return empty NonIntersecPolCenter : ", pts);
-  return {};
+  throw ("Warning: return empty NonIntersecPolCenter");
 };
 
 /*

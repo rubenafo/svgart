@@ -51,13 +51,13 @@ describe ("Ellipse", function ()
   });
 
   it ("clones to coords", function () {
-    var coords = [{x:100, y:100}, {x:200, y:200}];
+    var coords = [{x:100, y:100, r:45}, {x:200, y:200, r:90}];
     var ellipses = ellipse.cloneToCoords(coords);
     assert.equal (ellipses.length, 2);
     ellipse.setPos (100, 100);
-    assert.deepEqual (ellipses[0], ellipse);
+    assert.deepEqual ({x:100, y:100}, ellipse.getCenter());
     ellipse.setPos (200, 200);
-    assert.deepEqual (ellipses[1], ellipse);
+    assert.deepEqual ({x:200, y:200}, ellipse.getCenter());
   });
 
 });

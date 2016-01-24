@@ -74,14 +74,15 @@ Ellipse.prototype.clone = function ()
 Ellipse.prototype.cloneToCoords = function (coords)
 {
   var results = [];
-  for (var i = 0; i < coords.length; i++)
+  var that = this;
+  coords.forEach (function (point)
   {
-    var ellipse = this.clone ();
-    ellipse.setPos (coords[i].x, coords[i].y);
-    if (coords[i].r)
-      ellipse.applyTransform.call(ellipse, {rotate:{deg:coords[i].r}} );
+    var ellipse = that.clone ();
+    ellipse.setPos (point.x, point.y);
+    if (point.r)
+      ellipse.applyTransform.call (ellipse, {rotate:{deg: point.r}} );
     results.push (ellipse);
-  }
+  });
   return results;
 }
 

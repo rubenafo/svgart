@@ -57,4 +57,11 @@ describe ("Polyline", function () {
       assert.deepEqual (elem.getCenter(), coords[i]);
     });
   });
+
+  it ("updates its coords given a list of points", function () {
+    var polyline = new Polyline ("50,50 70,50 70,70 50,70", "stroke: red", 1);
+    var coords = [{x:100, y:100}, {x:150, y:100}, {x:150, y:150}, {x:100, y:150}];
+    polyline.updateCoords (coords);
+    assert.deepEqual ({x:125, y:125}, polyline.getCenter());
+  });
 });

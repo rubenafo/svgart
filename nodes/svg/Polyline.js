@@ -75,15 +75,16 @@ Polyline.prototype.cloneToCoords = function (coords)
 /**
  * Update the object coordinates
  * @param {object} coords - array of coords ({x:val, y:val})
+ * @returns {object} - the polyline updated to the given coords
  */
 Polyline.prototype.updateCoords = function (coords)
 {
   this.content.polyPoints = new Array();
   var newString = "";
   var that = this;
-  coords.forEach (function (item) {
-    that.content.polyPoints.push (item);
-    newString += " " + item.x + "," + item.y;
+  coords.forEach (function (point) {
+    that.content.polyPoints.push (point);
+    newString += " " + point.x + "," + point.y;
   });
   this.parent.setAttribute.call (this, "points", newString);
   return this;
