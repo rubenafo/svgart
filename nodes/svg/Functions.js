@@ -22,8 +22,8 @@ RandomGen = function(s) {
  * - parameters: vertices: {x,y} vertices list
  */
 NonIntersecPolCenter = function (points) {
-  if (points)
-    var pts = points.slice(0);
+  if (points != undefined)
+    pts = points.slice(0);
   if (pts != undefined && pts.length)
   {
     if (pts.length == 2)

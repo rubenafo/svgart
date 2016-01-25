@@ -18,7 +18,7 @@ Polyline.prototype.constructor = Polyline;
 function Polyline (text, style, zindex) {
   SVGBase.call (this, Polyline.type, style, zindex, true);
   this.parent.setAttribute.call (this, "points", text);
-  this.content.polyPoints = PolygonGrammar.parse(text)[0];
+  this.content.polyPoints = PolygonGrammar.parse(text);
 };
 
 /*
