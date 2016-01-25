@@ -141,7 +141,7 @@ SVGBase.prototype.getZIndex = function () {
  */
 SVGBase.prototype.applyTransform = function (transf) {
   if (transf.translate) {
-    this.setPos (0,0);
+    //this.setPos (0,0);
     this.addTranslate (transf.translate.x, transf.translate.y);
   }
   if (transf.rotate) {
@@ -260,13 +260,23 @@ SVGBase.prototype.isDefinedByPoints = function ()
 }
 
 /**
- * Duplicates the object to the given coords array
+ * Duplicates the object to the given coords array, each class should implement its own
  * @param {object} coords - array of coords ({x:val,y:val})
  * @returns {object} - an array objects
  */
 SVGBase.prototype.cloneToCoords = function (coords)
 {
 	throw ("Missing cloneToCoords implementation for " + this.content.type + " class");
+}
+
+/**
+* Sets the position of the object, each class should implement its own
+* @param {number} x - x coord
+* @param {number} y - y coord
+*/
+SVGBase.prototype.setPos = function (x, y)
+{
+	throw ("Missing setPos implementation for " + this.content.type + " class");
 }
 
 /**

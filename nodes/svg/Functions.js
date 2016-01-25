@@ -12,9 +12,8 @@
 //
 RandomGen = function(s) {
   s = s || Math.random ();
-  return function() {
-    s = Math.sin(s) * 10000; return s - Math.floor(s);
-  };
+  s = Math.sin(s) * 10000;
+  return s - Math.floor(s);
 };
 
 /*

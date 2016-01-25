@@ -14,6 +14,7 @@ describe ("Functions", function () {
 
   it ("Generates a number using RandomGem", function () {
     assert.notEqual (null, Functions.RandomGen());
+    assert.notEqual (null, Functions.RandomGen(4));
   });
 
   it ("gets the NonIntersecPolCenter of a bunch of figures", function () {

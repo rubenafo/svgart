@@ -93,4 +93,56 @@ describe ("SVG", function () {
     assert.equal (Rect.type, svg.getType());
   });
 
+  it ("sets an attribute", function ()
+  {
+    var svg = new SVGBase (Rect.type, "", 1);
+    assert.deepEqual (["style"], svg.content.properties);
+    svg.setAttribute ("width", 40);
+    assert.deepEqual (["style", "width"], svg.content.properties);
+    assert.equal (40, svg.getAttribute ("width"));
+    try {
+      svg.getAttribute ("nonExistantAttr");
+    }
+    catch (msg)
+    {
+      assert.equal (true, true); // got the exception right
+    }
+  });
+
+  it ("gets the zindex", function () {
+    var svg = new SVGBase (Rect.type, "", 10);
+    assert.equal (10, svg.getZIndex());
+  });
+
+  it ("returns a SVG string", function () {
+    var svg = new SVGBase (Rect.type, "fill:red", 1);
+    var svgStr = svg.toSVG();
+    assert.equal (true, svgStr.length != 0);
+    assert.notEqual (-1, svgStr.indexOf ("<rect"));
+    assert.notEqual (-1, svgStr.indexOf ("rect>"));
+    assert.notEqual (-1, svgStr.indexOf ("fill:red"));
+  });
+
+  it ("returns the transforms", function () {
+    var svg = new SVGBase (Rect.type, "fill:red", 1);
+    assert.equal (0, svg.getTransforms().length);
+    svg.applyTransform ({rotate : {r:45, x:100, y:100}});
+    assert.equal (1, svg.getTransforms().length);
+  });
+
+  it ("sets the filter", function () {
+    var svg = new SVGBase (Rect.type, "fill:red", 1);
+    svg.setFilter ("filterString");
+    assert.equal ("filterString", svg.getFilter());
+  });
+
+  it ("clones to coords is not implemented", function () {
+    var svg = new SVGBase (Rect.type, "fill:red", 1);
+  });
+
+  it ("sets the style", function () {
+    var svg = new SVGBase (Rect.type, "fill:red", 1);
+    assert.equal ("", svg.getAttribute ("filter"));
+  });
+
 });

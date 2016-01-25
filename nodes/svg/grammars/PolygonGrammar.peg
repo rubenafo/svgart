@@ -3,7 +3,7 @@
  * basically a list of x,y pairs.
  */
 
-start = (pairs)+
+start = p:(pairs)+ { return p[0] }
 
 int
   = digits:[0-9]+{ return parseInt(digits.join(""), 10); }
@@ -13,4 +13,3 @@ pairs
     { return val }
 
 ws = [ \t\r\n]
-
