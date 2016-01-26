@@ -29,6 +29,16 @@ describe ("Functions", function () {
     assert.deepEqual ({x:67, y:167}, {x: Math.round(center.x), y: Math.round(center.y)});
     // an empty input
     try {
+      Functions.NonIntersecPolCenter ([]);
+      assert.equal (false, true); // always fail here because an exception should take place
+    }
+    catch (msg)
+    {
+      // Success, there was an exception and it was catched here
+      assert.equal (true, true);
+      return;
+    }
+    try {
       Functions.NonIntersecPolCenter ();
       assert.equal (false, true); // always fail here because an exception should take place
     }

@@ -68,14 +68,6 @@ SVGBase.prototype.getAttribute = function (key) {
 }
 
 /**
- * Returns the z-index of the element.
- * The default value is zero.
- */
-SVGBase.prototype.getZindex = function () {
-  return this.content["zindex"] || 0;
-};
-
-/**
  * Returns the xml string containing all the properties,
  * ready to be inserted into a SVG element
  */

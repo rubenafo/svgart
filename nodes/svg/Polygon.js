@@ -25,7 +25,17 @@ function Polygon (pointsStr, style, zindex) {
  * Polygons don't accept x,y so we use the transform attribute
  */
 Polygon.prototype.setPos = function (x,y) {
-  this.parent.addTranslate.call (this, x, y);
+  var center = this.getCenter();
+  var newStrPoints = "";
+  var newX = (x - center.x);
+  var newY = (y - center.y);
+  for (var i = 0; i < this.content.pointsList.length; i++)
+  {
+    this.content.pointsList[i].x += newX;
+    this.content.pointsList[i].y += newY;
+    newStrPoints += this.content.pointsList[i].x + "," + this.content.pointsList[i].y + " ";
+  }
+  this.parent.setAttribute.call (this, "points", newStrPoints);
 };
 
 /**
@@ -39,7 +49,9 @@ Polygon.prototype.getCenter = function () {
 Polygon.prototype.clone = function () {
   var copy = this.parent.clone.call (this);
   copy.content.pointsList = new Array();
-  copy.content.pointsList = this.content.pointsList.slice ();
+  this.content.pointsList.forEach (function(item) {
+    copy.content.pointsList.push ({x:item.x, y:item.y});
+  });
   return Polygon.adapt (copy);
 }
 
@@ -50,14 +62,15 @@ Polygon.prototype.clone = function () {
 Polygon.prototype.cloneToCoords = function (coords)
 {
   var polygons = [];
-  for (var i = 0; i < coords.length; i++)
+  var that = this;
+  coords.forEach (function (coord, i)
   {
-    var pol = this.clone();
-    pol.setPos (coords[i].x, coords[i].y);
-    if (coords[i].r)
-      pol.applyTransform.call (pol, {rotate:{deg:coords[i].r}} );
+    var pol = that.clone();
+    pol.setPos (coord.x, coord.y);
+    pol.applyTransform.call (pol, {rotate:{deg:coords[i].r}} );
     polygons.push (pol);
-  }
+
+  });
   return polygons;
 }
 

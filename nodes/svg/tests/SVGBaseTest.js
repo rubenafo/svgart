@@ -123,10 +123,42 @@ describe ("SVG", function () {
     assert.notEqual (-1, svgStr.indexOf ("fill:red"));
   });
 
+  it ("returns a SVG string and its content", function () {
+    var svg = new SVGBase (Rect.type, "fill:red", 1);
+    svg.setFilter ("withFilter");
+    svg.setAttribute ("filter", "url(#id33)");
+    var svgStr = svg.toSVG("withContent");
+    assert.equal (true, svgStr.length != 0);
+    assert.notEqual (-1, svgStr.indexOf("withContent"));
+    assert.notEqual (-1, svgStr.indexOf("withFilter"));
+  });
+
   it ("returns the transforms", function () {
     var svg = new SVGBase (Rect.type, "fill:red", 1);
     assert.equal (0, svg.getTransforms().length);
     svg.applyTransform ({rotate : {r:45, x:100, y:100}});
+    assert.equal (1, svg.getTransforms().length);
+  });
+
+  it ("applies the translate transform", function () {
+    var svg = new SVGBase (Rect.type, "fill:red", 1);
+    assert.equal (0, svg.getTransforms().length);
+    svg.applyTransform ({translate : {x:100, y:100}});
+    assert.equal (1, svg.getTransforms().length);
+  });
+
+  it ("applies the scale transform", function () {
+    var svg = new SVGBase (Rect.type, "fill:red", 1);
+    svg.applyTransform ({skewX : {x:100}});
+    assert.equal (1, svg.getTransforms().length);
+    assert.deepEqual ({op : "skewX", val: 100}, svg.getTransforms()[0]);
+    svg.applyTransform ({skewY : {y:200}});
+    assert.deepEqual ({op : "skewY", val: 200}, svg.getTransforms()[1]);
+  });
+
+  it ("applies the skew transforms", function () {
+    var svg = new SVGBase (Rect.type, "fill:red", 1);
+    svg.applyTransform ({scale : {x:100, y:100}});
     assert.equal (1, svg.getTransforms().length);
   });
 
