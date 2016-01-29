@@ -64,24 +64,6 @@ Rect.prototype.cloneToCoords = function (coords)
   return results;
 }
 
-/**
-* Update the object coordinates
-* @param {object} coords - array of coords ({x:val, y:val})
-*/
-Rect.prototype.updateCoords = function (coords)
-{
-  var results = [];
-  for (var i = 0; i < coords.length; i++)
-  {
-    var rect = this.clone ();
-    rect.setPos (coords[i].x, coords[i].y);
-    if (coords[i].r != undefined)
-      rect.applyTransform.call (rect, {rotate:{deg:coords[i].r}});
-    results.push (rect);
-  }
-  return results;
-}
-
 Rect.adapt = function (elem) {
   return SVGBase.prototype.adapt.call (elem, Rect.prototype);
 }

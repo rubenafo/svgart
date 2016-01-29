@@ -50,4 +50,5 @@ describe ("Rect", function ()
     rect.setPos (200, 200);
     assert.deepEqual (rects[1], rect);
   });
+
 });

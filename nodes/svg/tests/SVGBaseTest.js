@@ -168,13 +168,33 @@ describe ("SVG", function () {
     assert.equal ("filterString", svg.getFilter());
   });
 
-  it ("clones to coords is not implemented", function () {
-    var svg = new SVGBase (Rect.type, "fill:red", 1);
+  it ("clones to coords is not implemented in the base object", function () {
+    var svgbase = new SVGBase (Rect.type, "fill:red", 1);
+    try {
+      svgbase.cloneToCoords ([{x:10,y:10}]);
+      asssert.equal (true, false);
+    }
+    catch (msg) {
+      assert.equal (true, true);
+    }
+  });
+
+  it ("setPos is not implemented in the base object", function () {
+    var svgbase = new SVGBase (Rect.type, "fill:red", 1);
+    try {
+      svgbase.setPos ([{x:10,y:10}]);
+      asssert.equal (true, false);
+    }
+    catch (msg) {
+      assert.equal (true, true);
+    }
   });
 
   it ("sets the style", function () {
     var svg = new SVGBase (Rect.type, "fill:red", 1);
     assert.equal ("", svg.getAttribute ("filter"));
   });
+
+
 
 });

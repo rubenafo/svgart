@@ -4,7 +4,7 @@
 
 start = (draws)+
 
-draws = moveTo / lineTo / horLineTo / verLineTo / curveTo / smoothTo / bezierTogetherTo / arcTo / close
+draws = moveTo / lineTo / horLineTo / verLineTo / curveTo / quadCurveTo / smoothTo / bezierTogetherTo / arcTo / close
 
 close =
  "Z" { return { type:"z" }} / "z" { return { type:"z" } }
@@ -12,8 +12,10 @@ close =
 number
   = digits:[0-9]+ ((".") [0-9]+)? { return parseFloat(digits.join(""), 10); }
 
-curveType =
- "q" { return { type:"q"} }
+quadCurveTo
+  = key:("q" / "Q") ws* val:([ ]* x1:number ws y1:number ws x:number ws y:number [ ]*
+                  { return {"x1": x1, "y1":y1, "x":x, "y":y }} )+
+  { return { type:"q", values: val }}
 
 moveTo
   = key:("M" / "m") ws* val:([ ]* x:number [ ,] y:number [ ]* { return {"x":x,"y":y} })+
@@ -33,7 +35,7 @@ verLineTo
 
 curveTo
   = key:("C" / "c") ws* val:([ ]* x1:number ws y1:number ws x2:number ws y2:number ws x:number ws y:number [ ]*
-                    { return [x1, y1, x2, y2, x, y]} )+
+                    { return {"x1": x1, "y1":y1, "x2":x2, "y2":y2, "x":x, "y":y }} )+
     { return { type:"c", values: val }}
 
 smoothTo
@@ -42,12 +44,12 @@ smoothTo
 
 bezierTogetherTo
   = key:("T" / "t") ws* val:([ ]* x1:number ws y1:number [ ]*
-                    { return [x1, y1]} )+
+                    { return {"x":x1, "y":y1} } )+
     { return { type:"t", values: val }}
 
 arcTo
-  = key:("A" / "a") ws* val:([ ]* rx:number ws ry:number ws xrot:number ws arcflag:number ws sweep:number ws x:number y:number [ ]*
-                    { return [rx, ry, xrot, arcflag, sweep, x, y]} )+
+  = key:("A" / "a") ws* val:([ ]* rx:number ws ry:number ws xrot:number ws arcflag:number ws sweep:number ws x:number ws y:number [ ]*
+                    { return { "rx":rx, "ry":ry, "xrot":xrot, "arcflag":arcflag, "sweep":sweep, "x":x, "y":y } } )+
     { return { type:"a", values: val }}
 
 ws = [" "\t\r\n\,]
