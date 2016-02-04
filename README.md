@@ -23,7 +23,7 @@ Clone this repository:
 ```git
 git clone https://github.com/figurebelow/svgart.git
 ```
-The plugin will be installed in the svgart folder, if you open NodeRed you should get this at the bottom of the toolbar:
+The plugin will be installed in the svgart folder, under the /nodes folder of your Node-RED installation. If you open NodeRed you should get this at the bottom of the toolbar:
 ![SVG in the NodeRed toolbar](https://cloud.githubusercontent.com/assets/1132995/12775076/132a5faa-ca43-11e5-9cdf-a7d100bfdd24.png) 
 
 Documentation
