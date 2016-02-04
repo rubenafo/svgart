@@ -49,17 +49,45 @@ Rect.prototype.clone = function ()
 
 /**
 * Clones the Rectangle to the given coords array, using each coord pair
-* as points for the rectangle
+* as points for the rectangle.
+* The rectangle is rotated accordingly.
 * @param {object} coords - array of coords ({x:val,y:val})
 */
 Rect.prototype.cloneToCoords = function (coords)
+{
+  var results = [];
+  for (var i = 1; i < coords.length; i++)
+  {
+    var rect = this.clone ();
+    var x1 = coords[i-1];
+    var x2 = coords[i];
+    rect.setPos (x1.x, x1.y - 10); // TODO: real width here
+
+    var vector = {x: x2.x - x1.x, y: x2.y - x1.y};
+    var perp = {x: vector.y, y: -vector.x};
+    var length = Math.sqrt(perp.x * perp.x + perp.y * perp.y);
+    var angleDeg = Math.atan2(x2.y - x1.y, x2.x - x1.x) * 180 / Math.PI;
+    rect.parent.setAttribute.call (rect, "width", length);
+    rect.parent.addRotate.call (rect, angleDeg, x1.x, x1.y);
+    results.push(rect);
+  }
+  return results;
+}
+
+/**
+* Clones the object to the coords points
+* @param {object} coords - array of coords ({x:val, y:val})
+*/
+Rect.prototype.updateCoords = function (coords)
 {
   var results = [];
   for (var i = 0; i < coords.length; i++)
   {
     var rect = this.clone ();
     rect.setPos (coords[i].x, coords[i].y);
-    results.push(rect);
+    if (coords[i].r != undefined)
+      rect.applyTransform.call (rect, {rotate:{deg:coords[i].r}});
+    results.push (rect);
   }
   return results;
 }

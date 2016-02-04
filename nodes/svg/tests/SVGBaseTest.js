@@ -195,6 +195,44 @@ describe ("SVG", function () {
     assert.equal ("", svg.getAttribute ("filter"));
   });
 
+  it ("applyPoints calls cloneToCoords correctly", function () {
+    var svg = new SVGBase (Rect.type, "fill:red", 1);
+    var cloneToCoordsIsCalled = false;
+    svg.cloneToCoords = function () {
+      cloneToCoordsIsCalled = true;
+    };
+    svg.applyPoints ([{x:0,y:0}]);
+    // not DefinedByPoints, not segmented, cloneToCoords gets called
+    assert.equal (true, cloneToCoordsIsCalled);
+  });
 
+  it ("applyPoints calls updateCoords correctly", function () {
+    // now setting DefinedByPoints to true
+    var svg = new SVGBase (Rect.type, "fill:red", 1, true);
+    var cloneToCoordsIsCalled = false;
+    var updateCoordsIsCalled = false;
+    svg.cloneToCoords = function () {
+      cloneToCoordsIsCalled = true;
+    };
+    svg.updateCoords = function () {
+      updateCoordsIsCalled = true;
+    };
+    svg.applyPoints ([{x:0,y:0}]);
+    assert.equal (true, updateCoordsIsCalled & !cloneToCoordsIsCalled);
+  });
 
+  it ("applyPoints calls cloneToCoords if segmented", function () {
+    // now setting DefinedByPoints to true
+    var svg = new SVGBase (Rect.type, "fill:red", 1, true);
+    var cloneToCoordsIsCalled = false;
+    var updateCoordsIsCalled = false;
+    svg.cloneToCoords = function () {
+      cloneToCoordsIsCalled = true;
+    };
+    svg.updateCoords = function () {
+      updateCoordsIsCalled = true;
+    };
+    svg.applyPoints ([{x:0,y:0}], true);
+    assert.equal (true, cloneToCoordsIsCalled & !updateCoordsIsCalled);
+  });
 });

@@ -262,6 +262,16 @@ SVGBase.prototype.cloneToCoords = function (coords)
 }
 
 /**
+ * Update the object to the coords array, each class should implement its own
+ * @param {object} coords - array of coords ({x:val,y:val})
+ * @returns {object} - an array objects
+ */
+SVGBase.prototype.updateCoords = function (coords)
+{
+	throw ("Missing updateCoords implementation for " + this.content.type + " class");
+}
+
+/**
 * Sets the position of the object, each class should implement its own
 * @param {number} x - x coord
 * @param {number} y - y coord
