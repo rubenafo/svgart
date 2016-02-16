@@ -9,15 +9,15 @@
 <script type="text/javascript">
 
     hideAllRows = function () {
-      $("#rxry-option").hide();
-      $("#radio-option").hide();
-      $("#zindex-option").hide();
-      $("#size-option").hide();
-      $("#textString-option").hide();
-      $("#stylelabel-option").hide();
-      $("#stylecontent-option").hide();
-      $("#node-input-segmented").hide();
-      $("#node-input-groupLength").hide();
+      $("#rxry-option").addClass('hidden');
+      $("#radio-option").addClass('hidden');
+      $("#zindex-option").addClass('hidden');
+      $("#size-option").addClass('hidden');
+      $("#textString-option").addClass('hidden');
+      $("#stylelabel-option").addClass('hidden');
+      $("#stylecontent-option").addClass('hidden');
+      $("#node-input-segmented").addClass('hidden');
+      $("#node-input-groupLength").addClass('hidden');
     };
 
     RED.nodes.registerType('shape',{
@@ -51,47 +51,47 @@
               hideAllRows ();
               switch (shape) {
                 case "circle":
-                  $("#radio-option").show();
-                  $("#zindex-option").show();
-                  $("#stylelabel-option").show();
-                  $("#stylecontent-option").show();
+                  $("#radio-option").removeClass('hidden');
+                  $("#zindex-option").removeClass('hidden');
+                  $("#stylelabel-option").removeClass('hidden');
+                  $("#stylecontent-option").removeClass('hidden');
                   break;
                 case "ellipse":
-                  $("#rxry-option").show();
-                  $("#zindex-option").show();
-                  $("#stylelabel-option").show();
-                  $("#stylecontent-option").show();
+                  $("#rxry-option").removeClass('hidden');
+                  $("#zindex-option").removeClass('hidden');
+                  $("#stylelabel-option").removeClass('hidden');
+                  $("#stylecontent-option").removeClass('hidden');
                   break;
                 case "rect":
-                  $("#size-option").show();
-                  $("#zindex-option").show();
-                  $("#stylelabel-option").show();
-                  $("#stylecontent-option").show();
-                  $("#node-input-segmented").show();
+                  $("#size-option").removeClass('hidden');
+                  $("#zindex-option").removeClass('hidden');
+                  $("#stylelabel-option").removeClass('hidden');
+                  $("#stylecontent-option").removeClass('hidden');
+                  $("#node-input-segmented").removeClass('hidden');
                   break;
                 case "line":
-                  $("#zindex-option").show();
-                  $("#stylelabel-option").show();
-                  $("#stylecontent-option").show();
+                  $("#zindex-option").removeClass('hidden');
+                  $("#stylelabel-option").removeClass('hidden');
+                  $("#stylecontent-option").removeClass('hidden');
                   break;
                 case "text":
-                  $("#textString-option").show();
-                  $("#zindex-option").show();
-                  $("#stylelabel-option").show();
-                  $("#stylecontent-option").show();
+                  $("#textString-option").removeClass('hidden');
+                  $("#zindex-option").removeClass('hidden');
+                  $("#stylelabel-option").removeClass('hidden');
+                  $("#stylecontent-option").removeClass('hidden');
                   break;
                 case "polygon": case "polyline": case "path":
-                  $("#textString-option").show();
-                  $("#zindex-option").show();
-                  $("#stylelabel-option").show();
-                  $("#stylecontent-option").show();
-                  $("#node-input-segmented").show();
+                  $("#textString-option").removeClass('hidden');
+                  $("#zindex-option").removeClass('hidden');
+                  $("#stylelabel-option").removeClass('hidden');
+                  $("#stylecontent-option").removeClass('hidden');
+                  $("#node-input-segmented").removeClass('hidden');
                   break;
                 case "g":
-                  $("#zindex-option").show();
-                  $("#stylelabel-option").show();
-                  $("#stylecontent-option").show();
-                  $("#node-input-groupLength").show();
+                  $("#zindex-option").removeClass('hidden');
+                  $("#stylelabel-option").removeClass('hidden');
+                  $("#stylecontent-option").removeClass('hidden');
+                  $("#node-input-groupLength").removeClass('hidden');
                   break;
                 default: // empty;
                 };
@@ -136,27 +136,32 @@
                         "var coords = new Gens.Lorentz (params);\n" +
                         "return coords;\n";
                   break;
+                case 'Grid':
+                  break;
               };
 
               require(["orion/editor/edit"], function(edit) {
                 that.genEditor = edit({
                   parent:document.getElementById('node-input-genContent-editor'),
                   lang:"js",
-                  contents: $("#node-input-genContent").val()
+                  contents: $("#node-input-genContent").val() // str
                 });
               });
+              functionDialogResize();
             });
             // End Generator change
 
             function functionDialogResize() {
-                var rows = $("#dialog-form>div:not(.node-text-editor-row)");
+                var rows = $("#dialog-form>div:not(.node-text-editor-row):not(.hidden)"); //
                 var height = $("#dialog-form").height();
-                for (var i=0;i<rows.size();i++) {
+                for (var i=0;i<rows.size()-1;i++) {
                     height -= $(rows[i]).outerHeight(true);
                 }
-                var editorRow = $("#dialog-form>div.node-text-editor-row");
-                height -= (parseInt(editorRow.css("marginTop"))+parseInt(editorRow.css("marginBottom")));
-                $(".node-text-editor").css("height",height+"px");
+                height -= $(".nav-tabs").outerHeight(true); // the tab header
+                height -= $("#generator>.form-row").outerHeight(true); // the genrator selector
+                var editorRow = $("#gencontent-option>div.node-text-editor").parent();
+                height -= (parseInt(editorRow.css("marginTop")) + parseInt(editorRow.css("marginBottom"))) + 5;
+                $("#node-input-genContent-editor").css("height",height+"px");
             };
 
             $( "#dialog" ).on("dialogresize", functionDialogResize);
@@ -165,8 +170,13 @@
                 if (size) {
                     $("#dialog").dialog('option','width',size.width);
                     $("#dialog").dialog('option','height',size.height);
-                    functionDialogResize();
+                    //functionDialogResize();
                 }
+                else {
+                  $("#dialog").dialog('option','width',616);
+                  $("#dialog").dialog('option','height',620);
+                }
+                functionDialogResize();
             });
             $( "#dialog" ).one("dialogclose", function(ev,ui) {
                 var height = $( "#dialog" ).dialog('option','height');
@@ -195,9 +205,14 @@
             $("#node-input-shapeType").val(this.shapeType);
             $("#node-input-shapeType").change();
 
-            //console.log ("Setting to " + this.genType);
-            //$("#node-input-genType").val(this.genType);
-            //$("#node-input-genType").change();
+            $("#node-input-genType").val(this.genType);
+            $("#node-input-genType").change();
+            functionDialogResize();
+
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+              var height = $("#node-input-genContent-editor").height();
+              $("#node-input-styleContent-editor").css("height",height+"px");
+            });
         }, // end oneditprepare
 
         oneditsave: function() {
@@ -259,10 +274,19 @@
         <input type="number" id="node-input-zindex" placeholder="z-index" value="0">
     </div>
 
+
+  <div>
+    <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#generatorTab" aria-controls="home" role="tab" data-toggle="tab">Generator</a></li>
+    <li role="presentation"><a href="#styleTab" aria-controls="profile" role="tab" data-toggle="tab">Style</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="generatorTab">
     <!-- Generator -->
     <div class="form-row" style="margin-bottom: 0px;" id="genlabel-option">
-      <label for="node-input-genContent" data-toggle="collapse" data-target="#generator">
-      <i class="fa fa-wrench"></i> Generator</label>
       <input type="hidden" id="node-input-genContent" autofocus="autofocus">
     </div>
     <div id="generator">
@@ -275,30 +299,35 @@
           <option value="Lorentz">Lorentz</option>
           <option value="Grid">Grid</option>
           <option value="Spiral">Spiral</option>
-          </select>
+        </select>
 
-          <input type="checkbox" id="node-input-segmented" style="width:10%">
-          <!--<label for="node-input-segmented"><i class="icon-tag" style="width:10%"></i>Segmented</label>-->
+        <input type="checkbox" id="node-input-segmented" style="width:10%">
+        <!--<label for="node-input-segmented"><i class="icon-tag" style="width:10%"></i>Segmented</label>-->
 
-          <a id="node-input-reset" class="editor-button"><i class="fa fa-pencil"></i></a>
+        <a id="node-input-reset" class="editor-button"><i class="fa fa-pencil"></i></a>
       </div>
 
       <div class="form-row node-text-editor-row" id="gencontent-option">
         <div style="height: 150px;" class="node-text-editor" id="node-input-genContent-editor" ></div>
       </div>
     </div>
+
+
     <!-- Generator ends -->
+    </div>
+    <div role="tabpanel" class="tab-pane" id="styleTab">
 
     <!-- Style -->
     <div class="form-row" style="margin-bottom: 0px;" id="stylelabel-option">
-      <label for="node-input-styleContent" data-toggle="collapse" data-target="#stylecontent-option">
-      <i class="fa fa-wrench"></i> Style</label>
       <input type="hidden" id="node-input-styleContent" autofocus="autofocus">
     </div>
     <div class="form-row node-text-editor-row in" id="stylecontent-option">
       <div style="height: 150px;" class="node-text-editor" id="node-input-styleContent-editor" ></div>
     </div>
     <!-- Style ends -->
+    </div>
+  </div>
+    </div>
 
 </script>
 

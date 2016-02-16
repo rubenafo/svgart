@@ -21,7 +21,7 @@
     "iot"
   ],
   "author": "Ruben <ruben@figurebelow.com>",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/figurebelow/svgart/issues"
   },
