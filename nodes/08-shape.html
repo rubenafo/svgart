@@ -8,329 +8,305 @@
 
 <script type="text/javascript">
 
-    hideAllRows = function () {
-      $("#rxry-option").addClass('hidden');
-      $("#radio-option").addClass('hidden');
-      $("#zindex-option").addClass('hidden');
-      $("#size-option").addClass('hidden');
-      $("#textString-option").addClass('hidden');
-      $("#stylelabel-option").addClass('hidden');
-      $("#stylecontent-option").addClass('hidden');
-      $("#node-input-segmented").addClass('hidden');
-      $("#node-input-groupLength").addClass('hidden');
+hideAllRows = function () {
+  $("#rxry-option").addClass('hidden');
+  $("#radio-option").addClass('hidden');
+  $("#zindex-option").addClass('hidden');
+  $("#size-option").addClass('hidden');
+  $("#textString-option").addClass('hidden');
+  $("#stylelabel-option").addClass('hidden');
+  $("#stylecontent-option").addClass('hidden');
+  $("#node-input-segmented").prop("type",'hidden');
+  $("#node-input-groupLength").addClass('hidden');
+  $("#node-input-groupLength").prop("type", 'hidden');
+};
+
+RED.nodes.registerType('shape',{
+  category: 'svg',
+  color: '#a6bbcf',
+  defaults: {
+    name: {value:""},
+    shapeType: {value: "circle"},
+    elemwidth: {value :"0"},
+    elemheight: {value :"0"},
+    radio: {value: "10"},
+    rx: {value: "10"},
+    ry: {value: "10"},
+    textString: {value: ""},
+    zindex: {value:"0"},
+    genContent: {value: ""},
+    styleContent: {value: ""},
+    segmented: {value:""},
+    groupLength: {value:0},
+    genType: {value:"SimpleAtractor"}
+  },
+  inputs:1,
+  outputs:1,
+  icon: "file.png",
+  label: function() {
+    return this.name || this.shapeType;
+  },
+  oneditprepare: function() {
+
+    $("#node-input-shapeType").change(function() {
+      var shape = $("#node-input-shapeType option:selected").val();
+      hideAllRows ();
+      switch (shape) {
+        case "circle":
+        $("#radio-option").removeClass('hidden');
+        $("#zindex-option").removeClass('hidden');
+        $("#stylelabel-option").removeClass('hidden');
+        $("#stylecontent-option").removeClass('hidden');
+        break;
+        case "ellipse":
+        $("#rxry-option").removeClass('hidden');
+        $("#zindex-option").removeClass('hidden');
+        $("#stylelabel-option").removeClass('hidden');
+        $("#stylecontent-option").removeClass('hidden');
+        break;
+        case "rect":
+        $("#size-option").removeClass('hidden');
+        $("#zindex-option").removeClass('hidden');
+        $("#stylelabel-option").removeClass('hidden');
+        $("#stylecontent-option").removeClass('hidden');
+        $("#node-input-segmented").prop("type", "checkbox");
+        break;
+        case "line":
+        $("#zindex-option").removeClass('hidden');
+        $("#stylelabel-option").removeClass('hidden');
+        $("#stylecontent-option").removeClass('hidden');
+        break;
+        case "text":
+        $("#textString-option").removeClass('hidden');
+        $("#zindex-option").removeClass('hidden');
+        $("#stylelabel-option").removeClass('hidden');
+        $("#stylecontent-option").removeClass('hidden');
+        break;
+        case "polygon": case "polyline": case "path":
+        $("#textString-option").removeClass('hidden');
+        $("#zindex-option").removeClass('hidden');
+        $("#stylelabel-option").removeClass('hidden');
+        $("#stylecontent-option").removeClass('hidden');
+        $("#node-input-segmented").prop("type", "checkbox");
+        break;
+        case "g":
+        $("#zindex-option").removeClass('hidden');
+        $("#stylelabel-option").removeClass('hidden');
+        $("#stylecontent-option").removeClass('hidden');
+        $("#node-input-groupLength").prop("type", 'text');
+        break;
+        default: // empty;
+      };
+    }); // end shape type changes
+
+    var that = this;
+    var genTemplates = {};
+    genTemplates['Simple Attractor'] = "var Gens = require (\"./svg/gens/Attractor.js\");\n" +
+    "var coords = new Gens.Attractor (120, \"QGGVSLMHHGCR\", 800, 600);\n" +
+    "return coords;\n";
+    genTemplates['Rossler'] = "var Gens = require (\"./svg/gens/Attractor.js\");\n"+
+    "var params =\n" +
+    "{\n" +
+    "  a: 0.1, b: 0.1, c: 6, h: 0.05,\n" +
+    "  points: 2000,\n" +
+    "  x0: 0.001, y0: 0.001,\n" +
+    "  scale: 25,\n" +
+    "  width:800,\n" +
+    "  height:600\n" +
+    "};\n" +
+    "return new Gens.Rossler (params);\n";
+    genTemplates['Lorentz'] = "var Gens = require (\"./svg/gens/Attractor.js\");\n" +
+    "var params =\n" +
+    "{\n" +
+    "a: 10, b: 28, c: 2.66, h: 0.01,\n" +
+    "points: 4000,\n" +
+    "x0: 0.001, y0: 0.001,\n" +
+    "scale: 10,\n" +
+    "width:800,\n" +
+    "height:600\n" +
+    "};\n" +
+    "var coords = new Gens.Lorentz (params);\n" +
+    "return coords;\n";
+    genTemplates['Grid'] = "grid";
+
+    $(".dropdown-menu").click(function(event){
+      var gen = $(event.target).text();
+      content = $("#node-input-genContent").val() + genTemplates[gen];
+      require(["orion/editor/edit"], function(edit) {
+        that.genEditor = edit({
+          parent:document.getElementById('node-input-genContent-editor'),
+          lang:"js",
+          contents: content // str
+        });
+      });
+    });
+
+    function functionDialogResize() {
+      var rows = $("#dialog-form>div:not(.node-text-editor-row):not(.hidden)"); //
+      var height = $("#dialog-form").height();
+      for (var i=0;i<rows.size()-1;i++) {
+        height -= $(rows[i]).outerHeight(true);
+      }
+      height -= $(".nav-tabs").outerHeight(true); // the tab header
+      //height -= $("#generator>.form-row").outerHeight(true); // the genrator selector
+      var editorRow = $("#gencontent-option>div.node-text-editor").parent();
+      height -= (parseInt(editorRow.css("marginTop")) + parseInt(editorRow.css("marginBottom"))) + 5;
+      $("#node-input-genContent-editor").css("height",height+"px");
     };
 
-    RED.nodes.registerType('shape',{
-        category: 'svg',
-        color: '#a6bbcf',
-        defaults: {
-            name: {value:""},
-            shapeType: {value: "circle"},
-            elemwidth: {value :"0"},
-            elemheight: {value :"0"},
-            radio: {value: "10"},
-            rx: {value: "10"},
-            ry: {value: "10"},
-            textString: {value: ""},
-            zindex: {value:"0"},
-            genContent: {value: ""},
-            styleContent: {value: ""},
-            segmented: {value:""},
-            groupLength: {value:0},
-            genType: {value:"SimpleAtractor"}
-        },
-        inputs:1,
-        outputs:1,
-        icon: "file.png",
-        label: function() {
-            return this.name || this.shapeType;
-        },
-        oneditprepare: function() {
-            $("#node-input-shapeType").change(function() {
-              var shape = $("#node-input-shapeType option:selected").val();
-              hideAllRows ();
-              switch (shape) {
-                case "circle":
-                  $("#radio-option").removeClass('hidden');
-                  $("#zindex-option").removeClass('hidden');
-                  $("#stylelabel-option").removeClass('hidden');
-                  $("#stylecontent-option").removeClass('hidden');
-                  break;
-                case "ellipse":
-                  $("#rxry-option").removeClass('hidden');
-                  $("#zindex-option").removeClass('hidden');
-                  $("#stylelabel-option").removeClass('hidden');
-                  $("#stylecontent-option").removeClass('hidden');
-                  break;
-                case "rect":
-                  $("#size-option").removeClass('hidden');
-                  $("#zindex-option").removeClass('hidden');
-                  $("#stylelabel-option").removeClass('hidden');
-                  $("#stylecontent-option").removeClass('hidden');
-                  $("#node-input-segmented").removeClass('hidden');
-                  break;
-                case "line":
-                  $("#zindex-option").removeClass('hidden');
-                  $("#stylelabel-option").removeClass('hidden');
-                  $("#stylecontent-option").removeClass('hidden');
-                  break;
-                case "text":
-                  $("#textString-option").removeClass('hidden');
-                  $("#zindex-option").removeClass('hidden');
-                  $("#stylelabel-option").removeClass('hidden');
-                  $("#stylecontent-option").removeClass('hidden');
-                  break;
-                case "polygon": case "polyline": case "path":
-                  $("#textString-option").removeClass('hidden');
-                  $("#zindex-option").removeClass('hidden');
-                  $("#stylelabel-option").removeClass('hidden');
-                  $("#stylecontent-option").removeClass('hidden');
-                  $("#node-input-segmented").removeClass('hidden');
-                  break;
-                case "g":
-                  $("#zindex-option").removeClass('hidden');
-                  $("#stylelabel-option").removeClass('hidden');
-                  $("#stylecontent-option").removeClass('hidden');
-                  $("#node-input-groupLength").removeClass('hidden');
-                  break;
-                default: // empty;
-                };
-            }); // end shape type changes
-
-            var that = this;
-            // Generator change
-            $("#node-input-genType").change(function() {
-              var generator = $("#node-input-genType option:selected").val();
-              console.log(generator);
-              var str = "";
-              switch (generator) {
-                case 'SimpleAtractor':
-                  str = "var Gens = require (\"./svg/gens/Attractor.js\");\n" +
-                        "var coords = new Gens.Attractor (120, \"QGGVSLMHHGCR\", 800, 600);\n" +
-                        "return coords;\n";
-                  break;
-                case 'Rossler':
-                  str = "var Gens = require (\"./svg/gens/Attractor.js\");\n"+
-                          "var params =\n" +
-                          "{\n" +
-                          "  a: 0.1, b: 0.1, c: 6, h: 0.05,\n" +
-                          "  points: 2000,\n" +
-                          "  x0: 0.001, y0: 0.001,\n" +
-                          "  scale: 25,\n" +
-                          "  width:800,\n" +
-                          "  height:600\n" +
-                          "};\n" +
-                          "return new Gens.Rossler (params);\n";
-                  break;
-                case 'Lorentz':
-                  str = "var Gens = require (\"./svg/gens/Attractor.js\");\n" +
-                        "var params =\n" +
-                        "{\n" +
-                        "a: 10, b: 28, c: 2.66, h: 0.01,\n" +
-                        "points: 4000,\n" +
-                        "x0: 0.001, y0: 0.001,\n" +
-                        "scale: 10,\n" +
-                        "width:800,\n" +
-                        "height:600\n" +
-                        "};\n" +
-                        "var coords = new Gens.Lorentz (params);\n" +
-                        "return coords;\n";
-                  break;
-                case 'Grid':
-                  break;
-              };
-
-              require(["orion/editor/edit"], function(edit) {
-                that.genEditor = edit({
-                  parent:document.getElementById('node-input-genContent-editor'),
-                  lang:"js",
-                  contents: $("#node-input-genContent").val() // str
-                });
-              });
-              functionDialogResize();
-            });
-            // End Generator change
-
-            function functionDialogResize() {
-                var rows = $("#dialog-form>div:not(.node-text-editor-row):not(.hidden)"); //
-                var height = $("#dialog-form").height();
-                for (var i=0;i<rows.size()-1;i++) {
-                    height -= $(rows[i]).outerHeight(true);
-                }
-                height -= $(".nav-tabs").outerHeight(true); // the tab header
-                height -= $("#generator>.form-row").outerHeight(true); // the genrator selector
-                var editorRow = $("#gencontent-option>div.node-text-editor").parent();
-                height -= (parseInt(editorRow.css("marginTop")) + parseInt(editorRow.css("marginBottom"))) + 5;
-                $("#node-input-genContent-editor").css("height",height+"px");
-            };
-
-            $( "#dialog" ).on("dialogresize", functionDialogResize);
-            $( "#dialog" ).one("dialogopen", function(ev) {
-                var size = $( "#dialog" ).dialog('option','sizeCache-function');
-                if (size) {
-                    $("#dialog").dialog('option','width',size.width);
-                    $("#dialog").dialog('option','height',size.height);
-                    //functionDialogResize();
-                }
-                else {
-                  $("#dialog").dialog('option','width',616);
-                  $("#dialog").dialog('option','height',620);
-                }
-                functionDialogResize();
-            });
-            $( "#dialog" ).one("dialogclose", function(ev,ui) {
-                var height = $( "#dialog" ).dialog('option','height');
-                $( "#dialog" ).off("dialogresize",functionDialogResize);
-            });
-            var that = this;
-            require(["orion/editor/edit"], function(edit) {
-              that.genEditor = edit({
-                parent:document.getElementById('node-input-genContent-editor'),
-                lang:"js",
-                contents: $("#node-input-genContent").val()
-              });
-              that.styleEditor = edit({
-                parent:document.getElementById('node-input-styleContent-editor'),
-                lang:"css",
-                contents: $("#node-input-styleContent").val()
-              });
-            });
-
-            // When the reset button is clicked, the generator content is reset
-            //$('$node-input-reset').on ("click", function () {
-
-            //});
-            // end rest button click
-
-            $("#node-input-shapeType").val(this.shapeType);
-            $("#node-input-shapeType").change();
-
-            $("#node-input-genType").val(this.genType);
-            $("#node-input-genType").change();
-            functionDialogResize();
-
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-              var height = $("#node-input-genContent-editor").height();
-              $("#node-input-styleContent-editor").css("height",height+"px");
-            });
-        }, // end oneditprepare
-
-        oneditsave: function() {
-          $("#node-input-styleContent").val(this.styleEditor.getText());
-          delete this.styleEditor;
-          $("#node-input-genContent").val(this.genEditor.getText());
-          delete this.genEditor;
-        }
+    $( "#dialog" ).on("dialogresize", functionDialogResize);
+    $( "#dialog" ).one("dialogopen", function(ev) {
+      var size = $( "#dialog" ).dialog('option','sizeCache-function');
+      if (size) {
+        $("#dialog").dialog('option','width',size.width);
+        $("#dialog").dialog('option','height',size.height);
+        //functionDialogResize();
+      }
+      else {
+        $("#dialog").dialog('option','width',616);
+        $("#dialog").dialog('option','height',620);
+      }
+      functionDialogResize();
     });
+    $( "#dialog" ).one("dialogclose", function(ev,ui) {
+      var height = $( "#dialog" ).dialog('option','height');
+      $( "#dialog" ).off("dialogresize",functionDialogResize);
+    });
+
+    var that = this;
+    require(["orion/editor/edit"], function(edit) {
+      console.log(edit)
+      that.genEditor = edit({
+        parent:document.getElementById('node-input-genContent-editor'),
+        lang:"js",
+        contents: $("#node-input-genContent").val()
+      });
+      that.styleEditor = edit({
+        parent:document.getElementById('node-input-styleContent-editor'),
+        lang:"css",
+        contents: $("#node-input-styleContent").val()
+      });
+    });
+
+    $("#node-input-shapeType").val(this.shapeType);
+    $("#node-input-shapeType").change();
+
+    $("#node-input-genType").val(this.genType);
+    $("#node-input-genType").change();
+    functionDialogResize();
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+      var height = $("#node-input-genContent-editor").height();
+      $("#node-input-styleContent-editor").css("height",height+"px");
+    });
+  }, // end oneditprepare
+
+  oneditsave: function() {
+    $("#node-input-styleContent").val(this.styleEditor.getText());
+    delete this.styleEditor;
+    $("#node-input-genContent").val(this.genEditor.getText());
+    delete this.genEditor;
+  }
+});
 </script>
 
 <script type="text/x-red" data-template-name="shape">
-    <div class="form-row">
-      <label for="node-input-shapeType"><i class="fa fa-envelope"></i> Shape</label>
-        <select id="node-input-shapeType" style="width:25% !important">
-          <option value="circle">Circle</option>
-          <option value="ellipse">Ellipse</option>
-          <option value="rect">Rect</option>
-          <option value="line">Line</option>
-          <option value="text">Text</option>
-          <option value="polygon">Polygon</option>
-          <option value="polyline">Polyline</option>
-          <option value="path">Path</option>
-          <option value="g">Group</option>
-        </select>
-        <input type="text" id="node-input-name" placeholder="Optional Name" style="width:25%">
-        <input type="text" id="node-input-groupLength" placeholder="Size" style="width:15%">
-    </div>
+<div class="form-row">
+  <label for="node-input-shapeType"><i class="fa fa-envelope"></i> Shape</label>
+  <select id="node-input-shapeType" style="width:25% !important">
+    <option value="circle">Circle</option>
+    <option value="ellipse">Ellipse</option>
+    <option value="rect">Rect</option>
+    <option value="line">Line</option>
+    <option value="text">Text</option>
+    <option value="polygon">Polygon</option>
+    <option value="polyline">Polyline</option>
+    <option value="path">Path</option>
+    <option value="g">Group</option>
+  </select>
+  <input type="text" id="node-input-name" placeholder="Optional Name" style="width:25%">
+  <input type="hidden" id="node-input-groupLength" placeholder="Size" style="width:15%">
+</div>
 
-    <!-- Radio -->
-    <div class="form-row hidden"  id="radio-option">
-      <label for="node-input-radio"><i class="icon-tag"></i> Radio</label>
-      <input type="text" id="node-input-radio" placeholder="Radio">
-    </div>
+<!-- Radio -->
+<div class="form-row hidden"  id="radio-option">
+  <label for="node-input-radio"><i class="icon-tag"></i> Radio</label>
+  <input type="text" id="node-input-radio" placeholder="Radio">
+</div>
 
-     <!-- RX,RY -->
-    <div class="form-row hidden" id="rxry-option">
-      <label for="node-input-rx"><i class="icon-tag"></i> RX,RY</label>
-      <input type="text" id="node-input-rx" placeholder="X radio" style="width:25%">
-      <input type="text" id="node-input-ry" placeholder="Y radio" style="width:25%">
-    </div>
+<!-- RX,RY -->
+<div class="form-row hidden" id="rxry-option">
+  <label for="node-input-rx"><i class="icon-tag"></i> RX,RY</label>
+  <input type="text" id="node-input-rx" placeholder="X radio" style="width:25%">
+  <input type="text" id="node-input-ry" placeholder="Y radio" style="width:25%">
+</div>
 
-    <!-- Width,Height -->
-    <div class="form-row hidden" id="size-option">
-      <label for="node-input-rx"><i class="icon-tag"></i> Size</label>
-      <input type="text" id="node-input-elemwidth" placeholder="Width" style="width:25%">
-      <input type="text" id="node-input-elemheight" placeholder="Height" style="width:25%">
-    </div>
+<!-- Width,Height -->
+<div class="form-row hidden" id="size-option">
+  <label for="node-input-rx"><i class="icon-tag"></i> Size</label>
+  <input type="text" id="node-input-elemwidth" placeholder="Width" style="width:25%">
+  <input type="text" id="node-input-elemheight" placeholder="Height" style="width:25%">
+</div>
 
-    <!-- Text -->
-    <div class="form-row hidden" id="textString-option">
-      <label for="node-input-textString"><i class="icon-tag"></i> Text</label>
-      <input type="text" id="node-input-textString" placeholder="string">
-    </div>
+<!-- Text -->
+<div class="form-row hidden" id="textString-option">
+  <label for="node-input-textString"><i class="icon-tag"></i> Text</label>
+  <input type="text" id="node-input-textString" placeholder="string">
+</div>
 
-    <!-- Z-Index -->
-    <div class="form-row hidden" id="zindex-option">
-      <label for="node-input-zindex"><i class="icon-tag"></i> Z-Index</label>
-        <input type="number" id="node-input-zindex" placeholder="z-index" value="0">
-    </div>
+<!-- Z-Index -->
+<div class="form-row hidden" id="zindex-option">
+  <label for="node-input-zindex"><i class="icon-tag"></i> Z-Index</label>
+  <input type="number" id="node-input-zindex" placeholder="z-index" value="0" style="width:20%">
+  <input type="checkbox" id="node-input-segmented" style="width:10%">
+</div>
 
-
-  <div>
-    <!-- Nav tabs -->
+<div>
+  <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#generatorTab" aria-controls="home" role="tab" data-toggle="tab">Generator</a></li>
-    <li role="presentation"><a href="#styleTab" aria-controls="profile" role="tab" data-toggle="tab">Style</a></li>
+  <li role="presentation" class="active"><a href="#generatorTab" aria-controls="home" role="tab" data-toggle="tab">Generator</a></li>
+  <li role="presentation"><a href="#styleTab" aria-controls="profile" role="tab" data-toggle="tab">Style</a></li>
+  <li role="presentation" class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+      Insert <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+      <li><a href="#">Simple Attractor</a></li>
+      <li><a href="#">Rossler</a></li>
+      <li><a href="#">Lorentz</a></li>
+      <li><a href="#">Grid</a></li>
+      <li><a href="#">Spiral</a></li>
+    </ul>
+  </li>
   </ul>
 
   <!-- Tab panes -->
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="generatorTab">
     <!-- Generator -->
-    <div class="form-row" style="margin-bottom: 0px;" id="genlabel-option">
-      <input type="hidden" id="node-input-genContent" autofocus="autofocus">
-    </div>
-    <div id="generator">
-      <div class="form-row">
-        <label for="node-input-genType"><i class="fa fa-envelope"></i> Generator</label>
-        <select id="node-input-genType" style="width:125px !important">
-          <option value="Custom">Custom</option>
-          <option value="SimpleAtractor">Simple Attractor</option>
-          <option value="Rossler">Rossler</option>
-          <option value="Lorentz">Lorentz</option>
-          <option value="Grid">Grid</option>
-          <option value="Spiral">Spiral</option>
-        </select>
-
-        <input type="checkbox" id="node-input-segmented" style="width:10%">
-        <!--<label for="node-input-segmented"><i class="icon-tag" style="width:10%"></i>Segmented</label>-->
-
-        <a id="node-input-reset" class="editor-button"><i class="fa fa-pencil"></i></a>
+      <div class="form-row" style="margin-bottom: 0px;" id="genlabel-option">
+        <input type="hidden" id="node-input-genContent" autofocus="autofocus">
       </div>
-
-      <div class="form-row node-text-editor-row" id="gencontent-option">
-        <div style="height: 150px;" class="node-text-editor" id="node-input-genContent-editor" ></div>
+      <div id="generator">
+        <div class="form-row node-text-editor-row" id="gencontent-option">
+          <div style="height: 150px;" class="node-text-editor" id="node-input-genContent-editor" ></div>
+        </div>
       </div>
     </div>
-
-
-    <!-- Generator ends -->
-    </div>
-    <div role="tabpanel" class="tab-pane" id="styleTab">
-
-    <!-- Style -->
+  <div role="tabpanel" class="tab-pane" id="styleTab">
+  <!-- Style -->
     <div class="form-row" style="margin-bottom: 0px;" id="stylelabel-option">
       <input type="hidden" id="node-input-styleContent" autofocus="autofocus">
     </div>
     <div class="form-row node-text-editor-row in" id="stylecontent-option">
       <div style="height: 150px;" class="node-text-editor" id="node-input-styleContent-editor" ></div>
     </div>
-    <!-- Style ends -->
-    </div>
+  <!-- Style ends -->
   </div>
-    </div>
+  </div>
+</div>
 
 </script>
-
 <script type="text/x-red" data-help-name="shape">
-    <p>SVG graphics elements</p>
+<p>SVG graphics elements</p>
 </script>
