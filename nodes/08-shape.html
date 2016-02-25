@@ -102,32 +102,32 @@ RED.nodes.registerType('shape',{
     var that = this;
     var genTemplates = {};
     genTemplates['Simple Attractor'] = "var Gens = require (\"./svg/gens/Attractor.js\");\n" +
-    "var coords = new Gens.Attractor (120, \"QGGVSLMHHGCR\", 800, 600);\n" +
-    "return coords;\n";
+    "return Gens.Attractor (120, \"QGGVSLMHHGCR\", 800, 600);\n";
     genTemplates['Rossler'] = "var Gens = require (\"./svg/gens/Attractor.js\");\n"+
     "var params =\n" +
     "{\n" +
     "  a: 0.1, b: 0.1, c: 6, h: 0.05,\n" +
     "  points: 2000,\n" +
-    "  x0: 0.001, y0: 0.001,\n" +
-    "  scale: 25,\n" +
-    "  width:800,\n" +
-    "  height:600\n" +
+    "  x0: 0.001, y0: 0.001, scale: 25,\n" +
+    "  width:800, height:600\n" +
     "};\n" +
-    "return new Gens.Rossler (params);\n";
+    "return Gens.Rossler (params);\n";
     genTemplates['Lorentz'] = "var Gens = require (\"./svg/gens/Attractor.js\");\n" +
     "var params =\n" +
     "{\n" +
     "a: 10, b: 28, c: 2.66, h: 0.01,\n" +
     "points: 4000,\n" +
     "x0: 0.001, y0: 0.001,\n" +
-    "scale: 10,\n" +
-    "width:800,\n" +
-    "height:600\n" +
-    "};\n" +
-    "var coords = new Gens.Lorentz (params);\n" +
-    "return coords;\n";
-    genTemplates['Grid'] = "grid";
+    "scale: 10, width:800, height:600 };\n" +
+    "return Gens.Lorentz (params);\n";
+    genTemplates['Grid'] = "var Gens = require (\"./svg/gens/Attractor.js\");\n" +
+                           "var params = {width:800,height:600,\n" +
+			                     "xrows:20, yrows:20};\n" +
+                           "return Gens.Grid (params);\n";
+    genTemplates['Spiral'] = "var Gens = require (\"./svg/gens/Attractor.js\");\n" +
+                             "var params = { points:300, x:400, y:300,\n" +
+                             "radius:300, coils:7, chord:40};\n" +
+                             "return Gens.Spiral (params);\n";
 
     $(".dropdown-menu").click(function(event){
       var gen = $(event.target).text();
