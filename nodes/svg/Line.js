@@ -78,14 +78,14 @@ Line.prototype.clone = function ()
 Line.prototype.cloneToCoords = function (coords)
 {
   var results = [];
-  for (var i = 0; i < coords.length; i++)
+  for (var i = 0; i < coords.length; i +=2)
   {
     if (i)
     {
       var line = this.clone ();
-      line.setPos (coords[i-1], coords[i]);
-      //if (coords[i].r)
-      // TODO line.applyTransform.call(line, {rotate:{deg:coords[i].r}} );
+      line.setPos (coords[i], coords[i+1]);
+      if (coords[i].r != undefined)
+        line.applyTransform.call(line, {rotate:{deg:coords[i].r}} );
       results.push (line);
     }
   }

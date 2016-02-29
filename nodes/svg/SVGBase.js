@@ -339,6 +339,12 @@ SVGBase.prototype.setStyle = function (styleStr)
 			styleStr = styleStr.replace(/\n/g, "");
 			this.setAttribute ("filter", "url(#id33)");
 		}
+		var matchGradient = /.*gradient\s*:\s*(.*);/i;
+		var gradientFunction = styleStr.match (matchGradient);
+		if (gradientFunction != null)
+		{
+			var gradient = gradientFunction[1];
+		}
 	}
 	this.setAttribute ("style", styleStr);
 }
